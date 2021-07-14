@@ -1,0 +1,342 @@
+## 开发准备
+
+1. 引入 sdk
+
+可以直接使用 script 标签方式引入。
+
+```html
+<script src="./qnweb-rtc-ai-1.0.2-beta.umd.js"></script>
+```
+
+也可以通过 import 方式引入。
+
+```js
+import * as QNRTCAI from './qnweb-rtc-ai-1.0.3-beta.umd.js'
+```
+
+2. 验证
+
+用如下代码获取主类，验证是否正常引入成功。
+
+```html
+<script>
+  console.log(QNRTCAI.version); // 1.0.3-beta
+</script>
+```
+
+## 快速开始
+
+```ts
+/**
+ * 根据回传的 url 由业务服务器生成 signToken
+ * 生成算法
+ * @param url
+ */
+async function signCallback(url) {
+  /**
+   * 这里编写通过 url 生成的 signToken 逻辑并返回
+   */
+  return signToken
+}
+
+/**
+ * 初始化由服务端生成的 aiToken 和 signToken
+ */
+QNRTCAI.init(aiToken, signCallback);
+
+/**
+ * 语音识别转文字
+ */
+const analyzer = QNRTCAI.AudioToTextAnalyzer.startAudioToText(
+  // 音频 Track 对象
+  audioTrack,
+  // 语音识别参数，可选
+  params,
+  {
+    // 语音识别转文字的结果
+    onAudioToText: (message: Message) => {
+      console.log(message)
+    }
+  }
+)
+
+/**
+ * 结束语音识别转文字
+ */
+analyzer.stopAudioToText();
+
+/**
+ * 身份证识别
+ * cameraTrack 为视频 Track 对象
+ */
+QNRTCAI.IDCardDetector.run(cameraTrack).then(res => {
+  console.log(res);
+})
+```
+
+#### aiToken 生成逻辑
+
+```js
+// app_id 加上过期时间
+const src = "<app_id>:<expiration>"
+const encodedSrc = urlsafe_base64_encode(src)
+// 计算HMAC-SHA1签名，并对签名结果做URL安全的Base64编码
+const sign = hmac_sha1(encodedSrc, "Your_Secret_Key")
+const encodedSign = urlsafe_base64_encode(sign)
+// 拼接上述结果得到 token
+const token = "QD " + Your_Access_Key + ":" + encodedSign + ":" + encodedSrc``
+```
+
+#### signToken 生成逻辑
+
+说明：参数为待签名的url（url中已经包含了时间戳），[将url签名成token 参考](https://developer.qiniu.com/kodo/1202/download-token)将https://developer.qiniu.com/kodo/1202/download-token
+
+
+## API 文档
+
+### AudioToTextAnalyzer(语音识别转文字)
+
+#### 使用
+```ts
+// 开启语音识别
+const audioAnalyzer = QNRTCAI.AudioToTextAnalyzer.startAudioToText(audioTrack, null,  {
+  onAudioToText: message => {
+    console.log('message', message);
+    if (message.transcript) {
+      localAudioText.innerText = message.transcript
+    }
+  }
+});
+
+audioAnalyzer.getStatus(); // 获取当前状态
+audioAnalyzer.stopAudioToText(); // 结束语音识别
+```
+
+#### API 说明
+
+| 方法 | 类型 | 说明 |
+| --- | --- | ---|
+| static startAudioToText(静态方法) | (audioTrack: [Track](https://doc.qnsdk.com/rtn/web/docs/api_track), params: [AudioToTextParams](#AudioToTextParams(开启语音识别所需的参数)), callback: [Callback](#Callback(语音识别的回调))) => QNAudioToTextAnalyzer | 开始语音实时识别 |
+| getStatus | () => [Status](#Status(当前的状态)) | 获取当前状态 |
+| stopAudioToText | () => void | 停止语音实时识别 |
+
+#### 类型定义
+
+##### Track
+
+Track 对象是 Track 模式下的媒体对象，可以用来在页面上播放媒体。
+
+##### AudioToTextParams(开启语音识别所需的参数)
+
+```ts
+interface AudioToTextParams {
+  force_final: number; // 是否在text为空的时候返回final信息, 1->强制返回;0->不强制返回。
+  maxsil: number; // 最长静音间隔，单位秒，默认10s
+  model_type: number; // 0->cn; 默认0
+  need_partial: number; // 是否返回partial文本，1->返回，0-> 不返回;默认1
+  need_words: number; // 是否返回词语的对齐信息，1->返回， 0->不返回;默认0。
+  needvad: number; // 是否需要vad;0->关闭;1->开启; 默认1
+  vad_sil_thres: number; // vad断句的累积时间，大于等于0， 如果设置为0，或者没设置，系统默认
+}
+```
+
+##### Callback(语音识别的回调)
+
+```ts
+/**
+ * 连接状态变化
+ * 参数:status-当前状态; msg-提示消息
+ */
+type StatusChangeCallback = (status: Status, msg: string) => void
+
+/**
+ * 实时转化文字数据
+ * 参数:audioToText - 当前片段的结果文字数据
+ */
+type AudioToTextCallback = (audioToText: AudioToText) => void;
+
+interface Callback {
+  onStatusChange: StatusChangeCallback;
+  onAudioToText: AudioToTextCallback;
+}
+```
+
+##### Status(当前的状态)
+
+```ts
+enum Status {
+  AVAILABLE, // 未开始可用 
+  DESTROY, // 已经销毁不可用
+  ERROR, // 连接异常断线
+  DETECTING // 正在实时转化
+}
+```
+
+##### AudioToText(语音识别的内容)
+
+```ts
+interface AudioToText {
+  end_seq: number; // 为该文本所在的切片的终点(包含)，否则为-1
+  end_time: number; // 该片段的终止时间，毫秒
+  ended: number; // 是否是websocket最后一条数据,0:非最后一条数据,1: 最后一条数据。
+  finalX: number; // 分片结束,当前消息的transcript为该片段最终结果，否则为partial结果
+  long_sil: number; // 是否长时间静音，0:否;1:是
+  partial_transcript: string; // partial结果文本, 开启needpartial后返回
+  seg_begin: number; // 是否分段开始: 1:是; 0:不是。
+  seg_index: number; // 是否是vad分段开始说话的开始1:是分段开始说话; 0:不是。
+  spk_begin: number; // 是否是vad分段开始说话的开始1:是分段开始说话; 0:不是。
+  start_seq: number; // 该文本所在的切片的起点(包含), 否则为-1
+  start_time: number; // 该片段的起始时间，毫秒
+  transcript: string; // 语音的文本, 如果final=0, 则为partinal结果 (后面可能会更改),final=1为该片段最终结果
+  uuid: string;
+  words: WordsDTO; // 返回词语的对齐信息, 参数need_words=1时返回详细内存见下表。
+}
+
+interface WordsDTO {
+  seg_end: number; // 该词语相对整个数据流的起始时间, 毫秒
+  seg_start: number; // 该词语相对当前分段的起始时间, 毫秒
+  voice_end: number; // 该词语相对整个数据流的终止时间, 毫秒
+  voice_start: number; // 该词语相对当前分段的终止时间, 毫秒
+  word: string; // 词语本身，包括标点符号
+}
+```
+
+
+
+### IDCardDetector(身份证信息识别)
+
+#### 使用
+```ts
+QNRTCAI.IDCardDetector.run(track)
+  .then(res => console.log(res))
+```
+
+#### API 说明
+
+| 方法 | 类型 | 说明 |
+| --- | --- | ---|
+| static run(静态方法) | (videoTrack: [Track](https://doc.qnsdk.com/rtn/web/docs/api_track), params?: [IDCardDetectorRunParams](#IDCardDetectorRunParams(身份证识别参数))) => Promise<[IDCardDetectorRunRes](#IDCardDetectorRunRes(身份证识别响应值))> | 身份证信息识别，返回的是一个promise，得到识别出来的信息 |
+
+#### 类型定义
+
+##### IDCardDetectorRunParams(身份证识别参数)
+
+```ts
+interface IDCardDetectorRunParams {
+  image?: string, // base64图像
+  session_id?: string, // 唯一会话 id
+  ret_image?: boolean, // 是否返回识别后的切图(切图是指精确剪裁对齐后的身份证正反面图片)，返回格式为 JPEG 格式二进制图片使用 base64 编码后的字符串
+  ret_portrait?: boolean, // 是否返回身份证(人像面)的人脸图 片，返回格式为 JPEG 格式二进制图片使用 base64 编码后的字符串
+  ref_side?: string, // 当图片中同时存在身份证正反面时，通过该参数指定识别的版面:取值'Any' - 识别人像面或国徽面，'F' - 仅 识别人像面，'B' - 仅识别国徽面
+  enable_border_check?: string, // 身份证遮挡检测开关，如果输入图片中的身份证卡片边框不完整则返回告警
+  enable_detect_copy?: string, // 复印件、翻拍件检测开关，如果输入图片中的身份证卡片是复印件，则返回告警
+}
+```
+
+##### IDCardDetectorRunRes(身份证识别响应值)
+
+```ts
+interface IDCardDetectorRunRes {
+  request_id?: string,
+  response: {
+    session_id: string, //唯一会话 id
+    errorcode: number,	// 返回状态码
+    errormsg: string,	// 返回错误消息
+    warnmsg: Array<string>, // 多重警告码
+    ocr_result: OcrResult,	// 文字识别结果
+    image_result: ImageResult,	// 图片检测结果
+  }
+}
+
+interface OcrResult {
+  side: string	// F-身份证人像面，B-身份 证国徽面
+  idno: string, // 身份号码(人像面)
+  name: string, //	姓名(人像面)
+  nation: string, //	民族(人像面)
+  gender: string, //	性别(人像面)
+  address: string, //	地址(人像面)
+  birthdate: string, //	生日(人像面) eg. "19900111"
+  validthru: string, //	有效期(国徽面) eg. "20001010-20101009"
+  issuedby: string, //	签发机关(国徽面)
+}
+
+interface ImageResult {
+  idcard:	string, //	身份证区域图片，使用Base64 编码后的字符串， 是否返回由请求参数ret_image 决定
+  portrait:	string, //	身份证人像照片，使用Base64 编码后的字符串， 是否返回由请求参数ret_portrait 决定
+  idcard_bbox: Array<Array<number>>, //	框坐标，格式为 [[x0, y0], [x1, y1], [x2, y2], [x3, y3]]
+}
+```
+
+### textToSpeak(文字转语音)
+
+#### 使用
+
+```ts
+QNRTCAI.textToSpeak({ text }).then(response => {
+  const base64String = response.response.audio;
+  console.log('response', response)
+  console.log('base64String', base64String);
+  const snd = new Audio('data:audio/wav;base64,' + base64String);
+  snd.play();
+});
+```
+
+#### API 说明
+
+| 方法        | 类型                                                         | 说明       |
+| ----------- | ------------------------------------------------------------ | ---------- |
+| textToSpeak | (params: [TextToSpeakParams](#TextToSpeakParams(文字转语音参数))) => Promise<[TextToSpeakRes](#TextToSpeakRes(文字转语音响应值))> | 文字转语音 |
+
+#### 类型定义
+
+##### TextToSpeakParams(文字转语音参数)
+
+```ts
+// 文字转语音声效枚举
+enum Speaker {
+  Male1 = 'male1', // 男声1
+  Male2 = 'male2', // 男声2
+  Female3 = 'female3', // 女声3
+  Male4 = 'male4', // 男声4
+  Female5 = 'female5', // 女声5
+  Female6 = 'female6', // 女声6
+  Kefu1 = 'kefu1', // 客服1
+  Girl1 = 'girl1', // 女孩1
+}
+// tts 音频编码格式枚举
+enum AudioEncoding {
+  Wav = 'wav',
+  Pcm = 'pcm',
+  Mp3 = 'mp3',
+}
+
+/**
+ * 文字转语音参数
+ */
+interface TextToSpeakParams {
+  text: string; // 需要进⾏语⾳合成的⽂本内容，最短1个字，最⻓200字
+  speaker?: Speaker; // 发⾳⼈id，⽤于选择不同⻛格的⼈声，⽬前默认为kefu1， 可选的包括female3，female5，female6，male1，male2， male4，kefu1，girl1
+  audio_encoding?: AudioEncoding; // 合成⾳频格式，⽬前默认为wav，可选的包括wav，pcm，mp3
+  sample_rate?: number; // 合成⾳频的采样率，默认为16000，可选的包括8000，16000， 24000，48000
+  volume?: number; // ⾳量⼤⼩，取值范围为0~100，默认为50
+  speed?: number; // 语速，取值范围为-100~100，默认为0
+}
+```
+
+##### TextToSpeakRes(文字转语音响应值)
+
+```ts
+/**
+ * 文字转语音响应值
+ */
+interface TextToSpeakRes {
+  request_id?: string; // 请求唯一 id
+  response: {
+    voice_id?: string; // 声音唯一 id
+    error_code?: number; // 返回状态码，详见状态码表格
+    err_msg?: number; // 状态码对应错误信息
+    audio?: string; // 合成的音频，采用 base64 编码
+  }
+}
+```
+
