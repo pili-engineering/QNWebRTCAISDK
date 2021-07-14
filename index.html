@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+  <meta charset='UTF-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+  <title>qnweb-rtc-ai demo</title>
+  <style>
+    #localvideo,
+    #remotevideo {
+      width: 320px;
+      height: 240px;
+      background: #000;
+    }
+
+    #localAudioText {
+      display: inline-block;
+      width: 180px;
+      word-break: break-all
+    }
+  </style>
+  <script src='./qnweb-rtc-4.0.1-beta.1.umd.js'></script>
+  <script src='./qnweb-rtc-ai-1.0.3-beta.umd.js'></script>
+  <script src='./bower_components/crypto-js/crypto-js.js'></script>
+</head>
+
+
+<body>
+  <h1>qnweb-rtc-ai demo 示例代码</h1>
+
+  <label>请输入 RoomToken 加入房间开始连麦</label>
+  <input id='roomtoken' type='text'
+         value='QxZugR8TAhI38AiJ_cptTl3RbzLyca3t-AAiH-Hh:DEfuUp8K3-kuZa7qN0qCnNcX7Dc=:eyJhcHBJZCI6ImZuZjB2cjZnbiIsImV4cGlyZUF0IjoxNzUzMzM2OTA3LCJwZXJtaXNzaW9uIjoidXNlciIsInJvb21OYW1lIjoid2ViNSIsInVzZXJJZCI6IndlYnVzZXI1In0=' />
+  <br>
+  <div style='margin: 10px 0'>
+    <button id='joinroom'>加入房间</button>
+    <button id='leaveroom'>离开房间</button>
+  </div>
+  <p class='tips'>如果您不知道如何生成 RoomToken，查看<a href='https://doc.qnsdk.com/rtn/docs/rtn_startup#4' target='_black'>这里</a>
+  </p>
+
+  <div id='trackcontainer'>
+    <p>本地视频</p>
+    <div id='localvideo'></div>
+    <div>
+      <button id='idCardAnalyzer' style='margin-top: 10px'>身份证识别</button>
+    </div>
+    <div id='idCardInfo'></div>
+    <div id='audioAnalyzer' style='margin: 10px 0'>
+      <button id='localAudioAnalyzer' style='float: left;margin-right: 20px'>开启语音识别</button>
+      <div id='localAudioText'></div>
+    </div>
+    <p>远端视频</p>
+    <div id='remotevideo'></div>
+    <div>
+      <input id='textToSpeakInput' placeholder='请输入需要转语音的文字' />
+      <button id='textToSpeakBtn'>开始识别</button>
+    </div>
+  </div>
+
+  <script>
+    const joinRoomBtn = document.getElementById('joinroom');
+    const leaveRoomBtn = document.getElementById('leaveroom');
+    const roomTokenInput = document.getElementById('roomtoken');
+    const localVideo = document.getElementById('localvideo');
+    const remoteVideo = document.getElementById('remotevideo');
+    const idCardAnalyzer = document.getElementById('idCardAnalyzer');
+    const localAudioAnalyzer = document.getElementById('localAudioAnalyzer');
+    const idCardInfo = document.getElementById('idCardInfo');
+    const localAudioText = document.getElementById('localAudioText');
+    let audioAnalyzerOpenState = false; // 是否开启语音识别
+    const textToSpeakBtn = document.querySelector('#textToSpeakBtn'); // 文字转语音按钮
+    const textToSpeakInput = document.querySelector('#textToSpeakInput'); // 输入文字转语音的文本内容
+
+    console.log('QNRTCAI.version', QNRTCAI.version);
+
+    /**
+     * 点击开始文字转语音
+     */
+    textToSpeakBtn.onclick = function() {
+      const text = textToSpeakInput.value;
+      QNRTCAI.textToSpeak({ text }).then(response => {
+        const base64String = response.response.audio;
+        console.log('response', response)
+        console.log('base64String', base64String);
+        const snd = new Audio('data:audio/wav;base64,' + base64String);
+        snd.play();
+      });
+    };
+
+    /**
+     * 模拟生成 aiToken
+     */
+    const generateAiToken = () => {
+      const accessKey = 'bsOUqUaLN-cJ3DlmdD6jU8B7_Nq5fo6IDZVAhtLe';
+      const secretKey = 'B8IUczRc8wlbttCxesVLzS0pEWZ_aKEQ63Cz9CzR';
+      const app_id = 'testApp';
+      const src = `${app_id}:${Math.floor(Date.now() / 1000 + 6 * 60 * 60 * 12)}`;
+      const encodedSrc = btoa(unescape(encodeURIComponent(src)));
+      const sign = CryptoJS.HmacSHA1(encodedSrc, secretKey);
+      const encodedSign = CryptoJS.enc.Base64.stringify(sign).replace(/\//g, '_').replace(/\+/g, '-');
+      const aiToken = 'QD ' + accessKey + ':' + encodedSign + ':' + encodedSrc;
+      console.log('aiToken', aiToken);
+      return aiToken;
+    };
+
+    /**
+     * 初始化由服务端生成的 aiToken 和 signToken
+     */
+    QNRTCAI.init(generateAiToken(), async function(url) {
+      /**
+       * 这里编写通过 url 生成的 signToken 逻辑并返回
+       */
+      const accessKey = 'QxZugR8TAhI38AiJ_cptTl3RbzLyca3t-AAiH-Hh';
+      const secretKey = '4yv8mE9kFeoE31PVlIjWvi3nfTytwT0JiAxWjCDa';
+      const SKSign = CryptoJS.HmacSHA1(url, secretKey);
+      const SKEncodedSign = CryptoJS.enc.Base64.stringify(SKSign).replace(/\//g, '_').replace(/\+/g, '-');
+      const signToken = `${accessKey}:${SKEncodedSign}`;
+      return signToken;
+    });
+
+    joinRoomBtn.addEventListener('click', joinRoom);
+    leaveRoomBtn.addEventListener('click', leaveRoom);
+
+
+    // 初始化
+    var QNRTC = QNRTC.default;
+    const client = QNRTC.createClient();
+
+    var localTracks = [];
+    var remoteTracks = [];
+
+    // 绑定事件监听
+
+    // 房间连接状态发生变化
+    client.on('connection-state-change', connectionState => {
+      console.log('连接状态变化', connectionState);
+    });
+
+    // 有用户加入房间
+    client.on('user-joined', user => {
+    });
+
+    // 有用户离开房间
+    client.on('user-left', user => {
+    });
+
+    // 有用户发布音视频流到房间，此时可以做订阅操作
+    client.on('user-published', (userID, tracks) => {
+      remoteTracks.push(...tracks);
+      subscribe(tracks);
+    });
+
+    // 有用户取消发布音视频流
+    client.on('user-unpublished', (userID, tracks) => {
+    });
+
+    // 远端用户正在重连，此时可以做 UI 提示
+    client.on('user-reconnecting', user => {
+    });
+
+    // 远端用户重连成功，此时可以做 UI 提示
+    client.on('user-reconnected', user => {
+    });
+
+    // 因不可恢复原因与房间断开连接，此时可以做清空资源，重新加入房间操作
+    client.on('disconnect', () => {
+    });
+
+    // 加入房间函数，包括加入房间、采集音视频流、发布音视频流等
+    async function joinRoom() {
+      const roomToken = roomTokenInput.value;
+      const users = await client.join(roomToken);
+      await publish();
+    }
+
+    // 发布函数，包括采集、播放、发布音视频流
+    async function publish() {
+      // 采集
+      const cameraTrack = await QNRTC.createCameraVideoTrack({
+        tag: 'camera',
+        facingMode: 'environment',
+        width: 480,
+        height: 640
+      });
+      const microphoneTrack = await QNRTC.createMicrophoneAudioTrack({ tag: 'microphone' });
+      localTracks.push(cameraTrack, microphoneTrack);
+
+      // 播放
+      for (const track of localTracks) {
+        if (track.tag === 'camera') track.play(localVideo);
+      }
+
+      // 发布
+      await client.publish(localTracks);
+
+      // 处理 track 终止的逻辑，如重新采集发布等
+      for (const track of localTracks) {
+        track.on('ended', () => {
+        });
+      }
+    }
+
+    // 订阅函数，保护订阅、播放音视频流
+    async function subscribe(tracks) {
+      // 订阅
+      await client.subscribe(tracks);
+
+      // 播放
+      for (const track of tracks) {
+        track.play(remoteVideo);
+      }
+    }
+
+    // 离开房间函数，包括取消订阅、取消发布、离开房间、释放音视频流
+    async function leaveRoom() {
+      // 取消订阅
+      await client.unsubscribe(remoteTracks);
+
+      // 取消发布
+      await client.unpublish(localTracks);
+
+      // 离开房间
+      client.leave();
+
+      // 释放
+      for (const track of localTracks) {
+        track.release();
+      }
+      localTracks = [];
+    }
+
+    /**
+     * 身份证识别
+     */
+    idCardAnalyzer.addEventListener('click', () => {
+      console.log('身份证识别');
+      if (!localTracks.length) {
+        alert('请先加入房间, 并授权媒体(摄像头、麦克风)设备');
+        return;
+      }
+      const cameraTrack = localTracks.find(t => t.tag === 'camera');
+      QNRTCAI.IDCardDetector.run(cameraTrack).then(res => {
+        idCardInfo.innerText = JSON.stringify(res);
+      });
+    });
+
+    let audioAnalyzer = null;
+
+    /**
+     * 语音识别
+     */
+    localAudioAnalyzer.addEventListener('click', event => {
+      if (!localTracks.length) {
+        alert('请先加入房间, 并授权媒体(摄像头、麦克风)设备');
+        return;
+      }
+      const cur = event.currentTarget;
+      const audioTrack = localTracks.find(t => t.tag === 'microphone');
+      if (audioAnalyzerOpenState) {
+        cur.innerText = '开启语音识别';
+        audioAnalyzer.stopAudioToText();
+      } else {
+        cur.innerText = '关闭语音识别';
+        audioAnalyzer = QNRTCAI.AudioToTextAnalyzer.startAudioToText(audioTrack, null, {
+          onAudioToText: message => {
+            console.log('message', message);
+            if (message.transcript) {
+              localAudioText.innerText = message.transcript;
+            }
+          }
+        });
+      }
+      audioAnalyzerOpenState = !audioAnalyzerOpenState;
+    });
+
+  </script>
+</body>
+
+</html>
