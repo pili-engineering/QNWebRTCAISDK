@@ -5,13 +5,13 @@
 可以直接使用 script 标签方式引入。
 
 ```html
-<script src="./qnweb-rtc-ai-1.0.2-beta.umd.js"></script>
+<script src="./qnweb-rtc-ai-1.0.5-beta.umd.js"></script>
 ```
 
 也可以通过 import 方式引入。
 
 ```js
-import * as QNRTCAI from './qnweb-rtc-ai-1.0.3-beta.umd.js'
+import * as QNRTCAI from './qnweb-rtc-ai-1.0.5-beta.umd.js'
 ```
 
 2. 验证
@@ -20,7 +20,7 @@ import * as QNRTCAI from './qnweb-rtc-ai-1.0.3-beta.umd.js'
 
 ```html
 <script>
-  console.log(QNRTCAI.version); // 1.0.3-beta
+  console.log(QNRTCAI.version); // 1.0.5-beta
 </script>
 ```
 
