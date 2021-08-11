@@ -208,9 +208,8 @@ const Room = () => {
    */
   const onFaceLiveAction = (actionType: string) => {
     const QNRTC = window.QNRTC.default;
-    const recorder = QNRTC.createMediaRecorder();
     const cameraTrack = localTracks.find(track => track.tag === 'camera');
-    const faceActionLiveDetector = QNRTCAI.FaceActionLiveDetector.start(recorder, cameraTrack, {
+    const faceActionLiveDetector = QNRTCAI.FaceActionLiveDetector.start(QNRTC, cameraTrack, {
       action_types: [actionType]
     });
     setFaceActionLiveDetector(faceActionLiveDetector);
