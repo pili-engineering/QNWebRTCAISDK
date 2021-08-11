@@ -67,9 +67,9 @@ analyzer.stopAudioToText();
 
 /**
  * 身份证识别
- * cameraTrack 为视频 Track 对象
+ * videoTrack 为视频 Track 对象
  */
-QNRTCAI.IDCardDetector.run(cameraTrack).then(res => {
+QNRTCAI.IDCardDetector.run(videoTrack).then(res => {
   console.log(res);
 })
 ```
@@ -338,5 +338,342 @@ interface TextToSpeakRes {
     audio?: string; // 合成的音频，采用 base64 编码
   }
 }
+```
+
+### FaceActionLiveDetector(动作活体检测)
+
+#### 使用
+
+```ts
+// 需通过 QNRTC 创建 recorder
+const QNRTC = window.QNRTC.default;
+const recorder = QNRTC.createMediaRecorder();
+
+// 开始检测
+const detector = QNRTCAI.FaceActionLiveDetector.start(recorder, videoTrack, {
+  action_types: ['shake'] // 传入动作活体动作的标示字符串
+});
+
+// 结束检测并响应数据
+detector.commit().then(response => {
+  console.log('response', response)
+});
+```
+
+#### API 说明
+
+| 方法                   | 类型                                                         | 说明               |
+| ---------------------- | ------------------------------------------------------------ | ------------------ |
+| static start(静态方法) | (record: QNMediaRecorder, videoTrack: QNRTCTrack, params: [FaceActionLiveDetectorParams](#FaceActionLiveDetectorParams(动作活体检测参数))) => FaceActionLiveDetector | 开始检测           |
+| commit                 | () => Promise\<[FaceActionLiveDetectorRes](#FaceActionLiveDetectorRes(动作活体检测响应体))\> | 结束检测并响应数据 |
+
+#### 类型定义
+
+##### FaceActionLiveDetectorParams(动作活体检测参数)
+
+```ts
+/**
+ * 动作的标示字符串
+ */
+enum ActionType {
+  Nod = 'nod',
+  Shake = 'shake',
+  Blink = 'blink',
+  Mouth = 'mouth'
+}
+/**
+ * 动作活体检测参数
+ */
+interface FaceActionLiveDetectorParams {
+  action_types: ActionType[];
+}
+```
+
+##### FaceActionLiveDetectorRes(动作活体检测响应体)
+
+```ts
+/**
+ * 动作活体检测响应体
+ */
+interface FaceActionLiveDetectorRes {
+  request_id: string;
+  response: FaceActionLiveResData;
+}
+/**
+ * 动作活体检测响应值
+ */
+interface FaceActionLiveResData {
+  best_frames: BestFrame[]; // 最优帧列表，列表中每个元素格式是 json，包括 base64 编码的二进制图片数据和图像质量分数
+  errorcode: number;
+  errormsg: string;
+  live_status: number; // 返回动作活体状态码，1 表示通过，0 表示不通过
+  session_id: string; // 唯一会话 id
+}
+
+/**
+ * 最优帧列表，列表中每个元素格式是 json，
+ * 包括 base64 编码的二进制图片数据和图像质量分数
+ */
+interface BestFrame {
+  image_b64: string; // base64 编码的二进制图像数据
+  quality: number; // 图像质量分数, 取值范围是[0,100]
+}
+```
+
+### 人脸对比
+
+#### 使用
+
+```ts
+const videoTrack = localTracks.find(t => t.tag === 'camera');
+/**
+ * targetImgBase64 为需要对比的图片 base64 编码
+ */
+QNRTCAI.faceComparer(videoTrack, targetImgBase64).then(response => {
+  console.log('response', response);
+});
+```
+
+#### API 说明
+
+| 方法         | 类型                                                         | 说明     |
+| ------------ | ------------------------------------------------------------ | -------- |
+| faceComparer | (videoTrack: QNRTCTrack, targetImg: string, params: [FaceComparerParams](#FaceComparerParams(人脸对比参数))) => Promise\<[FaceComparerRes](#FaceComparerRes(人脸对比响应体))\> | 人脸对比 |
+
+#### 类型定义
+
+##### FaceComparerParams(人脸对比参数)
+
+```ts
+/**
+ * 人脸对比参数
+ * @param rotate_A  否  bool  人脸检测失败时，是否对图像 A 做旋转再检测，旋转角包括 90、180、270 三个角度，默认值为 False
+ * @param rotate_B  否  bool  人脸检测失败时，是否对图像 B 做旋转再检测，旋转角包括 90、180、270 三个角度，默认值为 False
+ * @param maxface_A  否  bool  图像 A 中检测到多张人脸时是否取最大区域的人脸作为输出，默认值为 True
+ * @param maxface_B  否  bool  图像 B 中检测到多张人脸时是否取最大区域的人脸作为输出，默认值为 True
+ */
+interface FaceComparerParams {
+  rotate_A?: boolean;
+  rotate_B?: boolean;
+  maxface_A?: boolean;
+  maxface_B?: boolean;
+}
+```
+
+##### FaceComparerRes(人脸对比响应体)
+
+```ts
+/**
+ * 人脸对比响应体
+ */
+interface FaceComparerRes {
+  request_id: string;
+  response: FaceComparerResData;
+}
+
+/**
+ * 人脸对比响应体数据
+ */
+interface FaceComparerResData {
+  errorcode: number;
+  errormsg: string;
+  session_id: string; // 唯一会话 id
+  similarity: number; // 两个 face 的相似度, 取值范围为[0,100]
+}
+```
+
+### 人脸检测
+
+#### 使用
+
+```ts
+const videoTrack = localTracks.find(t => t.tag === 'camera');
+QNRTCAI.faceDetector(cameraTrack).then(response => {
+  console.log('response', response);
+});
+```
+
+#### API 说明
+
+| 方法         | 类型                                                         | 说明     |
+| ------------ | ------------------------------------------------------------ | -------- |
+| faceDetector | (videoTrack: QNRTCTrack, params: [FaceDetectorParams](#FaceDetectorParams(人脸检测参数))) => Promise\<[FaceDetectorRes](#FaceDetectorRes(人脸检测响应体))\> | 人脸检测 |
+
+#### 类型定义
+
+##### FaceDetectorParams(人脸检测参数)
+
+```ts
+/**
+ * 人脸检测参数
+ * @param rotate-人脸检测失败时，是否对图像 A 做旋转再检测，旋转角包 括 90、180、270 三个角度，默认值为false
+ */
+interface FaceDetectorParams {
+  rotate?: boolean;
+}
+```
+
+##### FaceDetectorRes(人脸检测响应体)
+
+```ts
+/**
+ * 人脸检测响应体
+ */
+interface FaceDetectorRes {
+  request_id: string;
+  response: FaceDetectorResData;
+}
+
+/**
+ * 人脸检测响应值
+ * @param num_face int 图像中人脸数量
+ * @param rotangle float 图像旋转角度
+ * @param face []faceItem [face1,face2,…]，其中 face1,face2,…等为 json 格式，具体格式见下表
+ * @param errorcode  int  返回状态码
+ * @param errormsg  string  返回错误消息
+ */
+export interface FaceDetectorResData {
+  errorcode: number;
+  errormsg: string;
+  face: FaceItem[];
+  num_face: number;
+  rotate_angle: number;
+  session_id: string;
+}
+
+/**
+ * faceItem
+ * @param blur  float  人脸模糊度，取值范围[0,1]，越大越清晰
+ * @param gender  string  性别，’M’代表男，’F’代表女
+ * @param age  int  年龄，区间 1-107 岁
+ * @param illumination  float  人脸光照范围，取值范围[0,100]，越大光照质量越好
+ * @param facesize  float  人脸尺寸分数，取值分数[0,100]， 越大人脸尺寸越大
+ * @param quality  float  人脸综合质量分数，取值范围[0,100], 越大质量越好
+ * @param eye  flaot  闭眼概率,取值范围[0,100]
+ * @param mouth  float  闭嘴概率,取值范围[0,100]
+ * @param pitch  float  三维旋转之俯仰角，[-180,180]
+ * @param roll  float  三维旋转之旋转角，[-180,180]
+ * @param yaw  float  三维旋转之左右旋转角, [-180,180]
+ * @param completeness  int  取值0到100；0表示人脸不完整，溢出了图像边界，100 表示人脸是完整的，在图像边界内
+ * @param area  int  人脸区域的大小
+ * @param face_aligned_b64  string  使用 base64 编码的对齐后人脸图片数据
+ * @param score  float  人脸分数 取值范围 [0,100]
+ * @param x  int  人脸框的左上角 x 坐标
+ * @param y  int  人脸框的左上角 y 坐标
+ * @param width  int  人脸框的宽度
+ * @param height  int  人脸框的高度
+ * @param face_shape  json  人脸 106 个关键点坐标，包含 face_profile，left_eye, left_eyebrow，right_eye，right_eyebrow，mouth，nose，pupil 等组件，每个组件都是一个 json
+ */
+interface FaceItem {
+  score: number;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  pitch: number;
+  yaw: number;
+  roll: number;
+  eye: number;
+  mouth: number;
+  blur: number;
+  gender: string;
+  age: number;
+  illumination: number;
+  face_shape: FaceShape;
+  completeness: number;
+  area: number;
+  facesize: number;
+  quality: number;
+  face_aligned_b64: string;
+}
+
+/**
+ * @param face_shape  json
+ * 人脸 106 个关键点坐标，
+ * 包含 face_profile，left_eye, left_eyebrow，right_eye，right_eyebrow，mouth，nose，pupil 等组件
+ */
+interface FaceShape {
+  face_profile: FaceProfile[];
+  left_eye: FaceProfile[];
+  left_eyebrow: FaceProfile[];
+  right_eye: FaceProfile[];
+  right_eyebrow: FaceProfile[];
+  mouth: FaceProfile[];
+  nose: FaceProfile[];
+  pupil: FaceProfile[];
+}
+
+interface FaceProfile {
+  x: number;
+  y: number;
+}
+```
+
+### 错误码
+
+```c
+业务错误码	信息
+
+// 通用:
+0	成功
+1000	未知异常
+1001	音频/视频轨道没有数据返回
+1002	音频/视频数据异常
+
+// 语音转文字:
+2000	网络异常连接中断
+
+// 身份证识别:
+53090001	请求解析失败
+53090002	图片解码错误
+53090003	OCR 内部错误
+53090004	无法识别的身份证(非中国身份证等)
+53090005	参数错误
+55060030	鉴权失败
+53091001	黑白复印件
+53091003	无法检测到人脸
+53091004	证件信息缺失或错误
+53091005	证件过期
+53091006	身份证不完整
+
+// 人脸检测:
+55060001	请求字段有非法传输
+55060002	图片解码失败
+55060006	人脸特征提取失败
+55060018	人脸配准失败
+55060019	人脸检测图片 Base64 解码失败
+55060033	人脸图片无效
+
+// 人脸对比:
+55060001	请求字段有非法传输
+55060002	图片解码失败
+55060028	人脸比对图片 A Base64 解码失败
+55060029	人脸比对图片 B Base64 解码失败
+55060040	图片A人脸检测失败
+55060041	图片B人脸检测失败
+
+// 动作活体检测:
+55060001	请求字段有非法传输
+55060002	图片解码失败
+55060012	点头动作检测失败
+55060013	摇头动作检测失败
+55060014	眨眼动作检测失败
+55060015	张嘴动作检测失败
+55060016	不是活体
+55060024	视频帧率过低
+55060016	动作类型无效
+
+// 光线活体
+55060001    请求字段有非法传输
+55060002	图片解码失败
+55060009	视频无效
+55060011	视频中人脸检测失败
+55060016	不是活体
+
+// 文转音
+100        请求参数缺失
+101        请求参数不合法，⽐如合成⽂本过⻓
+102        服务不可⽤
+103        语⾳合成错误
 ```
 
