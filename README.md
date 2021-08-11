@@ -5,7 +5,8 @@
 可以直接使用 script 标签方式引入。
 
 ```html
-<script src="./qnweb-rtc-ai.umd.js"></script>
+
+<script src='./qnweb-rtc-ai.umd.js'></script>
 ```
 
 也可以通过 import 方式引入。
@@ -19,6 +20,7 @@ import * as QNRTCAI from './qnweb-rtc-ai.umd.js'
 用如下代码获取主类，验证是否正常引入成功。
 
 ```html
+
 <script>
   console.log(QNRTCAI.version);
 </script>
@@ -91,15 +93,15 @@ const token = "QD " + Your_Access_Key + ":" + encodedSign + ":" + encodedSrc``
 
 说明：参数为待签名的url（url中已经包含了时间戳），[将url签名成token 参考](https://developer.qiniu.com/kodo/1202/download-token)将https://developer.qiniu.com/kodo/1202/download-token
 
-
 ## API 文档
 
 ### AudioToTextAnalyzer(语音识别转文字)
 
 #### 使用
+
 ```ts
 // 开启语音识别
-const audioAnalyzer = QNRTCAI.AudioToTextAnalyzer.startAudioToText(audioTrack, null,  {
+const audioAnalyzer = QNRTCAI.AudioToTextAnalyzer.startAudioToText(audioTrack, null, {
   onAudioToText: message => {
     console.log('message', message);
     if (message.transcript) {
@@ -201,11 +203,10 @@ interface WordsDTO {
 }
 ```
 
-
-
 ### IDCardDetector(身份证信息识别)
 
 #### 使用
+
 ```ts
 QNRTCAI.IDCardDetector.run(track)
   .then(res => console.log(res))
@@ -261,8 +262,8 @@ interface OcrResult {
 }
 
 interface ImageResult {
-  idcard:	string, //	身份证区域图片，使用Base64 编码后的字符串， 是否返回由请求参数ret_image 决定
-  portrait:	string, //	身份证人像照片，使用Base64 编码后的字符串， 是否返回由请求参数ret_portrait 决定
+  idcard: string, //	身份证区域图片，使用Base64 编码后的字符串， 是否返回由请求参数ret_image 决定
+  portrait: string, //	身份证人像照片，使用Base64 编码后的字符串， 是否返回由请求参数ret_portrait 决定
   idcard_bbox: Array<Array<number>>, //	框坐标，格式为 [[x0, y0], [x1, y1], [x2, y2], [x3, y3]]
 }
 ```
@@ -303,6 +304,7 @@ enum Speaker {
   Kefu1 = 'kefu1', // 客服1
   Girl1 = 'girl1', // 女孩1
 }
+
 // tts 音频编码格式枚举
 enum AudioEncoding {
   Wav = 'wav',
@@ -347,10 +349,9 @@ interface TextToSpeakRes {
 ```ts
 // 需通过 QNRTC 创建 recorder
 const QNRTC = window.QNRTC.default;
-const recorder = QNRTC.createMediaRecorder();
 
 // 开始检测
-const detector = QNRTCAI.FaceActionLiveDetector.start(recorder, videoTrack, {
+const detector = QNRTCAI.FaceActionLiveDetector.start(QNRTC, videoTrack, {
   action_types: ['shake'] // 传入动作活体动作的标示字符串
 });
 
@@ -364,7 +365,7 @@ detector.commit().then(response => {
 
 | 方法                   | 类型                                                         | 说明               |
 | ---------------------- | ------------------------------------------------------------ | ------------------ |
-| static start(静态方法) | (record: QNMediaRecorder, videoTrack: QNRTCTrack, params: [FaceActionLiveDetectorParams](#FaceActionLiveDetectorParams(动作活体检测参数))) => FaceActionLiveDetector | 开始检测           |
+| static start(静态方法) | (QNRTC, videoTrack: QNRTCTrack, params: [FaceActionLiveDetectorParams](#FaceActionLiveDetectorParams(动作活体检测参数))) => FaceActionLiveDetector | 开始检测           |
 | commit                 | () => Promise\<[FaceActionLiveDetectorRes](#FaceActionLiveDetectorRes(动作活体检测响应体))\> | 结束检测并响应数据 |
 
 #### 类型定义
@@ -381,6 +382,7 @@ enum ActionType {
   Blink = 'blink',
   Mouth = 'mouth'
 }
+
 /**
  * 动作活体检测参数
  */
@@ -399,6 +401,7 @@ interface FaceActionLiveDetectorRes {
   request_id: string;
   response: FaceActionLiveResData;
 }
+
 /**
  * 动作活体检测响应值
  */
