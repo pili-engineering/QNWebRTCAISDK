@@ -1,0 +1,54 @@
+.fullScreen {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.room {
+  composes: fullScreen;
+}
+
+.cameraTrack {
+  composes: fullScreen;
+}
+
+.toolBtn {
+  margin: 5px;
+}
+
+.caption {
+  width: fit-content;
+  min-height: 20px;
+  position: fixed;
+  bottom: 20px;
+  background: rgba(0, 0, 0, 0.5);
+  left: 0;
+  right: 0;
+  margin: auto;
+  color: #fff;
+  padding: 10px;
+}
+
+.targetFileInput {
+  display: none;
+}
+
+.liveAction {
+  margin: 0 10px;
+}
+
+.faceActionLiveDetectorToast {
+  min-width: 120px;
+  min-height: 32px;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+}
