@@ -1,6 +1,6 @@
 {
   "name": "qnweb-rtc-ai-demo",
-  "version": "1.0.7-beta",
+  "version": "1.0.8-beta",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
