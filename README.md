@@ -423,6 +423,51 @@ interface BestFrame {
 }
 ```
 
+### FaceFlashLiveDetector(光线活体检测)
+
+#### 使用
+
+```ts
+// 开始检测
+const faceFlashLiveDetector = QNRTCAI.FaceFlashLiveDetector.start(cameraTrack);
+
+// 结束检测
+faceFlashLiveDetector.commit().then(response => console.log('response', response))
+```
+
+#### API 说明
+
+| 方法                   | 类型                                                         | 说明                                         |
+| ---------------------- | ------------------------------------------------------------ | -------------------------------------------- |
+| static start(静态方法) | (videoTrack: QNRTCTrack, defaultFrameRate: number) => FaceFlashLiveDetector | 开始检测，defaultFrameRate 为帧率，默认为 15 |
+| commit                 | () => Promise\<[FaceFlashLiveDetectorRes](#FaceFlashLiveDetectorRes(动作活体检测响应体))\> | 结束检测并响应数据                           |
+
+#### 类型定义
+
+##### FaceFlashLiveDetectorRes(动作活体检测响应体)
+
+```ts
+/**
+ * 光线活体检测响应体
+ */
+interface FaceFlashLiveDetectorRes {
+  request_id: string;
+  response: FaceFlashLiveDetectorResData;
+}
+
+/**
+ * 光线活体检测响应值
+ */
+interface FaceFlashLiveDetectorResData {
+  errorcode: number;
+  errormsg: string;
+  face_num: number; // 视频中检测到的人脸帧数
+  pass_num: number; // 视频中通过的人脸帧数
+  score: number; // 活体分数 [0,100]
+  session_id: string; // 唯一会话 id
+}
+```
+
 ### 人脸对比
 
 #### 使用
@@ -667,7 +712,7 @@ interface FaceProfile {
 55060016	动作类型无效
 
 // 光线活体
-55060001    请求字段有非法传输
+55060001  请求字段有非法传输
 55060002	图片解码失败
 55060009	视频无效
 55060011	视频中人脸检测失败

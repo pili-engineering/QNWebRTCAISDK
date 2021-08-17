@@ -7,6 +7,15 @@ import { generateAiToken, generateSignToken } from '../../utils/token';
 import * as eruda from 'eruda';
 import css from './index.module.scss';
 
+/**
+ * 光线检测状态值
+ */
+enum FaceFlashLiveStatus {
+  Pending, // 预备
+  InProgress, // 进行中
+  Closed, // 已结束
+}
+
 const Room = () => {
   const roomToken = new URLSearchParams(location.search).get('roomToken') || '';
   const { RTCClient, isRTCRoomJoined } = useRTCJoinRoom(roomToken);
@@ -24,6 +33,7 @@ const Room = () => {
     setFaceActionLiveDetectorType
   } = useFaceActionLiveDetector();
   const [faceActionLiveDetector, setFaceActionLiveDetector] = useState<any>();
+  const [faceFlashLiveStatus, setFaceFlashLiveStatus] = useState<FaceFlashLiveStatus>(FaceFlashLiveStatus.Closed);
 
   /**
    * 初始化
@@ -216,6 +226,31 @@ const Room = () => {
     setFaceActionLiveDetectorType(actionType);
   };
 
+  /**
+   * 光线活体检测
+   */
+  const faceFlashLive = () => {
+    setFaceFlashLiveStatus(FaceFlashLiveStatus.Pending);
+    const cameraTrack = localTracks.find(track => track.tag === 'camera');
+    const faceFlashLiveDetector = QNRTCAI.FaceFlashLiveDetector.start(cameraTrack);
+    setTimeout(() => {
+      setFaceFlashLiveStatus(FaceFlashLiveStatus.InProgress);
+      faceFlashLiveDetector.commit().then(response => {
+        Modal.info({
+          title: '光线活体检测信息',
+          content: JSON.stringify(response, null, 2)
+        });
+      }).catch(error => {
+        Modal.error({
+          title: '光线活体检测报错',
+          content: `请求失败，http status: ${error.status}`
+        });
+      }).finally(() => {
+        setFaceFlashLiveStatus(FaceFlashLiveStatus.Closed);
+      });
+    }, 3000);
+  };
+
   return <div className={css.room}>
     <div ref={cameraTrackElement} className={css.cameraTrack}></div>
     <div className={css.toolBox}>
@@ -237,6 +272,7 @@ const Room = () => {
       >
         <Button className={css.toolBtn} size='small' type='primary'>动作活体</Button>
       </Popover>
+      <Button className={css.toolBtn} size='small' type='primary' onClick={faceFlashLive}>光线活体</Button>
       <Button className={css.toolBtn} size='small' type='primary' onClick={faceDetector}>人脸检测</Button>
       <Button className={css.toolBtn} size='small' type='primary' onClick={faceCompare}>人脸对比</Button>
       <Button className={css.toolBtn} size='small' type='primary' onClick={textToSpeak}>文转音</Button>
@@ -268,6 +304,15 @@ const Room = () => {
     {
       faceActionLiveDetectorText &&
       <div className={css.faceActionLiveDetectorToast}>{faceActionLiveDetectorText}：{countdown}</div>
+    }
+
+    {
+      faceFlashLiveStatus !== FaceFlashLiveStatus.Closed &&
+      <div className={css.faceActionLiveDetectorToast}>
+        {
+          faceFlashLiveStatus === FaceFlashLiveStatus.Pending ? '光线活体检测中...' : '光线活体数据请求中...'
+        }
+      </div>
     }
   </div>;
 };
