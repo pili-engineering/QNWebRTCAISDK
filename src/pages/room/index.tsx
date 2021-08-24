@@ -139,7 +139,9 @@ const Room = () => {
     if (saying) { // 关闭
       audioAnalyzer.current.stopAudioToText();
     } else { // 开启
-      audioAnalyzer.current = QNRTCAI.AudioToTextAnalyzer.startAudioToText(audioTrack, {}, {
+      audioAnalyzer.current = QNRTCAI.AudioToTextAnalyzer.startAudioToText(audioTrack, {
+        hot_words: "清楚,10;清晰,1"
+      }, {
         onAudioToText: (message: any) => {
           console.log('message', message);
           const captionText = message.transcript;
