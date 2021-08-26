@@ -1,6 +1,6 @@
 {
   "name": "qnweb-rtc-ai-demo",
-  "version": "1.0.9-beta",
+  "version": "1.0.10-beta.4",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -8,6 +8,8 @@
     "lint": "eslint src --ext .ts,.tsx"
   },
   "dependencies": {
+    "@ffmpeg/core": "^0.10.0",
+    "@ffmpeg/ffmpeg": "^0.10.1",
     "antd": "^4.16.9",
     "crypto-js": "^4.1.1",
     "eruda": "^2.4.1",

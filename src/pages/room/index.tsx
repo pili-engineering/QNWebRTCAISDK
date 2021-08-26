@@ -1,4 +1,5 @@
-import { Button, Input, Modal, Popover } from 'antd';
+import { Button, Input, Modal, Popover, Select } from 'antd';
+import { baseDownload } from '../../utils/download';
 import React, { useEffect, useRef, useState } from 'react';
 import useFaceActionLiveDetector from '../../hooks/useFaceActionLiveDetector';
 import useRTCJoinRoom from '../../hooks/useRTCJoinRoom';
@@ -34,6 +35,18 @@ const Room = () => {
   } = useFaceActionLiveDetector();
   const [faceActionLiveDetector, setFaceActionLiveDetector] = useState<any>();
   const [faceFlashLiveStatus, setFaceFlashLiveStatus] = useState<FaceFlashLiveStatus>(FaceFlashLiveStatus.Closed);
+  const [isRecord, setIsRecord] = useState(false);
+  const recorder = useRef(null);
+  const [recordMimeTypes] = useState([
+    'video/webm',
+    'audio/webm',
+    'video/webm\;codecs=vp8',
+    'video/webm\;codecs=daala',
+    'video/webm\;codecs=h264',
+    'audio/webm\;codecs=opus',
+    'video/mpeg'
+  ]);
+  const [recordMimeType, setRecordMimeType] = useState('video/webm');
 
   /**
    * 初始化
@@ -49,13 +62,13 @@ const Room = () => {
    * debug audioBuffer
    */
   useEffect(() => {
-    const isDebug = JSON.parse(new URLSearchParams(location.search).get('isDebug'));
-    const audioTrack = localTracks.find(track => track.tag === 'microphone');
-    if (audioTrack && isDebug) {
-      audioTrack._track.on('audioBuffer', buffer => {
-        console.log('audioTrack', buffer);
-      });
-    }
+    // const isDebug = JSON.parse(new URLSearchParams(location.search).get('isDebug'));
+    // const audioTrack = localTracks.find(track => track.tag === 'microphone');
+    // if (audioTrack && isDebug) {
+    //   audioTrack._track.on('audioBuffer', buffer => {
+    //     console.log('audioTrack', buffer);
+    //   });
+    // }
     /**
      * 播放视频 Track
      */
@@ -140,7 +153,7 @@ const Room = () => {
       audioAnalyzer.current.stopAudioToText();
     } else { // 开启
       audioAnalyzer.current = QNRTCAI.AudioToTextAnalyzer.startAudioToText(audioTrack, {
-        hot_words: "清楚,10;清晰,1"
+        hot_words: '清楚,10;清晰,1'
       }, {
         onAudioToText: (message: any) => {
           console.log('message', message);
@@ -219,13 +232,21 @@ const Room = () => {
    * @param actionType
    */
   const onFaceLiveAction = (actionType: string) => {
-    const QNRTC = window.QNRTC.default;
-    const cameraTrack = localTracks.find(track => track.tag === 'camera');
-    const faceActionLiveDetector = QNRTCAI.FaceActionLiveDetector.start(QNRTC, cameraTrack, {
-      action_types: [actionType]
-    });
-    setFaceActionLiveDetector(faceActionLiveDetector);
-    setFaceActionLiveDetectorType(actionType);
+    try {
+      const QNRTC = window.QNRTC.default;
+      const cameraTrack = localTracks.find(track => track.tag === 'camera');
+      const faceActionLiveDetector = QNRTCAI.FaceActionLiveDetector.start(QNRTC, cameraTrack, {
+        action_types: [actionType],
+        mimeType: recordMimeType
+      });
+      setFaceActionLiveDetector(faceActionLiveDetector);
+      setFaceActionLiveDetectorType(actionType);
+    } catch (err) {
+      Modal.error({
+        title: 'onFaceLiveAction error',
+        content: err.message
+      });
+    }
   };
 
   /**
@@ -251,6 +272,35 @@ const Room = () => {
         setFaceFlashLiveStatus(FaceFlashLiveStatus.Closed);
       });
     }, 3000);
+  };
+
+  /**
+   * 开始/结束录制
+   */
+  const toggleRecord = () => {
+    const nextValue = !isRecord;
+    const QNRTC = window.QNRTC.default;
+    const videoTrack = localTracks.find(track => track.tag === 'camera');
+    const audioTrack = localTracks.find(track => track.tag === 'microphone');
+    recorder.current = recorder.current || QNRTC.createMediaRecorder();
+    const setMimeTypeResult = recorder.current.setMimeType(recordMimeType);
+    if (!setMimeTypeResult) {
+      Modal.error({
+        title: `mimeType: ${recordMimeType} not supported`
+      });
+      return;
+    }
+    if (nextValue) {
+      recorder.current.start({
+        videoTrack,
+        audioTrack
+      });
+    } else {
+      const recordBlob = recorder.current.stop();
+      const blobURL = URL.createObjectURL(recordBlob);
+      baseDownload(blobURL, 'test.webm');
+    }
+    setIsRecord(nextValue);
   };
 
   return <div className={css.room}>
@@ -282,6 +332,17 @@ const Room = () => {
       <Button className={css.toolBtn} size='small' type='primary' onClick={speakToText}>
         {saying ? '关闭' : '开启'}语音转文字
       </Button>
+      <Button className={css.toolBtn} size='small' type='primary' onClick={toggleRecord}>
+        {isRecord ? '结束' : '开始'}录制
+      </Button>
+      <div className={css.toolBtn}>
+        <Select placeholder='请选择录制的格式' onChange={value => setRecordMimeType(value)} size='small'
+                style={{ width: '80%' }} value={recordMimeType}>
+          {
+            recordMimeTypes.map(mimeType => <Select.Option key={mimeType} value={mimeType}>{mimeType}</Select.Option>)
+          }
+        </Select>
+      </div>
     </div>
 
     <Input

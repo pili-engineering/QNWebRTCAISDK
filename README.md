@@ -370,10 +370,10 @@ detector.commit().then(response => {
 
 #### API 说明
 
-| 方法                   | 类型                                                         | 说明               |
-| ---------------------- | ------------------------------------------------------------ | ------------------ |
-| static start(静态方法) | (QNRTC, videoTrack: QNRTCTrack, params: [FaceActionLiveDetectorParams](#FaceActionLiveDetectorParams(动作活体检测参数))) => FaceActionLiveDetector | 开始检测           |
-| commit                 | () => Promise\<[FaceActionLiveDetectorRes](#FaceActionLiveDetectorRes(动作活体检测响应体))\> | 结束检测并响应数据 |
+| 方法                   | 类型                                                         | 说明                                                         |
+| ---------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| static start(静态方法) | (QNRTC, videoTrack: QNRTCTrack, params: [FaceActionLiveDetectorParams](#FaceActionLiveDetectorParams(动作活体检测参数))) => FaceActionLiveDetector | mimeType 表示选择录制的格式，建议设置为 'video/webm'。调用 start 开始录制。 |
+| commit                 | () => Promise\<[FaceActionLiveDetectorRes](#FaceActionLiveDetectorRes(动作活体检测响应体))\> | 结束检测并响应数据                                           |
 
 #### 类型定义
 
@@ -395,6 +395,7 @@ enum ActionType {
  */
 interface FaceActionLiveDetectorParams {
   action_types: ActionType[];
+  mimeType: string; // 选择录制的格式
 }
 ```
 
