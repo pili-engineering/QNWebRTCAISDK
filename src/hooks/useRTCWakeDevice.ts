@@ -16,9 +16,7 @@ const useRTCWakeDevice = (client: any, defaultFacingMode?: string) => {
       const localTracks = [];
       const cameraTrack = await QNRTC.createCameraVideoTrack({
         tag: 'camera',
-        facingMode,
-        width: 320,
-        height: 640
+        facingMode
       });
       const microphoneTrack = await QNRTC.createMicrophoneAudioTrack({ tag: 'microphone' });
       localTracks.push(cameraTrack, microphoneTrack);
