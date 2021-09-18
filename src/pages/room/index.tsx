@@ -1,4 +1,5 @@
 import { Button, Input, Modal, Popover, Select } from 'antd';
+import useRTCListeners from '../../hooks/useRTCListeners';
 import { baseDownload } from '../../utils/download';
 import React, { useEffect, useRef, useState } from 'react';
 import useFaceActionLiveDetector from '../../hooks/useFaceActionLiveDetector';
@@ -47,6 +48,8 @@ const Room = () => {
     'video/mpeg'
   ]);
   const [recordMimeType, setRecordMimeType] = useState('video/webm');
+  const remoteTrackElement = useRef(null);
+  const { remoteTracks } = useRTCListeners(RTCClient);
 
   /**
    * 初始化
@@ -59,35 +62,40 @@ const Room = () => {
   }, []);
 
   /**
-   * debug audioBuffer
+   * 本地 Track 发生变化
    */
   useEffect(() => {
-    // const isDebug = JSON.parse(new URLSearchParams(location.search).get('isDebug'));
-    // const audioTrack = localTracks.find(track => track.tag === 'microphone');
-    // if (audioTrack && isDebug) {
-    //   audioTrack._track.on('audioBuffer', buffer => {
-    //     console.log('audioTrack', buffer);
-    //   });
-    // }
-    /**
-     * 播放视频 Track
-     */
-    localTracks.forEach(track => {
-      if (track.tag === 'camera' && cameraTrackElement.current) track.play(cameraTrackElement.current);
-    });
-  }, [localTracks]);
+    if (isRTCRoomJoined) {
+      localTracks.forEach(track => {
+        if (track.tag === 'camera' && cameraTrackElement.current) track.play(cameraTrackElement.current);
+      });
+      RTCClient.publish(localTracks);
+    }
+  }, [localTracks, isRTCRoomJoined, RTCClient]);
+
+  /**
+   * 远端 Track 发生变化
+   */
+  useEffect(() => {
+    if (isRTCRoomJoined) {
+      console.log('remoteTracks', remoteTracks)
+      remoteTracks.forEach(track => {
+        if (remoteTrackElement.current) track.play(remoteTrackElement.current);
+      });
+    }
+  }, [remoteTracks, isRTCRoomJoined, RTCClient]);
 
   /**
    * 离开房间
    */
   useEffect(() => {
     return () => {
-      if (RTCClient && isRTCRoomJoined) {
+      if (isRTCRoomJoined) {
         RTCClient.leave();
         // localTracks.forEach(track => track.release());
       }
     };
-  }, [isRTCRoomJoined, RTCClient, localTracks]);
+  }, [RTCClient, isRTCRoomJoined]);
 
   /**
    * 结束动作活体检测、开始响应识别结果
@@ -305,6 +313,7 @@ const Room = () => {
 
   return <div className={css.room}>
     <div ref={cameraTrackElement} className={css.cameraTrack}></div>
+    <div ref={remoteTrackElement} className={css.remoteTrack}></div>
     <div className={css.toolBox}>
       <Button className={css.toolBtn} size='small' type='primary' onClick={IDCard}>身份证识别</Button>
       <Popover
