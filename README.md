@@ -395,7 +395,7 @@ enum ActionType {
  */
 interface FaceActionLiveDetectorParams {
   action_types: ActionType[];
-  mimeType: string; // 选择录制的格式
+  mimeType?: string; // 选择录制的格式
 }
 ```
 
