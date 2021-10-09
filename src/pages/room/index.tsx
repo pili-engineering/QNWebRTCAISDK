@@ -244,8 +244,7 @@ const Room = () => {
       const QNRTC = window.QNRTC.default;
       const cameraTrack = localTracks.find(track => track.tag === 'camera');
       const faceActionLiveDetector = QNRTCAI.FaceActionLiveDetector.start(QNRTC, cameraTrack, {
-        action_types: [actionType],
-        mimeType: recordMimeType
+        action_types: [actionType]
       });
       setFaceActionLiveDetector(faceActionLiveDetector);
       setFaceActionLiveDetectorType(actionType);
@@ -291,13 +290,13 @@ const Room = () => {
     const videoTrack = localTracks.find(track => track.tag === 'camera');
     const audioTrack = localTracks.find(track => track.tag === 'microphone');
     recorder.current = recorder.current || QNRTC.createMediaRecorder();
-    const setMimeTypeResult = recorder.current.setMimeType(recordMimeType);
-    if (!setMimeTypeResult) {
-      Modal.error({
-        title: `mimeType: ${recordMimeType} not supported`
-      });
-      return;
-    }
+    // const setMimeTypeResult = recorder.current.setMimeType(recordMimeType);
+    // if (!setMimeTypeResult) {
+    //   Modal.error({
+    //     title: `mimeType: ${recordMimeType} not supported`
+    //   });
+    //   return;
+    // }
     if (nextValue) {
       recorder.current.start({
         videoTrack,
