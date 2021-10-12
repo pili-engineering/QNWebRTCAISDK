@@ -11,7 +11,10 @@
 }
 
 .cameraTrack {
-  composes: fullScreen;
+  width: 100%;
+  height: 200px;
+  margin-top: 20px;
+  position: relative;
 }
 
 .remoteTrack {
@@ -51,7 +54,7 @@
   min-width: 120px;
   min-height: 32px;
   padding: 0 10px;
-  position: fixed;
+  position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
@@ -67,4 +70,8 @@
   position: absolute;
   left: 0;
   bottom: 0;
+}
+
+.aiText {
+  width: 100%;
 }
