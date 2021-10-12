@@ -372,7 +372,7 @@ detector.commit().then(response => {
 
 | 方法                   | 类型                                                         | 说明                                                         |
 | ---------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| static start(静态方法) | (QNRTC, videoTrack: QNRTCTrack, params: [FaceActionLiveDetectorParams](#FaceActionLiveDetectorParams(动作活体检测参数))) => FaceActionLiveDetector | mimeType 表示选择录制的格式，建议设置为 'video/webm'。调用 start 开始录制。 |
+| static start(静态方法) | (QNRTC, videoTrack: QNRTCTrack, params: [FaceActionLiveDetectorParams](#FaceActionLiveDetectorParams(动作活体检测参数))) => FaceActionLiveDetector | video_type 表示选择录制的格式，默认为 1(1 为 mp4，2 为 h264)。调用 start 开始录制。 |
 | commit                 | () => Promise\<[FaceActionLiveDetectorRes](#FaceActionLiveDetectorRes(动作活体检测响应体))\> | 结束检测并响应数据                                           |
 
 #### 类型定义
@@ -391,11 +391,20 @@ enum ActionType {
 }
 
 /**
+ * 视频格式，1 表示 mp4, 2 表示 h264，默认值为 1
+ */
+export enum VideoType {
+  Mp4 = 1,
+  H264
+}
+
+/**
  * 动作活体检测参数
  */
 interface FaceActionLiveDetectorParams {
   action_types: ActionType[];
-  mimeType?: string; // 选择录制的格式
+  video_type?: VideoType; // 选择录制的格式
+  debug?: boolean; // 是否开启 debug，开启 debug 的记录目前会在数据库里面保存 12 小时
 }
 ```
 

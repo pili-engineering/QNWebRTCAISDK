@@ -1,4 +1,4 @@
-import { Button, Input, Modal, Popover, Select } from 'antd';
+import { Button, Input, Modal, Popover } from 'antd';
 import useRTCListeners from '../../hooks/useRTCListeners';
 import { baseDownload } from '../../utils/download';
 import React, { useEffect, useRef, useState } from 'react';
@@ -38,18 +38,9 @@ const Room = () => {
   const [faceFlashLiveStatus, setFaceFlashLiveStatus] = useState<FaceFlashLiveStatus>(FaceFlashLiveStatus.Closed);
   const [isRecord, setIsRecord] = useState(false);
   const recorder = useRef(null);
-  const [recordMimeTypes] = useState([
-    'video/webm',
-    'audio/webm',
-    'video/webm\;codecs=vp8',
-    'video/webm\;codecs=daala',
-    'video/webm\;codecs=h264',
-    'audio/webm\;codecs=opus',
-    'video/mpeg'
-  ]);
-  const [recordMimeType, setRecordMimeType] = useState('video/webm');
   const remoteTrackElement = useRef(null);
   const { remoteTracks } = useRTCListeners(RTCClient);
+  const [aiText, setAiText] = useState<string>();
 
   /**
    * 初始化
@@ -107,17 +98,17 @@ const Room = () => {
       faceActionLiveDetectorType &&
       faceActionLiveDetector
     ) {
+      console.log('结束动作活体检测、开始响应识别结果')
       faceActionLiveDetector.commit().then(response => {
-        Modal.info({
-          title: '动作活体检测信息',
-          content: JSON.stringify(response, null, 2)
-        });
+        console.log('动作活体检测信息')
+        setAiText(JSON.stringify(response, null, 2));
       }).catch(error => {
+        console.log('动作活体检测报错')
         Modal.error({
           title: '动作活体检测报错',
           content: `请求失败，http status: ${error.status}`
         });
-      }).finally(() => setFaceActionLiveDetector(undefined));
+      });
     }
   }, [countdown, faceActionLiveDetectorType, localTracks, faceActionLiveDetector]);
 
@@ -128,10 +119,7 @@ const Room = () => {
     console.log('身份证识别');
     const cameraTrack = localTracks.find(t => t.tag === 'camera');
     QNRTCAI.IDCardDetector.run(cameraTrack).then((res: any) => {
-      Modal.info({
-        title: '身份证识别信息',
-        content: JSON.stringify(res)
-      });
+      setAiText(JSON.stringify(res));
     });
   };
 
@@ -181,10 +169,7 @@ const Room = () => {
   const faceDetector = () => {
     const cameraTrack = localTracks.find(t => t.tag === 'camera');
     QNRTCAI.faceDetector(cameraTrack).then(response => {
-      Modal.info({
-        title: '人脸检测信息',
-        content: JSON.stringify(response)
-      });
+      setAiText(JSON.stringify(response));
     });
   };
 
@@ -211,15 +196,9 @@ const Room = () => {
         const cameraTrack = localTracks.find(t => t.tag === 'camera');
         if (imgFile) {
           QNRTCAI.faceComparer(cameraTrack, imgFile + '').then(response => {
-            Modal.info({
-              title: '人脸对比信息',
-              content: JSON.stringify(response)
-            });
+            setAiText(JSON.stringify(response));
           }).catch(error => {
-            Modal.info({
-              title: '人脸对比失败',
-              content: JSON.stringify(error)
-            });
+            setAiText(JSON.stringify(error));
           });
         }
       };
@@ -244,7 +223,9 @@ const Room = () => {
       const QNRTC = window.QNRTC.default;
       const cameraTrack = localTracks.find(track => track.tag === 'camera');
       const faceActionLiveDetector = QNRTCAI.FaceActionLiveDetector.start(QNRTC, cameraTrack, {
-        action_types: [actionType]
+        action_types: [actionType],
+        video_type: 1,
+        debug: true
       });
       setFaceActionLiveDetector(faceActionLiveDetector);
       setFaceActionLiveDetectorType(actionType);
@@ -266,10 +247,7 @@ const Room = () => {
     setTimeout(() => {
       setFaceFlashLiveStatus(FaceFlashLiveStatus.InProgress);
       faceFlashLiveDetector.commit().then(response => {
-        Modal.info({
-          title: '光线活体检测信息',
-          content: JSON.stringify(response, null, 2)
-        });
+        setAiText(JSON.stringify(response, null, 2));
       }).catch(error => {
         Modal.error({
           title: '光线活体检测报错',
@@ -290,13 +268,6 @@ const Room = () => {
     const videoTrack = localTracks.find(track => track.tag === 'camera');
     const audioTrack = localTracks.find(track => track.tag === 'microphone');
     recorder.current = recorder.current || QNRTC.createMediaRecorder();
-    // const setMimeTypeResult = recorder.current.setMimeType(recordMimeType);
-    // if (!setMimeTypeResult) {
-    //   Modal.error({
-    //     title: `mimeType: ${recordMimeType} not supported`
-    //   });
-    //   return;
-    // }
     if (nextValue) {
       recorder.current.start({
         videoTrack,
@@ -311,7 +282,6 @@ const Room = () => {
   };
 
   return <div className={css.room}>
-    <div ref={cameraTrackElement} className={css.cameraTrack}></div>
     <div ref={remoteTrackElement} className={css.remoteTrack}></div>
     <div className={css.toolBox}>
       <Button className={css.toolBtn} size='small' type='primary' onClick={IDCard}>身份证识别</Button>
@@ -343,14 +313,6 @@ const Room = () => {
       <Button className={css.toolBtn} size='small' type='primary' onClick={toggleRecord}>
         {isRecord ? '结束' : '开始'}录制
       </Button>
-      <div className={css.toolBtn}>
-        <Select placeholder='请选择录制的格式' onChange={value => setRecordMimeType(value)} size='small'
-                style={{ width: '80%' }} value={recordMimeType}>
-          {
-            recordMimeTypes.map(mimeType => <Select.Option key={mimeType} value={mimeType}>{mimeType}</Select.Option>)
-          }
-        </Select>
-      </div>
     </div>
 
     <Input
@@ -373,11 +335,6 @@ const Room = () => {
     />
 
     {
-      faceActionLiveDetectorText &&
-      <div className={css.faceActionLiveDetectorToast}>{faceActionLiveDetectorText}：{countdown}</div>
-    }
-
-    {
       faceFlashLiveStatus !== FaceFlashLiveStatus.Closed &&
       <div className={css.faceActionLiveDetectorToast}>
         {
@@ -385,6 +342,14 @@ const Room = () => {
         }
       </div>
     }
+
+    <div ref={cameraTrackElement} className={css.cameraTrack}>
+      {
+        faceActionLiveDetectorText &&
+        <div className={css.faceActionLiveDetectorToast}>{faceActionLiveDetectorText}：{countdown}</div>
+      }
+    </div>
+    <div className={css.aiText}>{aiText}</div>
   </div>;
 };
 
