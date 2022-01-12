@@ -3,31 +3,34 @@ import { useEffect, useState } from 'react';
 /**
  * 采集摄像头和音频设备
  * @param client
- * @param defaultFacingMode
+ * @param cameraRecordConfig
  */
-const useRTCWakeDevice = (client: any, defaultFacingMode?: string) => {
+const useRTCWakeDevice = (client: any, cameraRecordConfig: any) => {
   const [localTracks, setLocalTracks] = useState<any[]>([]);
-  const [facingMode, setFacingMode] = useState<string>(defaultFacingMode || 'environment');
+  const [facingMode, setFacingMode] = useState<string>('environment');
+
   useEffect(() => {
     /**
      * 采集设备
      */
-    async function wakeDevice(QNRTC: any, facingMode: string) {
+    async function wakeDevice(QNRTC: any, facingMode: string, cameraRecordConfig: any) {
       const localTracks = [];
       const cameraTrack = await QNRTC.createCameraVideoTrack({
         tag: 'camera',
-        facingMode
+        facingMode,
+        ...cameraRecordConfig
       });
       const microphoneTrack = await QNRTC.createMicrophoneAudioTrack({ tag: 'microphone' });
       localTracks.push(cameraTrack, microphoneTrack);
       return localTracks;
     }
 
-    if (client) {
+    if (client && cameraRecordConfig) {
       const QNRTC = window.QNRTC.default;
-      wakeDevice(QNRTC, facingMode).then(localTracks => setLocalTracks(localTracks));
+      wakeDevice(QNRTC, facingMode, cameraRecordConfig).then(localTracks => setLocalTracks(localTracks));
     }
-  }, [client, facingMode]);
+  }, [client, facingMode, cameraRecordConfig]);
+
   return {
     localTracks,
     facingMode,

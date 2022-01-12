@@ -1,4 +1,4 @@
-import { Button, Input, Modal, Popover } from 'antd';
+import { Button, Input, Modal, Popover, Spin } from 'antd';
 import useRTCListeners from '../../hooks/useRTCListeners';
 import { baseDownload } from '../../utils/download';
 import React, { useEffect, useRef, useState } from 'react';
@@ -21,7 +21,6 @@ enum FaceFlashLiveStatus {
 const Room = () => {
   const roomToken = new URLSearchParams(location.search).get('roomToken') || '';
   const { RTCClient, isRTCRoomJoined } = useRTCJoinRoom(roomToken);
-  const { localTracks, facingMode, setFacingMode } = useRTCWakeDevice(RTCClient);
   const cameraTrackElement = useRef<HTMLDivElement>(null);
   const [text, setText] = useState('');
   const [saying, setSaying] = useState(false);
@@ -41,6 +40,46 @@ const Room = () => {
   const remoteTrackElement = useRef(null);
   const { remoteTracks } = useRTCListeners(RTCClient);
   const [aiText, setAiText] = useState<string>();
+  // 采集参数(宽、高、视频帧率、视频码率、optimizationMode)
+  const [cameraRecordConfigString, setCameraRecordConfigString] = useState<string>('');
+  const [cameraRecordConfig, setCameraRecordConfig] = useState<any>();
+  const { localTracks, facingMode, setFacingMode } = useRTCWakeDevice(RTCClient, cameraRecordConfig);
+  const [loading, setLoading] = useState(false);
+
+  /**
+   * 获取摄像头采集参数
+   * 宽、高、视频帧率、视频码率、optimizationMode
+   * @param val
+   */
+  const getCameraConfig = (val: string) => {
+    // 宽、高、视频帧率、视频码率、optimizationMode
+    return val
+      .split(',')
+      .map((value, index) => {
+        const keys: { key?: string; type?: string }[] = [
+          { key: 'width', type: 'number' },
+          { key: 'height', type: 'number' },
+          { key: 'frameRate', type: 'number' },
+          { key: 'bitrate', type: 'number' },
+          { key: 'optimizationMode', type: 'string' }
+        ];
+        const matchKeyMap = keys[index] || {};
+        const type = matchKeyMap.type;
+        const isNeedFilter = ['', 'undefined', 'null'].includes(value);
+        return {
+          [matchKeyMap.key]: type === 'number' ? +value : value,
+          isNeedFilter,
+        }
+      })
+      .filter(v => !v.isNeedFilter)
+      .reduce((previousValue, currentValue) => {
+        const { isNeedFilter, ...config } = currentValue;
+        return {
+          ...previousValue,
+          ...config
+        }
+      }, {});
+  }
 
   /**
    * 初始化
@@ -98,6 +137,7 @@ const Room = () => {
       faceActionLiveDetectorType &&
       faceActionLiveDetector
     ) {
+      setLoading(true);
       console.log('结束动作活体检测、开始响应识别结果')
       faceActionLiveDetector.commit().then(response => {
         console.log('动作活体检测信息')
@@ -108,7 +148,7 @@ const Room = () => {
           title: '动作活体检测报错',
           content: `请求失败，http status: ${error.status}`
         });
-      });
+      }).finally(() => setLoading(false));
     }
   }, [countdown, faceActionLiveDetectorType, localTracks, faceActionLiveDetector]);
 
@@ -281,7 +321,27 @@ const Room = () => {
     setIsRecord(nextValue);
   };
 
+  /**
+   * 开始采集设备
+   */
+  const startWakeDevice = () => {
+    localTracks.forEach(track => track.release())
+    const config = getCameraConfig(cameraRecordConfigString);
+    setCameraRecordConfig(config);
+  }
+
   return <div className={css.room}>
+    <Input
+      placeholder='请输入摄像头采集的参数，并以英文逗号(,)分隔开'
+      value={cameraRecordConfigString}
+      onChange={event => setCameraRecordConfigString(event.target.value)}
+    />
+    <Button
+      className={css.toolBtn}
+      size='small'
+      type='primary'
+      onClick={startWakeDevice}
+    >开始采集</Button>
     <div ref={remoteTrackElement} className={css.remoteTrack}></div>
     <div className={css.toolBox}>
       <Button className={css.toolBtn} size='small' type='primary' onClick={IDCard}>身份证识别</Button>
@@ -289,14 +349,18 @@ const Room = () => {
         trigger='click'
         content={
           <>
-            <Button onClick={() => onFaceLiveAction('nod')} className={css.liveAction} size='small'
-                    type='primary'>点点头</Button>
-            <Button onClick={() => onFaceLiveAction('shake')} className={css.liveAction} size='small'
-                    type='primary'>摇摇头</Button>
-            <Button onClick={() => onFaceLiveAction('blink')} className={css.liveAction} size='small'
-                    type='primary'>眨眨眼</Button>
-            <Button onClick={() => onFaceLiveAction('mouth')} className={css.liveAction} size='small'
-                    type='primary'>张张嘴</Button>
+            {
+              ['nod', 'shake', 'blink', 'mouth'].map(action => {
+                const mapText = { nod: '点点头', shake: '摇摇头', blink: '眨眨眼', mouth: '张张嘴' }
+                return <Button
+                  onClick={() => onFaceLiveAction(action)}
+                  className={css.liveAction}
+                  size='small'
+                  type='primary'
+                  key={action}
+                >{mapText[action]}</Button>
+              })
+            }
           </>
         }
       >
@@ -320,6 +384,7 @@ const Room = () => {
       value={text}
       onChange={event => setText(event.target.value)}
     />
+
     {
       saying && <div className={css.caption}>
         识别结果：{captionText}
@@ -350,6 +415,12 @@ const Room = () => {
       }
     </div>
     <div className={css.aiText}>{aiText}</div>
+
+    {
+      loading && <div className={css.loadingMask}>
+        <Spin tip='数据加载中...'/>
+      </div>
+    }
   </div>;
 };
 
