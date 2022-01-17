@@ -1,7 +1,7 @@
 import { Button, Input, Modal, Popover, Spin } from 'antd';
 import useRTCListeners from '../../hooks/useRTCListeners';
 import { baseDownload } from '../../utils/download';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { CSSProperties, useEffect, useRef, useState } from 'react';
 import useFaceActionLiveDetector from '../../hooks/useFaceActionLiveDetector';
 import useRTCJoinRoom from '../../hooks/useRTCJoinRoom';
 import useRTCWakeDevice from '../../hooks/useRTCWakeDevice';
@@ -45,6 +45,7 @@ const Room = () => {
   const [cameraRecordConfig, setCameraRecordConfig] = useState<any>();
   const { localTracks, facingMode, setFacingMode } = useRTCWakeDevice(RTCClient, cameraRecordConfig);
   const [loading, setLoading] = useState(false);
+  const [isEnableActionAndAuth, setIsEnableActionAndAuth] = useState(false); // 动作活体+权威人脸认证
 
   /**
    * 获取摄像头采集参数
@@ -69,7 +70,7 @@ const Room = () => {
         return {
           [matchKeyMap.key]: type === 'number' ? +value : value,
           isNeedFilter,
-        }
+        };
       })
       .filter(v => !v.isNeedFilter)
       .reduce((previousValue, currentValue) => {
@@ -77,9 +78,9 @@ const Room = () => {
         return {
           ...previousValue,
           ...config
-        }
+        };
       }, {});
-  }
+  };
 
   /**
    * 初始化
@@ -108,7 +109,7 @@ const Room = () => {
    */
   useEffect(() => {
     if (isRTCRoomJoined) {
-      console.log('remoteTracks', remoteTracks)
+      console.log('remoteTracks', remoteTracks);
       remoteTracks.forEach(track => {
         if (remoteTrackElement.current) track.play(remoteTrackElement.current);
       });
@@ -138,16 +139,16 @@ const Room = () => {
       faceActionLiveDetector
     ) {
       setLoading(true);
-      console.log('结束动作活体检测、开始响应识别结果')
-      faceActionLiveDetector.commit().then(response => {
-        console.log('动作活体检测信息')
-        setAiText(JSON.stringify(response, null, 2));
+      console.log('faceActionLiveDetector');
+      faceActionLiveDetector.commit().then(result => {
+        setAiText(JSON.stringify(result, (key, value) => {
+          if (key === 'image_b64') {
+            return undefined;
+          }
+          return value;
+        }));
       }).catch(error => {
-        console.log('动作活体检测报错')
-        Modal.error({
-          title: '动作活体检测报错',
-          content: `请求失败，http status: ${error.status}`
-        });
+        setAiText(JSON.stringify(error));
       }).finally(() => setLoading(false));
     }
   }, [countdown, faceActionLiveDetectorType, localTracks, faceActionLiveDetector]);
@@ -167,8 +168,8 @@ const Room = () => {
    * 文字转语音
    */
   const textToSpeak = () => {
-    QNRTCAI.textToSpeak({ text }).then(response => {
-      const base64String = response.response.audio;
+    QNRTCAI.textToSpeak({ text }).then(result => {
+      const base64String = result.response.audio;
       const snd = new Audio('data:audio/wav;base64,' + base64String);
       snd.play().catch(error => {
         Modal.error({
@@ -208,8 +209,8 @@ const Room = () => {
    */
   const faceDetector = () => {
     const cameraTrack = localTracks.find(t => t.tag === 'camera');
-    QNRTCAI.faceDetector(cameraTrack).then(response => {
-      setAiText(JSON.stringify(response));
+    QNRTCAI.faceDetector(cameraTrack).then(result => {
+      setAiText(JSON.stringify(result));
     });
   };
 
@@ -230,13 +231,13 @@ const Room = () => {
     const file = files[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = function(ev) {
+      reader.onload = function (ev) {
         // base64码
         const imgFile = ev.target?.result; // 或 e.target 都是一样的
         const cameraTrack = localTracks.find(t => t.tag === 'camera');
         if (imgFile) {
-          QNRTCAI.faceComparer(cameraTrack, imgFile + '').then(response => {
-            setAiText(JSON.stringify(response));
+          QNRTCAI.faceComparer(cameraTrack, imgFile + '').then(result => {
+            setAiText(JSON.stringify(result));
           }).catch(error => {
             setAiText(JSON.stringify(error));
           });
@@ -255,20 +256,62 @@ const Room = () => {
   };
 
   /**
+   * 权威认证弹窗
+   */
+  const showAuthFaceModal = (): Promise<{
+    realname: string,
+    idcard: string,
+  }> => {
+    return new Promise((resolve) => {
+      const inputStyle: CSSProperties = {
+        marginBottom: 10
+      };
+      Modal.confirm({
+        title: '权威人脸对比',
+        content: <div>
+          <Input placeholder="请输入姓名" id="realName" style={inputStyle}/>
+          <Input placeholder="请输入身份证号" id="idCard" style={inputStyle}/>
+        </div>,
+        onOk() {
+          const realname = document.querySelector<HTMLInputElement>('#realName')?.value;
+          const idcard = document.querySelector<HTMLInputElement>('#idCard')?.value;
+          resolve({
+            realname,
+            idcard
+          })
+        },
+        cancelText: '取消',
+        okText: '确定'
+      });
+    })
+  }
+
+  /**
    * 开始动作活体检测
    * @param actionType
    */
   const onFaceLiveAction = (actionType: string) => {
     try {
       const QNRTC = window.QNRTC.default;
-      const cameraTrack = localTracks.find(track => track.tag === 'camera');
-      const faceActionLiveDetector = QNRTCAI.FaceActionLiveDetector.start(QNRTC, cameraTrack, {
+      const videoTrack = localTracks.find(track => track.tag === 'camera');
+      const faceActionParams = {
         action_types: [actionType],
         video_type: 1,
         debug: true
-      });
-      setFaceActionLiveDetector(faceActionLiveDetector);
-      setFaceActionLiveDetectorType(actionType);
+      };
+      if (isEnableActionAndAuth) { // 动作活体+权威人脸比对
+        showAuthFaceModal().then(authoritativeFaceParams => {
+          setFaceActionLiveDetector(
+            QNRTCAI.QNAuthorityActionFaceComparer.start(
+              QNRTC, videoTrack, faceActionParams, authoritativeFaceParams
+            )
+          );
+          setFaceActionLiveDetectorType(actionType);
+        })
+      } else {
+        setFaceActionLiveDetector(QNRTCAI.FaceActionLiveDetector.start(QNRTC, videoTrack, faceActionParams));
+        setFaceActionLiveDetectorType(actionType);
+      }
     } catch (err) {
       Modal.error({
         title: 'onFaceLiveAction error',
@@ -286,8 +329,8 @@ const Room = () => {
     const faceFlashLiveDetector = QNRTCAI.FaceFlashLiveDetector.start(cameraTrack);
     setTimeout(() => {
       setFaceFlashLiveStatus(FaceFlashLiveStatus.InProgress);
-      faceFlashLiveDetector.commit().then(response => {
-        setAiText(JSON.stringify(response, null, 2));
+      faceFlashLiveDetector.commit().then(result => {
+        setAiText(JSON.stringify(result, null, 2));
       }).catch(error => {
         Modal.error({
           title: '光线活体检测报错',
@@ -325,62 +368,98 @@ const Room = () => {
    * 开始采集设备
    */
   const startWakeDevice = () => {
-    localTracks.forEach(track => track.release())
+    localTracks.forEach(track => track.release());
     const config = getCameraConfig(cameraRecordConfigString);
     setCameraRecordConfig(config);
-  }
+  };
+
+  /**
+   * 权威人脸对比
+   */
+  const onAuthoritativeFaceComparer = () => {
+    showAuthFaceModal().then(res => {
+      const videoTrack = localTracks.find(track => track.tag === 'camera');
+      QNRTCAI.QNAuthoritativeFaceComparer.run(videoTrack, {
+        realname: res.realname,
+        idcard: res.idcard
+      }).then(result => {
+        setAiText(JSON.stringify(result));
+      }).catch(error => {
+        setAiText(JSON.stringify(error));
+      }).finally(() => setLoading(false));
+    })
+  };
+
+  /**
+   * ocr识别
+   */
+  const onOCR = () => {
+    setLoading(true);
+    const videoTrack = localTracks.find(track => track.tag === 'camera');
+    QNRTCAI.QNOCRDetector.run(videoTrack).then(result => {
+      setAiText(JSON.stringify(result));
+    }).finally(() => setLoading(false));
+  };
 
   return <div className={css.room}>
     <Input
-      placeholder='请输入摄像头采集的参数，并以英文逗号(,)分隔开'
+      placeholder="请输入摄像头采集的参数，并以英文逗号(,)分隔开"
       value={cameraRecordConfigString}
       onChange={event => setCameraRecordConfigString(event.target.value)}
     />
     <Button
       className={css.toolBtn}
-      size='small'
-      type='primary'
+      size="small"
+      type="primary"
       onClick={startWakeDevice}
     >开始采集</Button>
-    <div ref={remoteTrackElement} className={css.remoteTrack}></div>
+    <div ref={remoteTrackElement} className={css.remoteTrack}/>
     <div className={css.toolBox}>
-      <Button className={css.toolBtn} size='small' type='primary' onClick={IDCard}>身份证识别</Button>
+      <Button className={css.toolBtn} size="small" type="primary" onClick={IDCard}>身份证识别</Button>
       <Popover
-        trigger='click'
+        trigger="click"
         content={
           <>
             {
               ['nod', 'shake', 'blink', 'mouth'].map(action => {
-                const mapText = { nod: '点点头', shake: '摇摇头', blink: '眨眨眼', mouth: '张张嘴' }
+                const mapText = { nod: '点点头', shake: '摇摇头', blink: '眨眨眼', mouth: '张张嘴' };
                 return <Button
                   onClick={() => onFaceLiveAction(action)}
                   className={css.liveAction}
-                  size='small'
-                  type='primary'
+                  size="small"
+                  type="primary"
                   key={action}
-                >{mapText[action]}</Button>
+                >{mapText[action]}</Button>;
               })
             }
           </>
         }
       >
-        <Button className={css.toolBtn} size='small' type='primary'>动作活体</Button>
+        <Button className={css.toolBtn} size="small" type="primary">动作活体</Button>
       </Popover>
-      <Button className={css.toolBtn} size='small' type='primary' onClick={faceFlashLive}>光线活体</Button>
-      <Button className={css.toolBtn} size='small' type='primary' onClick={faceDetector}>人脸检测</Button>
-      <Button className={css.toolBtn} size='small' type='primary' onClick={faceCompare}>人脸对比</Button>
-      <Button className={css.toolBtn} size='small' type='primary' onClick={textToSpeak}>文转音</Button>
-      <Button className={css.toolBtn} size='small' type='primary' onClick={toggleCamera}>切换摄像头</Button>
-      <Button className={css.toolBtn} size='small' type='primary' onClick={speakToText}>
+      <Button className={css.toolBtn} size="small" type="primary"
+              onClick={() => setIsEnableActionAndAuth(!isEnableActionAndAuth)}>动作活体{isEnableActionAndAuth ? '关闭' : '开启'}权威认证</Button>
+      <Button className={css.toolBtn} size="small" type="primary" onClick={faceFlashLive}>光线活体</Button>
+      <Button className={css.toolBtn} size="small" type="primary" onClick={faceDetector}>人脸检测</Button>
+      <Button className={css.toolBtn} size="small" type="primary" onClick={faceCompare}>人脸对比</Button>
+      <Button className={css.toolBtn} size="small" type="primary" onClick={textToSpeak}>文转音</Button>
+      <Button className={css.toolBtn} size="small" type="primary" onClick={toggleCamera}>切换摄像头</Button>
+      <Button className={css.toolBtn} size="small" type="primary" onClick={speakToText}>
         {saying ? '关闭' : '开启'}语音转文字
       </Button>
-      <Button className={css.toolBtn} size='small' type='primary' onClick={toggleRecord}>
+      <Button className={css.toolBtn} size="small" type="primary" onClick={toggleRecord}>
         {isRecord ? '结束' : '开始'}录制
+      </Button>
+      <Button className={css.toolBtn} size="small" type="primary" onClick={onAuthoritativeFaceComparer}>
+        权威人脸对比
+      </Button>
+      <Button className={css.toolBtn} size="small" type="primary" onClick={onOCR}>
+        OCR识别
       </Button>
     </div>
 
     <Input
-      placeholder='请输入文字转语音的内容'
+      placeholder="请输入文字转语音的内容"
       value={text}
       onChange={event => setText(event.target.value)}
     />
@@ -394,9 +473,9 @@ const Room = () => {
     <input
       className={css.targetFileInput}
       ref={targetFileInput}
-      type='file'
+      type="file"
       onChange={onChangeFile}
-      accept='image/*'
+      accept="image/*"
     />
 
     {
@@ -418,7 +497,7 @@ const Room = () => {
 
     {
       loading && <div className={css.loadingMask}>
-        <Spin tip='数据加载中...'/>
+        <Spin tip="数据加载中..."/>
       </div>
     }
   </div>;

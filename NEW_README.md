@@ -1,11 +1,10 @@
-## 开发准备
+# 开发准备
 
 1. 引入 sdk
 
 可以直接使用 script 标签方式引入。
 
 ```html
-
 <script src='./qnweb-rtc-ai.umd.js'></script>
 ```
 
@@ -20,13 +19,12 @@ import * as QNRTCAI from './qnweb-rtc-ai.umd.js'
 用如下代码获取主类，验证是否正常引入成功。
 
 ```html
-
 <script>
   console.log(QNRTCAI.version);
 </script>
 ```
 
-## 快速开始
+# 快速开始
 
 ```ts
 /**
@@ -76,61 +74,232 @@ QNRTCAI.IDCardDetector.run(videoTrack).then(res => {
 })
 ```
 
-#### aiToken 生成逻辑
+# API 概览
 
-```js
-// app_id 加上过期时间
-const src = "<app_id>:<expiration>"
-const encodedSrc = urlsafe_base64_encode(src)
-// 计算HMAC-SHA1签名，并对签名结果做URL安全的Base64编码
-const sign = hmac_sha1(encodedSrc, "Your_Secret_Key")
-const encodedSign = urlsafe_base64_encode(sign)
-// 拼接上述结果得到 token
-const token = "QD " + Your_Access_Key + ":" + encodedSign + ":" + encodedSrc``
-```
+| 方法                                                         | 描述                  |
+| ------------------------------------------------------------ | --------------------- |
+| [AudioToTextAnalyzer](#audiototextanalyzer)                  | 语音识别转文字        |
+| [IDCardDetector](#idcarddetector)                            | 身份证信息识别        |
+| [textToSpeak](#texttospeak)                                  | 文字转语音            |
+| [FaceActionLiveDetector](#faceactionlivedetector)            | 动作活体检测          |
+| [FaceFlashLiveDetector](#faceflashlivedetector)              | 光线活体检测          |
+| [faceComparer](#facecomparer)                                | 人脸对比              |
+| [faceDetector](#facedetector)                                | 人脸检测              |
+| [QNAuthoritativeFaceComparer](#qnauthoritativefacecomparer)  | 权威人脸比对          |
+| [QNAuthorityActionFaceComparer](#qnauthorityactionfacecomparer) | 权威人脸比对+动作活体 |
+| [QNOCRDetector](#qnocrdetector)                              | OCR识别               |
 
-#### signToken 生成逻辑
+## API文档
 
-说明：参数为待签名的url（url中已经包含了时间戳），[将url签名成token 参考](https://developer.qiniu.com/kodo/1202/download-token)将https://developer.qiniu.com/kodo/1202/download-token
+### AudioToTextAnalyzer
 
-## API 文档
-
-### AudioToTextAnalyzer(语音识别转文字)
-
-#### 使用
+#### 如何使用
 
 ```ts
 // 开启语音识别
-const audioAnalyzer = QNRTCAI.AudioToTextAnalyzer.startAudioToText(audioTrack, null, {
-  onAudioToText: message => {
+const audioAnalyzer = QNRTCAI.AudioToTextAnalyzer.startAudioToText(
+  audioTrack, 
+  null, 
+  {
+    onAudioToText: message => {
     console.log('message', message);
     if (message.transcript) {
       localAudioText.innerText = message.transcript
     }
   }
 });
-
 audioAnalyzer.getStatus(); // 获取当前状态
 audioAnalyzer.stopAudioToText(); // 结束语音识别
 ```
 
-#### API 说明
+#### 方法
 
-| 方法 | 类型 | 说明 |
-| --- | --- | ---|
-| static startAudioToText(静态方法) | (audioTrack: [Track](https://doc.qnsdk.com/rtn/web/docs/api_track), params: [AudioToTextParams](#AudioToTextParams(开启语音识别所需的参数)), callback: [Callback](#Callback(语音识别的回调))) => QNAudioToTextAnalyzer | 开始语音实时识别 |
-| getStatus | () => [Status](#Status(当前的状态)) | 获取当前状态 |
-| stopAudioToText | () => void | 停止语音实时识别 |
+| 方法                              | 类型                                                         | 说明             |
+| --------------------------------- | ------------------------------------------------------------ | ---------------- |
+| static startAudioToText(静态方法) | (audioTrack: [Track](https://doc.qnsdk.com/rtn/web/docs/api_track), params: [AudioToTextParams](#audiototextparams), callback: [Callback](#callback)) => QNAudioToTextAnalyzer | 开始语音实时识别 |
+| getStatus                         | () => [Status](#status)                                      | 获取当前状态     |
+| stopAudioToText                   | () => void                                                   | 停止语音实时识别 |
 
-#### 类型定义
+### IDCardDetector
 
-##### Track
-
-Track 对象是 Track 模式下的媒体对象，可以用来在页面上播放媒体。
-
-##### AudioToTextParams(开启语音识别所需的参数)
+#### 如何使用
 
 ```ts
+QNRTCAI.IDCardDetector.run(videoTrack)
+  .then(res => console.log(res))
+```
+
+#### 方法
+
+| 方法                 | 类型                                                         | 说明                                                    |
+| -------------------- | ------------------------------------------------------------ | ------------------------------------------------------- |
+| static run(静态方法) | (videoTrack: [Track](https://doc.qnsdk.com/rtn/web/docs/api_track), params?: [IDCardDetectorRunParams](#idcarddetectorrunparams) => Promise<[IDCardDetectorRunRes](#idcarddetectorrunRes)> | 身份证信息识别，返回的是一个promise，得到识别出来的信息 |
+
+### textToSpeak
+
+#### 如何使用
+
+```ts
+QNRTCAI.textToSpeak({ text }).then(response => {
+  const base64String = response.response.audio;
+  console.log('response', response)
+  console.log('base64String', base64String);
+  const snd = new Audio('data:audio/wav;base64,' + base64String);
+  snd.play();
+});
+```
+
+#### 方法
+
+| 方法        | 类型                                                         | 说明       |
+| ----------- | ------------------------------------------------------------ | ---------- |
+| textToSpeak | (params: [TextToSpeakParams](#texttospeakparams))) => Promise<[TextToSpeakRes](#texttospeakres)> | 文字转语音 |
+
+### FaceActionLiveDetector
+
+#### 如何使用
+
+```ts
+// 需通过 QNRTC 创建 recorder
+const QNRTC = window.QNRTC.default;
+// 开始检测
+const detector = QNRTCAI.FaceActionLiveDetector.start(QNRTC, videoTrack, {
+  action_types: ['shake'] // 传入动作活体动作的标示字符串
+});
+// 结束检测并响应数据
+detector.commit().then(response => {
+  console.log('response', response)
+});
+```
+
+#### 方法
+
+| 方法                   | 类型                                                         | 说明                                                         |
+| ---------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| static start(静态方法) | (QNRTC, videoTrack: [Track](https://doc.qnsdk.com/rtn/web/docs/api_track), params: [FaceActionLiveDetectorParams](#faceactionlivedetectorparams)) => FaceActionLiveDetector | video_type 表示选择录制的格式，默认为 1(1 为 mp4，2 为 h264)。调用 start 开始录制。 |
+| commit                 | () => Promise\<[FaceActionLiveDetectorRes](#faceactionlivedetectorres)\> | 结束检测并响应数据                                           |
+
+### FaceFlashLiveDetector
+
+#### 如何使用
+
+```ts
+// 开始检测
+const faceFlashLiveDetector = QNRTCAI.FaceFlashLiveDetector.start(videoTrack);
+// 结束检测
+faceFlashLiveDetector.commit().then(response => console.log('response', response))
+```
+
+#### 方法
+
+| 方法                   | 类型                                                         | 说明                                         |
+| ---------------------- | ------------------------------------------------------------ | -------------------------------------------- |
+| static start(静态方法) | (videoTrack: [Track](https://doc.qnsdk.com/rtn/web/docs/api_track), defaultFrameRate: number) => FaceFlashLiveDetector | 开始检测，defaultFrameRate 为帧率，默认为 15 |
+| commit                 | () => Promise\<[FaceFlashLiveDetectorRes](#faceflashlivedetectorres)\> | 结束检测并响应数据                           |
+
+### faceComparer
+
+#### 如何使用
+
+```ts
+/**
+ * targetImgBase64 为需要对比的图片 base64 编码
+ */
+QNRTCAI.faceComparer(videoTrack, targetImgBase64).then(response => {
+  console.log('response', response);
+});
+```
+
+#### 方法
+
+| 方法         | 类型                                                         | 说明     |
+| ------------ | ------------------------------------------------------------ | -------- |
+| faceComparer | (videoTrack: [Track](https://doc.qnsdk.com/rtn/web/docs/api_track), targetImg: string, params: [FaceComparerParams](#facecomparerparams) => Promise\<[FaceComparerRes](#facecomparerres)\> | 人脸对比 |
+
+### faceDetector
+
+#### 如何使用
+
+```ts
+QNRTCAI.faceDetector(videoTrack).then(response => {
+  console.log('response', response);
+});
+```
+
+#### 方法
+
+| 方法         | 类型                                                         | 说明     |
+| ------------ | ------------------------------------------------------------ | -------- |
+| faceDetector | (videoTrack: [Track](https://doc.qnsdk.com/rtn/web/docs/api_track), params: [FaceDetectorParams](#facedetectorparams) => Promise\<[FaceDetectorRes](#facedetectorres)\> | 人脸检测 |
+
+### QNAuthoritativeFaceComparer
+
+#### 如何使用
+
+```ts
+QNRTCAI.QNAuthoritativeFaceComparer.run(videoTrack, {
+  realname, // 真实名字
+  idcard, // 身份证号
+}).then(result => {
+  console.log('result', result)
+}).catch(error => {
+  console.error(error);
+});
+```
+
+#### 方法
+
+| 方法                 | 类型                                                         | 说明             |
+| -------------------- | ------------------------------------------------------------ | ---------------- |
+| static run(静态方法) | (videoTrack: [Track](https://doc.qnsdk.com/rtn/web/docs/api_track), params: [QNAuthoritativeFaceParams](#qnauthoritativefaceparams)) => Promise\<[QNAuthoritativeFaceResult](#qnauthoritativefaceresult)\> | 执行权威人脸对比 |
+
+### QNAuthorityActionFaceComparer
+
+#### 如何使用
+
+```ts
+// 开始权威人脸比对和动作活体检测
+const detector = QNRTCAI.QNAuthorityActionFaceComparer.start(
+  QNRTC, 
+  videoTrack, 
+  faceActionParams,
+  authoritativeFaceParams
+);
+// 结束权威人脸比对和动作活体检测, 得到响应值
+detector.commit().then(result => {
+  console.log('result', result)
+})
+```
+
+#### 方法
+
+| 方法                   | 类型                                                         | 说明               |
+| ---------------------- | ------------------------------------------------------------ | ------------------ |
+| static start(静态方法) | (QNRTC, videoTrack: [Track](https://doc.qnsdk.com/rtn/web/docs/api_track), faceActionParams: [FaceActionLiveDetectorParams](#faceactionlivedetectorparams), authoritativeFaceParams: [QNAuthoritativeFaceParams](#qnauthoritativefaceparams)) => QNAuthorityActionFaceComparer | 开始检测           |
+| commit                 | () => Promise<{   faceActionResult: [FaceActionLiveDetectorRes](#faceactionlivedetectorres);   authoritativeFaceResult: [QNAuthoritativeFaceResult](#qnauthoritativefaceresult); } | 结束检测并响应数据 |
+
+### QNOCRDetector
+
+#### 如何使用
+
+```ts
+QNRTCAI.QNOCRDetector.run(videoTrack).then(result => {
+  console.log('result', result);
+});
+```
+
+#### 方法
+
+| 方法                 | 类型                                                         | 说明        |
+| -------------------- | ------------------------------------------------------------ | ----------- |
+| static run(静态方法) | (videoTrack: [Track](https://doc.qnsdk.com/rtn/web/docs/api_track)) => Promise\<[qnocrdetectorresult](#qnocrdetectorresult)\> | 执行ocr识别 |
+
+## 类型说明
+
+### AudioToTextParams
+
+```ts
+// 开启语音识别所需的参数
 interface AudioToTextParams {
   force_final: number; // 是否在text为空的时候返回final信息, 1->强制返回;0->不强制返回。
   maxsil: number; // 最长静音间隔，单位秒，默认10s
@@ -149,7 +318,7 @@ interface AudioToTextParams {
 }
 ```
 
-##### Callback(语音识别的回调)
+### Callback
 
 ```ts
 /**
@@ -164,15 +333,17 @@ type StatusChangeCallback = (status: Status, msg: string) => void
  */
 type AudioToTextCallback = (audioToText: AudioToText) => void;
 
+// 语音识别的回调
 interface Callback {
   onStatusChange: StatusChangeCallback;
   onAudioToText: AudioToTextCallback;
 }
 ```
 
-##### Status(当前的状态)
+### Status
 
 ```ts
+// 当前的状态
 enum Status {
   AVAILABLE, // 未开始可用 
   DESTROY, // 已经销毁不可用
@@ -181,9 +352,10 @@ enum Status {
 }
 ```
 
-##### AudioToText(语音识别的内容)
+### AudioToText
 
 ```ts
+// 语音识别的内容
 interface AudioToText {
   end_seq: number; // 为该文本所在的切片的终点(包含)，否则为-1
   end_time: number; // 该片段的终止时间，毫秒
@@ -210,26 +382,10 @@ interface WordsDTO {
 }
 ```
 
-### IDCardDetector(身份证信息识别)
-
-#### 使用
+### IDCardDetectorRunParams
 
 ```ts
-QNRTCAI.IDCardDetector.run(track)
-  .then(res => console.log(res))
-```
-
-#### API 说明
-
-| 方法 | 类型 | 说明 |
-| --- | --- | ---|
-| static run(静态方法) | (videoTrack: [Track](https://doc.qnsdk.com/rtn/web/docs/api_track), params?: [IDCardDetectorRunParams](#IDCardDetectorRunParams(身份证识别参数))) => Promise<[IDCardDetectorRunRes](#IDCardDetectorRunRes(身份证识别响应值))> | 身份证信息识别，返回的是一个promise，得到识别出来的信息 |
-
-#### 类型定义
-
-##### IDCardDetectorRunParams(身份证识别参数)
-
-```ts
+// 身份证识别参数
 interface IDCardDetectorRunParams {
   image?: string, // base64图像
   session_id?: string, // 唯一会话 id
@@ -241,9 +397,10 @@ interface IDCardDetectorRunParams {
 }
 ```
 
-##### IDCardDetectorRunRes(身份证识别响应值)
+### IDCardDetectorRunRes
 
 ```ts
+// 身份证识别响应值
 interface IDCardDetectorRunRes {
   request_id?: string,
   response: {
@@ -275,29 +432,7 @@ interface ImageResult {
 }
 ```
 
-### textToSpeak(文字转语音)
-
-#### 使用
-
-```ts
-QNRTCAI.textToSpeak({ text }).then(response => {
-  const base64String = response.response.audio;
-  console.log('response', response)
-  console.log('base64String', base64String);
-  const snd = new Audio('data:audio/wav;base64,' + base64String);
-  snd.play();
-});
-```
-
-#### API 说明
-
-| 方法        | 类型                                                         | 说明       |
-| ----------- | ------------------------------------------------------------ | ---------- |
-| textToSpeak | (params: [TextToSpeakParams](#TextToSpeakParams(文字转语音参数))) => Promise<[TextToSpeakRes](#TextToSpeakRes(文字转语音响应值))> | 文字转语音 |
-
-#### 类型定义
-
-##### TextToSpeakParams(文字转语音参数)
+### TextToSpeakParams
 
 ```ts
 // 文字转语音声效枚举
@@ -332,7 +467,7 @@ interface TextToSpeakParams {
 }
 ```
 
-##### TextToSpeakRes(文字转语音响应值)
+### TextToSpeakRes
 
 ```ts
 /**
@@ -349,35 +484,7 @@ interface TextToSpeakRes {
 }
 ```
 
-### FaceActionLiveDetector(动作活体检测)
-
-#### 使用
-
-```ts
-// 需通过 QNRTC 创建 recorder
-const QNRTC = window.QNRTC.default;
-
-// 开始检测
-const detector = QNRTCAI.FaceActionLiveDetector.start(QNRTC, videoTrack, {
-  action_types: ['shake'] // 传入动作活体动作的标示字符串
-});
-
-// 结束检测并响应数据
-detector.commit().then(response => {
-  console.log('response', response)
-});
-```
-
-#### API 说明
-
-| 方法                   | 类型                                                         | 说明                                                         |
-| ---------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| static start(静态方法) | (QNRTC, videoTrack: [Track](https://doc.qnsdk.com/rtn/web/docs/api_track), params: [FaceActionLiveDetectorParams](#faceactionlivedetectorparams(动作活体检测参数))) => FaceActionLiveDetector | video_type 表示选择录制的格式，默认为 1(1 为 mp4，2 为 h264)。调用 start 开始录制。 |
-| commit                 | () => Promise\<[FaceActionLiveDetectorRes](#FaceActionLiveDetectorRes(动作活体检测响应体))\> | 结束检测并响应数据                                           |
-
-#### 类型定义
-
-##### FaceActionLiveDetectorParams(动作活体检测参数)
+### FaceActionLiveDetectorParams
 
 ```ts
 /**
@@ -408,7 +515,7 @@ interface FaceActionLiveDetectorParams {
 }
 ```
 
-##### FaceActionLiveDetectorRes(动作活体检测响应体)
+### FaceActionLiveDetectorRes
 
 ```ts
 /**
@@ -440,28 +547,7 @@ interface BestFrame {
 }
 ```
 
-### FaceFlashLiveDetector(光线活体检测)
-
-#### 使用
-
-```ts
-// 开始检测
-const faceFlashLiveDetector = QNRTCAI.FaceFlashLiveDetector.start(videoTrack);
-
-// 结束检测
-faceFlashLiveDetector.commit().then(response => console.log('response', response))
-```
-
-#### API 说明
-
-| 方法                   | 类型                                                         | 说明                                         |
-| ---------------------- | ------------------------------------------------------------ | -------------------------------------------- |
-| static start(静态方法) | (videoTrack: [Track](https://doc.qnsdk.com/rtn/web/docs/api_track), defaultFrameRate: number) => FaceFlashLiveDetector | 开始检测，defaultFrameRate 为帧率，默认为 15 |
-| commit                 | () => Promise\<[FaceFlashLiveDetectorRes](#FaceFlashLiveDetectorRes(动作活体检测响应体))\> | 结束检测并响应数据                           |
-
-#### 类型定义
-
-##### FaceFlashLiveDetectorRes(光线活体检测响应体)
+### FaceFlashLiveDetectorRes
 
 ```ts
 /**
@@ -485,28 +571,7 @@ interface FaceFlashLiveDetectorResData {
 }
 ```
 
-### faceComparer(人脸对比)
-
-#### 使用
-
-```ts
-/**
- * targetImgBase64 为需要对比的图片 base64 编码
- */
-QNRTCAI.faceComparer(videoTrack, targetImgBase64).then(response => {
-  console.log('response', response);
-});
-```
-
-#### API 说明
-
-| 方法         | 类型                                                         | 说明     |
-| ------------ | ------------------------------------------------------------ | -------- |
-| faceComparer | (videoTrack: [Track](https://doc.qnsdk.com/rtn/web/docs/api_track), targetImg: string, params: [FaceComparerParams](#FaceComparerParams(人脸对比参数))) => Promise\<[FaceComparerRes](#FaceComparerRes(人脸对比响应体))\> | 人脸对比 |
-
-#### 类型定义
-
-##### FaceComparerParams(人脸对比参数)
+### FaceComparerParams
 
 ```ts
 /**
@@ -524,7 +589,7 @@ interface FaceComparerParams {
 }
 ```
 
-##### FaceComparerRes(人脸对比响应体)
+### FaceComparerRes
 
 ```ts
 /**
@@ -546,25 +611,7 @@ interface FaceComparerResData {
 }
 ```
 
-### faceDetector(人脸检测)
-
-#### 使用
-
-```ts
-QNRTCAI.faceDetector(videoTrack).then(response => {
-  console.log('response', response);
-});
-```
-
-#### API 说明
-
-| 方法         | 类型                                                         | 说明     |
-| ------------ | ------------------------------------------------------------ | -------- |
-| faceDetector | (videoTrack: [Track](https://doc.qnsdk.com/rtn/web/docs/api_track), params: [FaceDetectorParams](#FaceDetectorParams(人脸检测参数))) => Promise\<[FaceDetectorRes](#FaceDetectorRes(人脸检测响应体))\> | 人脸检测 |
-
-#### 类型定义
-
-##### FaceDetectorParams(人脸检测参数)
+### FaceDetectorParams
 
 ```ts
 /**
@@ -576,7 +623,7 @@ interface FaceDetectorParams {
 }
 ```
 
-##### FaceDetectorRes(人脸检测响应体)
+### FaceDetectorRes
 
 ```ts
 /**
@@ -672,30 +719,7 @@ interface FaceProfile {
 }
 ```
 
-### QNAuthoritativeFaceComparer(权威人脸比对)
-
-#### 使用
-
-```ts
-QNRTCAI.QNAuthoritativeFaceComparer.run(videoTrack, {
-  realname, // 真实名字
-  idcard, // 身份证号
-}).then(result => {
-  console.log('result', result)
-}).catch(error => {
-  console.error(error);
-});
-```
-
-#### API 说明
-
-| 方法                 | 类型                                                         | 说明             |
-| -------------------- | ------------------------------------------------------------ | ---------------- |
-| static run(静态方法) | (videoTrack: [Track](https://doc.qnsdk.com/rtn/web/docs/api_track), params: [QNAuthoritativeFaceParams](#qnauthoritativefaceparams)) => Promise\<[QNAuthoritativeFaceResult](#qnauthoritativefaceresult)\> | 执行权威人脸对比 |
-
-#### 类型定义
-
-##### QNAuthoritativeFaceParams
+### QNAuthoritativeFaceParams
 
 ```ts
 // 权威人脸比对请求参数
@@ -705,7 +729,7 @@ interface QNAuthoritativeFaceParams {
 }
 ```
 
-##### QNAuthoritativeFaceResult
+### QNAuthoritativeFaceResult
 
 ```ts
 // 权威人脸比对响应值
@@ -720,50 +744,7 @@ interface QNAuthoritativeFaceResult {
 }
 ```
 
-### QNAuthorityActionFaceComparer(权威人脸比对+动作活体)
-
-#### 使用
-
-```ts
-// 开始权威人脸比对和动作活体检测
-const detector = QNRTCAI.QNAuthorityActionFaceComparer.start(
-  QNRTC, 
-  videoTrack, 
-  faceActionParams,
-  authoritativeFaceParams
-);
-// 结束权威人脸比对和动作活体检测, 得到响应值
-detector.commit().then(result => {
-  console.log('result', result)
-})
-```
-
-#### API 说明
-
-| 方法                   | 类型                                                         | 说明               |
-| ---------------------- | ------------------------------------------------------------ | ------------------ |
-| static start(静态方法) | (QNRTC, videoTrack: [Track](https://doc.qnsdk.com/rtn/web/docs/api_track), faceActionParams: [FaceActionLiveDetectorParams](#faceactionlivedetectorparams(动作活体检测参数)), authoritativeFaceParams: [QNAuthoritativeFaceParams](#qnauthoritativefaceparams)) => QNAuthorityActionFaceComparer | 开始检测           |
-| commit                 | () => Promise<{   faceActionResult: [FaceActionLiveDetectorRes](#faceactionlivedetectorres);   authoritativeFaceResult: [QNAuthoritativeFaceResult](#qnauthoritativefaceresult); } | 结束检测并响应数据 |
-
-### QNOCRDetector(OCR识别)
-
-#### 使用
-
-```ts
-QNRTCAI.QNOCRDetector.run(videoTrack).then(result => {
-  console.log('result', result);
-});
-```
-
-#### API 说明
-
-| 方法                 | 类型                                                         | 说明        |
-| -------------------- | ------------------------------------------------------------ | ----------- |
-| static run(静态方法) | (videoTrack: [Track](https://doc.qnsdk.com/rtn/web/docs/api_track)) => Promise\<[QNOCRDetectorResult](#qnocrdetectorresult)\> | 执行ocr识别 |
-
-#### 类型定义
-
-##### QNOCRDetectorResult
+### QNOCRDetectorResult
 
 ```ts
 // ocr识别响应值
@@ -782,9 +763,9 @@ interface QNOCRDetectorResult {
 }
 ```
 
-### 错误码
+## 错误码
 
-```c
+```ts
 业务错误码	信息
 
 // 通用:
