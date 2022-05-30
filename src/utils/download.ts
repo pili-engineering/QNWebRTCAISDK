@@ -3,7 +3,7 @@
  * @param url
  * @param fileName
  */
-export function baseDownload(url: string, fileName: string) {
+export function baseDownload(url: string, fileName: string): void {
   const downloadLink = document.createElement('a');
   document.body.append(downloadLink);
   downloadLink.href = url;

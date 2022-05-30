@@ -12,7 +12,7 @@ export function generateAiToken(): string {
   const sign = CryptoJS.HmacSHA1(encodedSrc, secretKey);
   const encodedSign = CryptoJS.enc.Base64.stringify(sign).replace(/\//g, '_').replace(/\+/g, '-');
   const aiToken = 'QD ' + accessKey + ':' + encodedSign + ':' + encodedSrc;
-  console.log('aiToken', aiToken);
+  console.log('generate token aiToken', aiToken);
   return aiToken;
 }
 
@@ -26,5 +26,6 @@ export async function generateSignToken(url: string): Promise<string> {
   const SKSign = CryptoJS.HmacSHA1(url, secretKey);
   const SKEncodedSign = CryptoJS.enc.Base64.stringify(SKSign).replace(/\//g, '_').replace(/\+/g, '-');
   const signToken = `${accessKey}:${SKEncodedSign}`;
+  console.log('generate token signToken', signToken);
   return signToken;
 }

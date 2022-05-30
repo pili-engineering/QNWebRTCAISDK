@@ -27,27 +27,20 @@ import * as QNRTCAI from './qnweb-rtc-ai.umd.js'
 # 快速开始
 
 ```ts
-/**
- * 根据回传的 url 由业务服务器生成 signToken
- * 生成算法
- * @param url
- */
+import * as QNRTCAI frmo 'qnweb-rtc-ai'
+
+// 根据回传的 url 由业务服务器生成 signToken, 生成算法
+// 该 token 主要用于语音转文字
 async function signCallback(url) {
-  /**
-   * 这里编写通过 url 生成的 signToken 逻辑并返回
-   */
+  // 这里编写通过 url 生成的 signToken 逻辑并返回
   return signToken
 }
 
-/**
- * 初始化由服务端生成的 aiToken 和 signToken
- */
-QNRTCAI.init(aiToken, signCallback);
+// 初始化由服务端生成的 aiToken 和 signToken
+QNRtcAiManager.init(aiToken, signCallback);
 
-/**
- * 语音识别转文字
- */
-const analyzer = QNRTCAI.AudioToTextAnalyzer.startAudioToText(
+// 语音识别转文字
+const analyzer = QNRTCAI.QNAudioToTextAnalyzer.startAudioToText(
   // 音频 Track 对象
   audioTrack,
   // 语音识别参数，可选
@@ -60,16 +53,11 @@ const analyzer = QNRTCAI.AudioToTextAnalyzer.startAudioToText(
   }
 )
 
-/**
- * 结束语音识别转文字
- */
+// 结束语音识别转文字
 analyzer.stopAudioToText();
 
-/**
- * 身份证识别
- * videoTrack 为视频 Track 对象
- */
-QNRTCAI.IDCardDetector.run(videoTrack).then(res => {
+// 身份证识别
+QNRTCAI.QNIDCardDetector.run(videoTrack).then(res => {
   console.log(res);
 })
 ```
@@ -78,69 +66,73 @@ QNRTCAI.IDCardDetector.run(videoTrack).then(res => {
 
 | 方法                                                         | 描述                  |
 | ------------------------------------------------------------ | --------------------- |
-| [AudioToTextAnalyzer](#audiototextanalyzer)                  | 语音识别转文字        |
-| [IDCardDetector](#idcarddetector)                            | 身份证信息识别        |
-| [textToSpeak](#texttospeak)                                  | 文字转语音            |
-| [FaceActionLiveDetector](#faceactionlivedetector)            | 动作活体检测          |
-| [FaceFlashLiveDetector](#faceflashlivedetector)              | 光线活体检测          |
-| [faceComparer](#facecomparer)                                | 人脸对比              |
-| [faceDetector](#facedetector)                                | 人脸检测              |
+| [QNAudioToTextAnalyzer](#qnaudiototextanalyzer)              | 语音识别转文字        |
+| [QNIDCardDetector](#qnidcarddetector)                        | 身份证信息识别        |
+| [QNTextToSpeakAnalyzer](#qntexttospeakanalyzer)              | 文字转语音            |
+| [QNFaceActionLive](#qnfaceactionlive)                        | 动作活体检测          |
+| [QNFaceFlashLiveDetector](#qnfaceflashlivedetector)          | 光线活体检测          |
+| [QNFaceComparer](#qnfacecomparer)                            | 人脸对比              |
+| [QNFaceDetector](#qnfacedetector)                            | 人脸检测              |
 | [QNAuthoritativeFaceComparer](#qnauthoritativefacecomparer)  | 权威人脸比对          |
 | [QNAuthorityActionFaceComparer](#qnauthorityactionfacecomparer) | 权威人脸比对+动作活体 |
 | [QNOCRDetector](#qnocrdetector)                              | OCR识别               |
 
 ## API文档
 
-### AudioToTextAnalyzer
+### QNAudioToTextAnalyzer
+
+> 语音转文字
 
 #### 如何使用
 
 ```ts
 // 开启语音识别
-const audioAnalyzer = QNRTCAI.AudioToTextAnalyzer.startAudioToText(
+const analyzer = QNRTCAI.QNAudioToTextAnalyzer.startAudioToText(
   audioTrack, 
   null, 
   {
     onAudioToText: message => {
-    console.log('message', message);
-    if (message.transcript) {
-      localAudioText.innerText = message.transcript
+      console.log('message', message);
     }
   }
 });
-audioAnalyzer.getStatus(); // 获取当前状态
-audioAnalyzer.stopAudioToText(); // 结束语音识别
+analyzer.getStatus(); // 获取当前状态
+analyzer.stopAudioToText(); // 结束语音识别
 ```
 
 #### 方法
 
-| 方法                              | 类型                                                         | 说明             |
-| --------------------------------- | ------------------------------------------------------------ | ---------------- |
-| static startAudioToText(静态方法) | (audioTrack: [Track](https://doc.qnsdk.com/rtn/web/docs/api_track), params: [AudioToTextParams](#audiototextparams), callback: [Callback](#callback)) => QNAudioToTextAnalyzer | 开始语音实时识别 |
-| getStatus                         | () => [Status](#status)                                      | 获取当前状态     |
-| stopAudioToText                   | () => void                                                   | 停止语音实时识别 |
+| 方法                    | 类型                                                         | 说明             |
+| ----------------------- | ------------------------------------------------------------ | ---------------- |
+| static startAudioToText | (audioTrack: [QNLocalAudioTrack](https://developer.qiniu.com/rtc/8660/QNLocalAudioTrack) \| [QNRemoteAudioTrack](https://developer.qiniu.com/rtc/8674/QNRemoteAudioTrack), params: [QNAudioToTextParams](#qnaudiototextparams), callback: [QNAudioToTextCallback](#qnaudiototextcallback)) => [QNAudioToTextAnalyzer](#qnaudiototextanalyzer) | 开始语音实时识别 |
+| getStatus               | () => [QNAudioToTextStatus](#qnaudiototextstatus)            | 获取当前状态     |
+| stopAudioToText         | () => void                                                   | 停止语音实时识别 |
 
-### IDCardDetector
+### QNIDCardDetector
+
+> 身份证识别
 
 #### 如何使用
 
 ```ts
-QNRTCAI.IDCardDetector.run(videoTrack)
+QNRTCAI.QNIDCardDetector.run(videoTrack)
   .then(res => console.log(res))
 ```
 
 #### 方法
 
-| 方法                 | 类型                                                         | 说明                                                    |
-| -------------------- | ------------------------------------------------------------ | ------------------------------------------------------- |
-| static run(静态方法) | (videoTrack: [Track](https://doc.qnsdk.com/rtn/web/docs/api_track), params?: [IDCardDetectorRunParams](#idcarddetectorrunparams) => Promise<[IDCardDetectorRunRes](#idcarddetectorrunRes)> | 身份证信息识别，返回的是一个promise，得到识别出来的信息 |
+| 方法       | 类型                                                         | 说明                                                    |
+| ---------- | ------------------------------------------------------------ | ------------------------------------------------------- |
+| static run | (videoTrack: [QNLocalVideoTrack](https://developer.qiniu.com/rtc/8663/QNLocalVideoTrack) \| [QNRemoteVideoTrack](https://developer.qiniu.com/rtc/8680/QNRemoteVideoTrack), params?: [QNIDCardDetectorParams](#qnidcarddetectorparams) => Promise<[QNIDCardDetectorResult](#qnidcarddetectorresult)> | 身份证信息识别，返回的是一个promise，得到识别出来的信息 |
 
-### textToSpeak
+### QNTextToSpeakAnalyzer
+
+> 文字转语音
 
 #### 如何使用
 
 ```ts
-QNRTCAI.textToSpeak({ text }).then(response => {
+QNRTCAI.QNTextToSpeakAnalyzer.run({ text }).then(response => {
   const base64String = response.response.audio;
   console.log('response', response)
   console.log('base64String', base64String);
@@ -151,19 +143,19 @@ QNRTCAI.textToSpeak({ text }).then(response => {
 
 #### 方法
 
-| 方法        | 类型                                                         | 说明       |
-| ----------- | ------------------------------------------------------------ | ---------- |
-| textToSpeak | (params: [TextToSpeakParams](#texttospeakparams))) => Promise<[TextToSpeakRes](#texttospeakres)> | 文字转语音 |
+| 方法       | 类型                                                         | 说明       |
+| ---------- | ------------------------------------------------------------ | ---------- |
+| static run | (params: [QNTextToSpeakAnalyzerParams](#qntexttospeakanalyzerparams))) => Promise<[QNTextToSpeakAnalyzerResult](#qntexttospeakanalyzerresult)> | 文字转语音 |
 
-### FaceActionLiveDetector
+### QNFaceActionLive
+
+> 动作活体检测
 
 #### 如何使用
 
 ```ts
-// 需通过 QNRTC 创建 recorder
-const QNRTC = window.QNRTC.default;
 // 开始检测
-const detector = QNRTCAI.FaceActionLiveDetector.start(QNRTC, videoTrack, {
+const detector = QNRTCAI.QNFaceActionLive.start(videoTrack, {
   action_types: ['shake'] // 传入动作活体动作的标示字符串
 });
 // 结束检测并响应数据
@@ -176,16 +168,18 @@ detector.commit().then(response => {
 
 | 方法                   | 类型                                                         | 说明                                                         |
 | ---------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| static start(静态方法) | (QNRTC, videoTrack: [Track](https://doc.qnsdk.com/rtn/web/docs/api_track), params: [FaceActionLiveDetectorParams](#faceactionlivedetectorparams)) => FaceActionLiveDetector | video_type 表示选择录制的格式，默认为 1(1 为 mp4，2 为 h264)。调用 start 开始录制。 |
-| commit                 | () => Promise\<[FaceActionLiveDetectorRes](#faceactionlivedetectorres)\> | 结束检测并响应数据                                           |
+| static start(静态方法) | (videoTrack: [QNLocalVideoTrack](https://developer.qiniu.com/rtc/8663/QNLocalVideoTrack) \| [QNRemoteVideoTrack](https://developer.qiniu.com/rtc/8680/QNRemoteVideoTrack), params: [QNFaceActionLiveParams](#qnfaceactionliveparams)) => [QNFaceActionLive](#qnfaceactionlive) | video_type 表示选择录制的格式，默认为 1(1 为 mp4，2 为 h264)。调用 start 开始录制。 |
+| commit                 | () => Promise\<[QNFaceActionLiveResult](#qnfaceactionliveresult)\> | 结束检测并响应数据                                           |
 
-### FaceFlashLiveDetector
+### QNFaceFlashLiveDetector
+
+> 光线活体检测
 
 #### 如何使用
 
 ```ts
 // 开始检测
-const faceFlashLiveDetector = QNRTCAI.FaceFlashLiveDetector.start(videoTrack);
+const faceFlashLiveDetector = QNRTCAI.QNFaceFlashLiveDetector.start(videoTrack);
 // 结束检测
 faceFlashLiveDetector.commit().then(response => console.log('response', response))
 ```
@@ -194,10 +188,12 @@ faceFlashLiveDetector.commit().then(response => console.log('response', response
 
 | 方法                   | 类型                                                         | 说明                                         |
 | ---------------------- | ------------------------------------------------------------ | -------------------------------------------- |
-| static start(静态方法) | (videoTrack: [Track](https://doc.qnsdk.com/rtn/web/docs/api_track), defaultFrameRate: number) => FaceFlashLiveDetector | 开始检测，defaultFrameRate 为帧率，默认为 15 |
-| commit                 | () => Promise\<[FaceFlashLiveDetectorRes](#faceflashlivedetectorres)\> | 结束检测并响应数据                           |
+| static start(静态方法) | (videoTrack: [QNLocalVideoTrack ](https://developer.qiniu.com/rtc/8663/QNLocalVideoTrack) \| [QNRemoteVideoTrack](https://developer.qiniu.com/rtc/8680/QNRemoteVideoTrack), defaultFrameRate: number) => [QNFaceFlashLiveDetector](#qnfaceflashlivedetector) | 开始检测，defaultFrameRate 为帧率，默认为 15 |
+| commit                 | () => Promise\<[QNFaceFlashLiveDetectorResult](#qnfaceflashlivedetectorresult)\> | 结束检测并响应数据                           |
 
-### faceComparer
+### QNFaceComparer
+
+> 人脸对比
 
 #### 如何使用
 
@@ -205,34 +201,38 @@ faceFlashLiveDetector.commit().then(response => console.log('response', response
 /**
  * targetImgBase64 为需要对比的图片 base64 编码
  */
-QNRTCAI.faceComparer(videoTrack, targetImgBase64).then(response => {
+QNRTCAI.QNFaceComparer.run(videoTrack, targetImgBase64).then(response => {
   console.log('response', response);
 });
 ```
 
 #### 方法
 
-| 方法         | 类型                                                         | 说明     |
-| ------------ | ------------------------------------------------------------ | -------- |
-| faceComparer | (videoTrack: [Track](https://doc.qnsdk.com/rtn/web/docs/api_track), targetImg: string, params: [FaceComparerParams](#facecomparerparams) => Promise\<[FaceComparerRes](#facecomparerres)\> | 人脸对比 |
+| 方法       | 类型                                                         | 说明     |
+| ---------- | ------------------------------------------------------------ | -------- |
+| static run | (videoTrack:  [QNLocalVideoTrack](https://developer.qiniu.com/rtc/8663/QNLocalVideoTrack) \| [QNRemoteVideoTrack](https://developer.qiniu.com/rtc/8680/QNRemoteVideoTrack), targetImg: string, params?: [QNFaceComparerParams](#qnfacecomparerparams) => Promise\<[QNFaceComparerResult](#qnfacecomparerresult)\> | 人脸对比 |
 
-### faceDetector
+### QNFaceDetector
+
+> 人脸检测
 
 #### 如何使用
 
 ```ts
-QNRTCAI.faceDetector(videoTrack).then(response => {
+QNRTCAI.QNFaceDetector.run(videoTrack).then(response => {
   console.log('response', response);
 });
 ```
 
 #### 方法
 
-| 方法         | 类型                                                         | 说明     |
-| ------------ | ------------------------------------------------------------ | -------- |
-| faceDetector | (videoTrack: [Track](https://doc.qnsdk.com/rtn/web/docs/api_track), params: [FaceDetectorParams](#facedetectorparams) => Promise\<[FaceDetectorRes](#facedetectorres)\> | 人脸检测 |
+| 方法       | 类型                                                         | 说明     |
+| ---------- | ------------------------------------------------------------ | -------- |
+| static run | (videoTrack: [QNLocalVideoTrack](https://developer.qiniu.com/rtc/8663/QNLocalVideoTrack) \| [QNRemoteVideoTrack](https://developer.qiniu.com/rtc/8680/QNRemoteVideoTrack), params?: [QNFaceDetectorParams](#qnfacedetectorparams) => Promise\<[QNFaceDetectorResult](#qnfacedetectorresult)\> | 人脸检测 |
 
 ### QNAuthoritativeFaceComparer
+
+> 权威人脸对比
 
 #### 如何使用
 
@@ -249,18 +249,19 @@ QNRTCAI.QNAuthoritativeFaceComparer.run(videoTrack, {
 
 #### 方法
 
-| 方法                 | 类型                                                         | 说明             |
-| -------------------- | ------------------------------------------------------------ | ---------------- |
-| static run(静态方法) | (videoTrack: [Track](https://doc.qnsdk.com/rtn/web/docs/api_track), params: [QNAuthoritativeFaceParams](#qnauthoritativefaceparams)) => Promise\<[QNAuthoritativeFaceResult](#qnauthoritativefaceresult)\> | 执行权威人脸对比 |
+| 方法       | 类型                                                         | 说明             |
+| ---------- | ------------------------------------------------------------ | ---------------- |
+| static run | (videoTrack: [QNLocalVideoTrack](https://developer.qiniu.com/rtc/8663/QNLocalVideoTrack) \| [QNRemoteVideoTrack](https://developer.qiniu.com/rtc/8680/QNRemoteVideoTrack), params: [QNAuthoritativeFaceParams](#qnauthoritativefaceparams)) => Promise\<[QNAuthoritativeFaceResult](#qnauthoritativefaceresult)\> | 执行权威人脸对比 |
 
 ### QNAuthorityActionFaceComparer
+
+> 活体动作识别加权威人脸对比
 
 #### 如何使用
 
 ```ts
 // 开始权威人脸比对和动作活体检测
 const detector = QNRTCAI.QNAuthorityActionFaceComparer.start(
-  QNRTC, 
   videoTrack, 
   faceActionParams,
   authoritativeFaceParams
@@ -273,12 +274,14 @@ detector.commit().then(result => {
 
 #### 方法
 
-| 方法                   | 类型                                                         | 说明               |
-| ---------------------- | ------------------------------------------------------------ | ------------------ |
-| static start(静态方法) | (QNRTC, videoTrack: [Track](https://doc.qnsdk.com/rtn/web/docs/api_track), faceActionParams: [FaceActionLiveDetectorParams](#faceactionlivedetectorparams), authoritativeFaceParams: [QNAuthoritativeFaceParams](#qnauthoritativefaceparams)) => QNAuthorityActionFaceComparer | 开始检测           |
-| commit                 | () => Promise<{   faceActionResult: [FaceActionLiveDetectorRes](#faceactionlivedetectorres);   authoritativeFaceResult: [QNAuthoritativeFaceResult](#qnauthoritativefaceresult); } | 结束检测并响应数据 |
+| 方法         | 类型                                                         | 说明               |
+| ------------ | ------------------------------------------------------------ | ------------------ |
+| static start | (videoTrack:  [QNLocalVideoTrack](https://developer.qiniu.com/rtc/8663/QNLocalVideoTrack) \| [QNRemoteVideoTrack](https://developer.qiniu.com/rtc/8680/QNRemoteVideoTrack), faceActionParams: [QNFaceActionLiveParams](#qnfaceactionliveparams), authoritativeFaceParams: [QNAuthoritativeFaceParams](#qnauthoritativefaceparams)) => [QNAuthorityActionFaceComparer](#qnauthorityactionfacecomparer) | 开始检测           |
+| commit       | () => Promise<{   faceActionResult: [QNFaceActionLiveResult](#qnfaceactionliveresult);   authoritativeFaceResult: [QNAuthoritativeFaceResult](#qnauthoritativefaceresult); } | 结束检测并响应数据 |
 
 ### QNOCRDetector
+
+> ocr识别
 
 #### 如何使用
 
@@ -290,73 +293,57 @@ QNRTCAI.QNOCRDetector.run(videoTrack).then(result => {
 
 #### 方法
 
-| 方法                 | 类型                                                         | 说明        |
-| -------------------- | ------------------------------------------------------------ | ----------- |
-| static run(静态方法) | (videoTrack: [Track](https://doc.qnsdk.com/rtn/web/docs/api_track)) => Promise\<[qnocrdetectorresult](#qnocrdetectorresult)\> | 执行ocr识别 |
+| 方法       | 类型                                                         | 说明        |
+| ---------- | ------------------------------------------------------------ | ----------- |
+| static run | (videoTrack: [QNLocalVideoTrack](https://developer.qiniu.com/rtc/8663/QNLocalVideoTrack) \| [QNRemoteVideoTrack](https://developer.qiniu.com/rtc/8680/QNRemoteVideoTrack)) => Promise\<[QNOCRDetectorResult](#qnocrdetectorresult)\> | 执行ocr识别 |
 
 ## 类型说明
 
-### AudioToTextParams
+### QNAudioToTextStatus
 
 ```ts
-// 开启语音识别所需的参数
-interface AudioToTextParams {
-  force_final: number; // 是否在text为空的时候返回final信息, 1->强制返回;0->不强制返回。
-  maxsil: number; // 最长静音间隔，单位秒，默认10s
-  model_type: number; // 0->cn; 默认0
-  need_partial: number; // 是否返回partial文本，1->返回，0-> 不返回;默认1
-  need_words: number; // 是否返回词语的对齐信息，1->返回， 0->不返回;默认0。
-  needvad: number; // 是否需要vad;0->关闭;1->开启; 默认1
-  vad_sil_thres: number; // vad断句的累积时间，大于等于0， 如果设置为0，或者没设置，系统默认
-  /**
-   * 提供热词，格式为: hot_words=热词1,因子1;热词2,因子2，
-   * 每个热词由热词本身和方法因子以英文逗号隔开，不同热词通过;隔开，
-   * 最多100个热词，每个热词40字节以内。由于潜在的http服务对url大小的限制，以实际支持的热词个数为准
-   * 因子范围[-10,10], 正数代表权重权重越高，权重越高越容易识别成这个词，建议设置1 ，负数代表不想识别
-   */
-  hot_words: string;
-}
-```
-
-### Callback
-
-```ts
-/**
- * 连接状态变化
- * 参数:status-当前状态; msg-提示消息
- */
-type StatusChangeCallback = (status: Status, msg: string) => void
-
-/**
- * 实时转化文字数据
- * 参数:audioToText - 当前片段的结果文字数据
- */
-type AudioToTextCallback = (audioToText: AudioToText) => void;
-
-// 语音识别的回调
-interface Callback {
-  onStatusChange: StatusChangeCallback;
-  onAudioToText: AudioToTextCallback;
-}
-```
-
-### Status
-
-```ts
-// 当前的状态
-enum Status {
-  AVAILABLE, // 未开始可用 
+enum QNAudioToTextStatus {
+  AVAILABLE, // 未开始可用
   DESTROY, // 已经销毁不可用
   ERROR, // 连接异常断线
   DETECTING // 正在实时转化
 }
 ```
 
-### AudioToText
+### QNAudioToTextCallback
+
+```tsx
+interface QNAudioToTextCallback {
+  onStatusChange?: (status: QNAudioToTextStatus, msg: string) => void,
+  onAudioToText?: (audioToText: QNAudioToTextResult) => void
+}
+```
+
+### QNAudioToTextParams
 
 ```ts
-// 语音识别的内容
-interface AudioToText {
+interface QNAudioToTextParams {
+  force_final?: number; // 是否在text为空的时候返回final信息, 1->强制返回;0->不强制返回。
+  maxsil?: number; // 最长静音间隔，单位秒，默认10s
+  model_type?: number; // 0->cn; 默认0
+  need_partial?: number; // 是否返回partial文本，1->返回，0-> 不返回;默认1
+  need_words?: number; // 是否返回词语的对齐信息，1->返回， 0->不返回;默认0。
+  needvad?: number; // 是否需要vad;0->关闭;1->开启; 默认1
+  vad_sil_thres?: number; // vad断句的累积时间，大于等于0， 如果设置为0，或者没设置，系统默认
+  /**
+   * 提供热词，格式为: hot_words=热词1,因子1;热词2,因子2，
+   * 每个热词由热词本身和方法因子以英文逗号隔开，不同热词通过;隔开，
+   * 最多100个热词，每个热词40字节以内。由于潜在的http服务对url大小的限制，以实际支持的热词个数为准
+   * 因子范围[-10,10], 正数代表权重权重越高，权重越高越容易识别成这个词，建议设置1 ，负数代表不想识别
+   */
+  hot_words?: string;
+}
+```
+
+### QNAudioToTextResult
+
+```ts
+interface QNAudioToTextResult {
   end_seq: number; // 为该文本所在的切片的终点(包含)，否则为-1
   end_time: number; // 该片段的终止时间，毫秒
   ended: number; // 是否是websocket最后一条数据,0:非最后一条数据,1: 最后一条数据。
@@ -370,10 +357,10 @@ interface AudioToText {
   start_time: number; // 该片段的起始时间，毫秒
   transcript: string; // 语音的文本, 如果final=0, 则为partinal结果 (后面可能会更改),final=1为该片段最终结果
   uuid: string;
-  words: WordsDTO; // 返回词语的对齐信息, 参数need_words=1时返回详细内存见下表。
+  words: QNWordsDTO; // 返回词语的对齐信息, 参数need_words=1时返回详细内存见下表。
 }
 
-interface WordsDTO {
+interface QNWordsDTO {
   seg_end: number; // 该词语相对整个数据流的起始时间, 毫秒
   seg_start: number; // 该词语相对当前分段的起始时间, 毫秒
   voice_end: number; // 该词语相对整个数据流的终止时间, 毫秒
@@ -382,12 +369,10 @@ interface WordsDTO {
 }
 ```
 
-### IDCardDetectorRunParams
+### QNIDCardDetectorParams
 
 ```ts
-// 身份证识别参数
-interface IDCardDetectorRunParams {
-  image?: string, // base64图像
+interface QNIDCardDetectorParams {
   session_id?: string, // 唯一会话 id
   ret_image?: boolean, // 是否返回识别后的切图(切图是指精确剪裁对齐后的身份证正反面图片)，返回格式为 JPEG 格式二进制图片使用 base64 编码后的字符串
   ret_portrait?: boolean, // 是否返回身份证(人像面)的人脸图 片，返回格式为 JPEG 格式二进制图片使用 base64 编码后的字符串
@@ -397,23 +382,22 @@ interface IDCardDetectorRunParams {
 }
 ```
 
-### IDCardDetectorRunRes
+### QNIDCardDetectorResult
 
 ```ts
-// 身份证识别响应值
-interface IDCardDetectorRunRes {
+interface QNIDCardDetectorResult {
   request_id?: string,
   response: {
-    session_id: string, //唯一会话 id
+    session_id: string, // 唯一会话 id
     errorcode: number,	// 返回状态码
     errormsg: string,	// 返回错误消息
     warnmsg: Array<string>, // 多重警告码
-    ocr_result: OcrResult,	// 文字识别结果
-    image_result: ImageResult,	// 图片检测结果
+    ocr_result: QNOcrResult,	// 文字识别结果
+    image_result: QNImageResult,	// 图片检测结果
   }
 }
 
-interface OcrResult {
+interface QNOcrResult {
   side: string	// F-身份证人像面，B-身份 证国徽面
   idno: string, // 身份号码(人像面)
   name: string, //	姓名(人像面)
@@ -425,18 +409,26 @@ interface OcrResult {
   issuedby: string, //	签发机关(国徽面)
 }
 
-interface ImageResult {
+interface QNImageResult {
   idcard: string, //	身份证区域图片，使用Base64 编码后的字符串， 是否返回由请求参数ret_image 决定
   portrait: string, //	身份证人像照片，使用Base64 编码后的字符串， 是否返回由请求参数ret_portrait 决定
   idcard_bbox: Array<Array<number>>, //	框坐标，格式为 [[x0, y0], [x1, y1], [x2, y2], [x3, y3]]
 }
 ```
 
-### TextToSpeakParams
+### QNTextToSpeakAnalyzerParams
 
 ```ts
-// 文字转语音声效枚举
-enum Speaker {
+interface QNTextToSpeakAnalyzerParams {
+  text: string; // 需要进⾏语⾳合成的⽂本内容，最短1个字，最⻓200字
+  speaker?: QNSpeaker; // 发⾳⼈id，⽤于选择不同⻛格的⼈声，⽬前默认为kefu1， 可选的包括female3，female5，female6，male1，male2， male4，kefu1，girl1
+  audio_encoding?: QNAudioEncoding; // 合成⾳频格式，⽬前默认为wav，可选的包括wav，pcm，mp3
+  sample_rate?: number; // 合成⾳频的采样率，默认为16000，可选的包括8000，16000， 24000，48000
+  volume?: number; // ⾳量⼤⼩，取值范围为0~100，默认为50
+  speed?: number; // 语速，取值范围为-100~100，默认为0
+}
+
+enum QNSpeaker {
   Male1 = 'male1', // 男声1
   Male2 = 'male2', // 男声2
   Female3 = 'female3', // 女声3
@@ -448,120 +440,82 @@ enum Speaker {
 }
 
 // tts 音频编码格式枚举
-enum AudioEncoding {
+enum QNAudioEncoding {
   Wav = 'wav',
   Pcm = 'pcm',
   Mp3 = 'mp3',
 }
-
-/**
- * 文字转语音参数
- */
-interface TextToSpeakParams {
-  text: string; // 需要进⾏语⾳合成的⽂本内容，最短1个字，最⻓200字
-  speaker?: Speaker; // 发⾳⼈id，⽤于选择不同⻛格的⼈声，⽬前默认为kefu1， 可选的包括female3，female5，female6，male1，male2， male4，kefu1，girl1
-  audio_encoding?: AudioEncoding; // 合成⾳频格式，⽬前默认为wav，可选的包括wav，pcm，mp3
-  sample_rate?: number; // 合成⾳频的采样率，默认为16000，可选的包括8000，16000， 24000，48000
-  volume?: number; // ⾳量⼤⼩，取值范围为0~100，默认为50
-  speed?: number; // 语速，取值范围为-100~100，默认为0
-}
 ```
 
-### TextToSpeakRes
+### QNTextToSpeakAnalyzerResult
 
 ```ts
-/**
- * 文字转语音响应值
- */
-interface TextToSpeakRes {
-  request_id?: string; // 请求唯一 id
+interface QNTextToSpeakAnalyzerResult {
+  request_id?: string;
   response: {
-    voice_id?: string; // 声音唯一 id
-    error_code?: number; // 返回状态码，详见状态码表格
-    err_msg?: number; // 状态码对应错误信息
-    audio?: string; // 合成的音频，采用 base64 编码
-  }
+    voice_id?: string;
+    error_code?: number;
+    err_msg?: number,
+    audio?: string;
+  };
 }
 ```
 
-### FaceActionLiveDetectorParams
+### QNFaceActionLiveParams
 
 ```ts
-/**
- * 动作的标示字符串
- */
-enum ActionType {
+interface QNFaceActionLiveParams {
+  action_types: QNFaceAction[];
+  video_type?: QNVideoType; // 选择录制的格式
+  debug?: boolean; // 是否开启 debug，开启 debug 的记录目前会在数据库里面保存 12 小时
+}
+
+// 动作的标示字符串
+enum QNFaceAction {
   Nod = 'nod',
   Shake = 'shake',
   Blink = 'blink',
   Mouth = 'mouth'
 }
 
-/**
- * 视频格式，1 表示 mp4, 2 表示 h264，默认值为 1
- */
-export enum VideoType {
+// 视频格式，1 表示 mp4, 2 表示 h264，默认值为 1
+enum QNVideoType {
   Mp4 = 1,
   H264
 }
-
-/**
- * 动作活体检测参数
- */
-interface FaceActionLiveDetectorParams {
-  action_types: ActionType[];
-  video_type?: VideoType; // 选择录制的格式
-  debug?: boolean; // 是否开启 debug，开启 debug 的记录目前会在数据库里面保存 12 小时
-}
 ```
 
-### FaceActionLiveDetectorRes
+### QNFaceActionLiveResult
 
 ```ts
-/**
- * 动作活体检测响应体
- */
-interface FaceActionLiveDetectorRes {
+interface QNFaceActionLiveResult {
   request_id: string;
-  response: FaceActionLiveResData;
+  response: {
+    best_frames: QNBestFrame[]; // 最优帧列表，列表中每个元素格式是 json，包括 base64 编码的二进制图片数据和图像质量分数
+    errorcode: number;
+    errormsg: string;
+    live_status: number; // 返回动作活体状态码，1 表示通过，0 表示不通过
+    session_id: string; // 唯一会话 id
+  };
 }
 
-/**
- * 动作活体检测响应值
- */
-interface FaceActionLiveResData {
-  best_frames: BestFrame[]; // 最优帧列表，列表中每个元素格式是 json，包括 base64 编码的二进制图片数据和图像质量分数
-  errorcode: number;
-  errormsg: string;
-  live_status: number; // 返回动作活体状态码，1 表示通过，0 表示不通过
-  session_id: string; // 唯一会话 id
-}
-
-/**
- * 最优帧列表，列表中每个元素格式是 json，
- * 包括 base64 编码的二进制图片数据和图像质量分数
- */
-interface BestFrame {
+// 最优帧列表，列表中每个元素格式是 json，
+// 包括 base64 编码的二进制图片数据和图像质量分数
+interface QNBestFrame {
   image_b64: string; // base64 编码的二进制图像数据
   quality: number; // 图像质量分数, 取值范围是[0,100]
 }
 ```
 
-### FaceFlashLiveDetectorRes
+### QNFaceFlashLiveDetectorResult
 
 ```ts
-/**
- * 光线活体检测响应体
- */
-interface FaceFlashLiveDetectorRes {
+interface QNFaceFlashLiveDetectorResult {
   request_id: string;
-  response: FaceFlashLiveDetectorResData;
+  response: QNFaceFlashLiveDetectorResultResponse;
 }
 
-/**
- * 光线活体检测响应值
- */
-interface FaceFlashLiveDetectorResData {
+interface QNFaceFlashLiveDetectorResultResponse {
   errorcode: number;
   errormsg: string;
   face_num: number; // 视频中检测到的人脸帧数
@@ -571,17 +525,17 @@ interface FaceFlashLiveDetectorResData {
 }
 ```
 
-### FaceComparerParams
+### QNFaceComparerParams
 
 ```ts
 /**
  * 人脸对比参数
- * @param rotate_A  否  bool  人脸检测失败时，是否对图像 A 做旋转再检测，旋转角包括 90、180、270 三个角度，默认值为 False
+ * @param rotate_A
  * @param rotate_B  否  bool  人脸检测失败时，是否对图像 B 做旋转再检测，旋转角包括 90、180、270 三个角度，默认值为 False
  * @param maxface_A  否  bool  图像 A 中检测到多张人脸时是否取最大区域的人脸作为输出，默认值为 True
  * @param maxface_B  否  bool  图像 B 中检测到多张人脸时是否取最大区域的人脸作为输出，默认值为 True
  */
-interface FaceComparerParams {
+interface QNFaceComparerParams {
   rotate_A?: boolean;
   rotate_B?: boolean;
   maxface_A?: boolean;
@@ -589,49 +543,38 @@ interface FaceComparerParams {
 }
 ```
 
-### FaceComparerRes
+### QNFaceComparerResult
 
 ```ts
-/**
- * 人脸对比响应体
- */
-interface FaceComparerRes {
+interface QNFaceComparerResult {
   request_id: string;
-  response: FaceComparerResData;
-}
-
-/**
- * 人脸对比响应体数据
- */
-interface FaceComparerResData {
-  errorcode: number;
-  errormsg: string;
-  session_id: string; // 唯一会话 id
-  similarity: number; // 两个 face 的相似度, 取值范围为[0,100]
+  response: {
+    errorcode: number;
+    errormsg: string;
+    session_id: string;
+    similarity: number;
+  };
 }
 ```
 
-### FaceDetectorParams
+### QNFaceDetectorParams
 
 ```ts
 /**
  * 人脸检测参数
- * @param rotate-人脸检测失败时，是否对图像 A 做旋转再检测，旋转角包 括 90、180、270 三个角度，默认值为false
+ * @param rotate-人脸检测失败时，是否对图像 A 做旋转再检测，旋转角包 括 90、180、270 三个角度，默认值为 false
  */
-interface FaceDetectorParams {
+interface QNFaceDetectorParams {
   rotate?: boolean;
 }
 ```
 
-### FaceDetectorRes
+### QNFaceDetectorResult
 
 ```ts
-/**
- * 人脸检测响应体
- */
-interface FaceDetectorRes {
+interface QNFaceDetectorResult {
   request_id: string;
-  response: FaceDetectorResData;
+  response: QNFaceDetectorResultResponse;
 }
 
 /**
@@ -642,10 +585,10 @@ interface FaceDetectorRes {
  * @param errorcode  int  返回状态码
  * @param errormsg  string  返回错误消息
  */
-export interface FaceDetectorResData {
+interface QNFaceDetectorResultResponse {
   errorcode: number;
   errormsg: string;
-  face: FaceItem[];
+  face: QNFaceItem[];
   num_face: number;
   rotate_angle: number;
   session_id: string;
@@ -674,7 +617,7 @@ export interface FaceDetectorResData {
  * @param height  int  人脸框的高度
  * @param face_shape  json  人脸 106 个关键点坐标，包含 face_profile，left_eye, left_eyebrow，right_eye，right_eyebrow，mouth，nose，pupil 等组件，每个组件都是一个 json
  */
-interface FaceItem {
+interface QNFaceItem {
   score: number;
   x: number;
   y: number;
@@ -689,7 +632,7 @@ interface FaceItem {
   gender: string;
   age: number;
   illumination: number;
-  face_shape: FaceShape;
+  face_shape: QNFaceShape;
   completeness: number;
   area: number;
   facesize: number;
@@ -701,19 +644,20 @@ interface FaceItem {
  * @param face_shape  json
  * 人脸 106 个关键点坐标，
  * 包含 face_profile，left_eye, left_eyebrow，right_eye，right_eyebrow，mouth，nose，pupil 等组件
+ * 每个组件都是一个 json
  */
-interface FaceShape {
-  face_profile: FaceProfile[];
-  left_eye: FaceProfile[];
-  left_eyebrow: FaceProfile[];
-  right_eye: FaceProfile[];
-  right_eyebrow: FaceProfile[];
-  mouth: FaceProfile[];
-  nose: FaceProfile[];
-  pupil: FaceProfile[];
+interface QNFaceShape {
+  face_profile: QNFaceProfile[];
+  left_eye: QNFaceProfile[];
+  left_eyebrow: QNFaceProfile[];
+  right_eye: QNFaceProfile[];
+  right_eyebrow: QNFaceProfile[];
+  mouth: QNFaceProfile[];
+  nose: QNFaceProfile[];
+  pupil: QNFaceProfile[];
 }
 
-interface FaceProfile {
+interface QNFaceProfile {
   x: number;
   y: number;
 }
@@ -722,7 +666,6 @@ interface FaceProfile {
 ### QNAuthoritativeFaceParams
 
 ```ts
-// 权威人脸比对请求参数
 interface QNAuthoritativeFaceParams {
   realname: string; // 真实名字
   idcard: string; // 身份证号
@@ -732,10 +675,9 @@ interface QNAuthoritativeFaceParams {
 ### QNAuthoritativeFaceResult
 
 ```ts
-// 权威人脸比对响应值
 interface QNAuthoritativeFaceResult {
   request_id: string; // 请求id
-  response: { 
+  response: {
     session_id: string; // 会话id
     similarity: number; // 人脸比对相似度。 71大约千分之一误识率，79大约万分之一误识率
     errorcode: number; // 返回状态码
@@ -747,12 +689,11 @@ interface QNAuthoritativeFaceResult {
 ### QNOCRDetectorResult
 
 ```ts
-// ocr识别响应值
 interface QNOCRDetectorResult {
-  request_id: string; // 请求id
+  request_id: string;
   response: {
-    code: number; // 错误码
-    message: string; // 错误消息
+    code: number;
+    message: string;
     data: Array<{
       line: number; // 文字所在行
       bbox: [number, number][]; // 文本框坐标
