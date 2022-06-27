@@ -61,7 +61,7 @@ const Room: React.FC = () => {
     request.get<undefined, { aiToken: string; signToken?: string }>('/v1/exam/aiToken').then(result => {
       QNRtcAiManager.init(result.aiToken, async (url) => {
         const result = await request.get<{ url: string }, { aiToken: string; signToken: string }>(`/v1/exam/aiToken`, {
-          url
+          url: encodeURIComponent(url)
         });
         return result.signToken || '';
       });
