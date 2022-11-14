@@ -2,7 +2,9 @@ import { Button, Input } from 'antd';
 import React, { useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import * as eruda from 'eruda';
-import css from './index.module.scss';
+import * as QNRTCAI from 'qnweb-rtc-ai';
+
+import styles from './index.module.scss';
 
 const roomTokens = [
   'QxZugR8TAhI38AiJ_cptTl3RbzLyca3t-AAiH-Hh:izA6cPmls835DDCSCJbVCRArGMw=:eyJhcHBJZCI6ImZsZXFmcTZ5YyIsImV4cGlyZUF0IjoxNzIwMTQ5ODUxLCJwZXJtaXNzaW9uIjoidXNlciIsInJvb21OYW1lIjoiZ28xIiwidXNlcklkIjoiZ291c2VyMSJ9',
@@ -41,28 +43,28 @@ const Home = () => {
     eruda.init();
   };
 
-  return <div className={css.container}>
-    <h1 className={css.title} onClick={onOpenDebug}>七牛 RTC-AI demo 体验</h1>
+  return <div className={styles.container}>
+    <h1 className={styles.title} onClick={onOpenDebug}>七牛 RTC-AI demo 体验</h1>
     <Input
       value={roomToken}
       onChange={e => setRoomToken(e.target.value)}
-      placeholder='请输入roomToken'
+      placeholder="请输入roomToken"
       style={{ marginBottom: 10 }}
     />
     <Button
-      type='primary'
+      type="primary"
       block
       style={{ marginBottom: 10 }}
       onClick={joinRoom}
     >点击进入房间</Button>
     <Button
-      type='primary'
+      type="primary"
       block
       onClick={generateRoomToken}
     >点击随机生成 roomToken</Button>
-    <div style={{ marginTop: 10 }} className={css.version}>Demo version: {__VERSION__}</div>
-    <div className={css.version}>SDK version: {QNRTCAI.version}</div>
-    <div className={css.version}>RTC version: {window.QNRTC.version}</div>
+    <div style={{ marginTop: 10 }} className={styles.version}>Demo version: {__VERSION__}</div>
+    <div className={styles.version}>SDK version: {QNRTCAI.version}</div>
+    <div className={styles.version}>RTC version: {QNRTC.version}</div>
   </div>;
 };
 
