@@ -1,0 +1,82 @@
+{
+	"name": "QNThresholds",
+	"reflect": {
+		"QNAudioToTextStatus": "./QNAudioToTextStatus",
+		"QNAudioToTextAnalyzer": "./QNAudioToTextAnalyzer",
+		"QNAuthoritativeFaceComparer": "./QNAuthoritativeFaceComparer",
+		"QNAuthorityActionFaceComparer": "./QNAuthorityActionFaceComparer",
+		"QNFaceActionLive": "./QNFaceActionLive",
+		"QNFaceComparer": "./QNFaceComparer",
+		"QNFaceDetector": "./QNFaceDetector",
+		"QNFaceFlashLiveDetector": "./QNFaceFlashLiveDetector",
+		"QNIDCardDetector": "./QNIDCardDetector",
+		"QNOCRDetector": "./QNOCRDetector",
+		"QNRtcAiManager": "./QNRtcAiManager",
+		"QNTextToSpeakAnalyzer": "./QNTextToSpeakAnalyzer",
+		"QNApiAsrParams": "./QNApiAsrParams",
+		"QNApiAsrResult": "./QNApiAsrResult",
+		"QNApiAuthoritativeFaceParams": "./QNApiAuthoritativeFaceParams",
+		"QNApiFaceActliveParams": "./QNApiFaceActliveParams",
+		"QNApiFaceActliveResult": "./QNApiFaceActliveResult",
+		"QNApiFaceActliveSessionParams": "./QNApiFaceActliveSessionParams",
+		"QNApiFaceActliveSessionResult": "./QNApiFaceActliveSessionResult",
+		"QNApiFaceCompareParams": "./QNApiFaceCompareParams",
+		"QNApiFaceCompareResult": "./QNApiFaceCompareResult",
+		"QNApiFaceDetectParams": "./QNApiFaceDetectParams",
+		"QNApiFaceDetectResult": "./QNApiFaceDetectResult",
+		"QNApiFaceFlashLiveDetectorParams": "./QNApiFaceFlashLiveDetectorParams",
+		"QNApiIDCardDetectorParams": "./QNApiIDCardDetectorParams",
+		"QNApiOCRDetectorParams": "./QNApiOCRDetectorParams",
+		"QNApiVoiceTtsParams": "./QNApiVoiceTtsParams",
+		"QNApiVoiceTtsResult": "./QNApiVoiceTtsResult",
+		"QNAudioToTextCallback": "./QNAudioToTextCallback",
+		"QNAuthoritativeFaceResult": "./QNAuthoritativeFaceResult",
+		"QNCompareResult": "./QNCompareResult",
+		"QNDetectResult": "./QNDetectResult",
+		"QNFaceAngle": "./QNFaceAngle",
+		"QNFaceFlashLiveDetectorResult": "./QNFaceFlashLiveDetectorResult",
+		"QNFaceFlashLiveDetectorResultResponse": "./QNFaceFlashLiveDetectorResultResponse",
+		"QNFaceLocation": "./QNFaceLocation",
+		"QNFaceQuality": "./QNFaceQuality",
+		"QNFaceQualityOcclusion": "./QNFaceQualityOcclusion",
+		"QNFaces": "./QNFaces",
+		"QNIDCardDetectorResult": "./QNIDCardDetectorResult",
+		"QNImage": "./QNImage",
+		"QNKeyWordsType": "./QNKeyWordsType",
+		"QNOCRDetectorResult": "./QNOCRDetectorResult",
+		"QNPiece": "./QNPiece",
+		"QNRtcAiManagerCache": "./QNRtcAiManagerCache",
+		"QNStreamingTranscription": "./QNStreamingTranscription",
+		"QNThresholds": "./QNThresholds",
+		"QNVerifyResult": "./QNVerifyResult"
+	},
+	"describe": {},
+	"blocks": [
+		{
+			"name": "Property",
+			"elements": [
+				{
+					"name": "frr_1e-2",
+					"desc": [
+						"百分之一误拒率的阈值"
+					],
+					"sign": "frr_1e-2?: number"
+				},
+				{
+					"name": "frr_1e-3",
+					"desc": [
+						"千分之一误拒率的阈值"
+					],
+					"sign": "frr_1e-3?: number"
+				},
+				{
+					"name": "frr_1e-4",
+					"desc": [
+						"万分之一误拒率的阈值"
+					],
+					"sign": "frr_1e-4?: number"
+				}
+			]
+		}
+	]
+}

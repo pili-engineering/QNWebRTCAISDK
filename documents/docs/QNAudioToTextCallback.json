@@ -1,0 +1,97 @@
+{
+	"name": "QNAudioToTextCallback",
+	"reflect": {
+		"QNAudioToTextStatus": "./QNAudioToTextStatus",
+		"QNAudioToTextAnalyzer": "./QNAudioToTextAnalyzer",
+		"QNAuthoritativeFaceComparer": "./QNAuthoritativeFaceComparer",
+		"QNAuthorityActionFaceComparer": "./QNAuthorityActionFaceComparer",
+		"QNFaceActionLive": "./QNFaceActionLive",
+		"QNFaceComparer": "./QNFaceComparer",
+		"QNFaceDetector": "./QNFaceDetector",
+		"QNFaceFlashLiveDetector": "./QNFaceFlashLiveDetector",
+		"QNIDCardDetector": "./QNIDCardDetector",
+		"QNOCRDetector": "./QNOCRDetector",
+		"QNRtcAiManager": "./QNRtcAiManager",
+		"QNTextToSpeakAnalyzer": "./QNTextToSpeakAnalyzer",
+		"QNApiAsrParams": "./QNApiAsrParams",
+		"QNApiAsrResult": "./QNApiAsrResult",
+		"QNApiAuthoritativeFaceParams": "./QNApiAuthoritativeFaceParams",
+		"QNApiFaceActliveParams": "./QNApiFaceActliveParams",
+		"QNApiFaceActliveResult": "./QNApiFaceActliveResult",
+		"QNApiFaceActliveSessionParams": "./QNApiFaceActliveSessionParams",
+		"QNApiFaceActliveSessionResult": "./QNApiFaceActliveSessionResult",
+		"QNApiFaceCompareParams": "./QNApiFaceCompareParams",
+		"QNApiFaceCompareResult": "./QNApiFaceCompareResult",
+		"QNApiFaceDetectParams": "./QNApiFaceDetectParams",
+		"QNApiFaceDetectResult": "./QNApiFaceDetectResult",
+		"QNApiFaceFlashLiveDetectorParams": "./QNApiFaceFlashLiveDetectorParams",
+		"QNApiIDCardDetectorParams": "./QNApiIDCardDetectorParams",
+		"QNApiOCRDetectorParams": "./QNApiOCRDetectorParams",
+		"QNApiVoiceTtsParams": "./QNApiVoiceTtsParams",
+		"QNApiVoiceTtsResult": "./QNApiVoiceTtsResult",
+		"QNAudioToTextCallback": "./QNAudioToTextCallback",
+		"QNAuthoritativeFaceResult": "./QNAuthoritativeFaceResult",
+		"QNCompareResult": "./QNCompareResult",
+		"QNDetectResult": "./QNDetectResult",
+		"QNFaceAngle": "./QNFaceAngle",
+		"QNFaceFlashLiveDetectorResult": "./QNFaceFlashLiveDetectorResult",
+		"QNFaceFlashLiveDetectorResultResponse": "./QNFaceFlashLiveDetectorResultResponse",
+		"QNFaceLocation": "./QNFaceLocation",
+		"QNFaceQuality": "./QNFaceQuality",
+		"QNFaceQualityOcclusion": "./QNFaceQualityOcclusion",
+		"QNFaces": "./QNFaces",
+		"QNIDCardDetectorResult": "./QNIDCardDetectorResult",
+		"QNImage": "./QNImage",
+		"QNKeyWordsType": "./QNKeyWordsType",
+		"QNOCRDetectorResult": "./QNOCRDetectorResult",
+		"QNPiece": "./QNPiece",
+		"QNRtcAiManagerCache": "./QNRtcAiManagerCache",
+		"QNStreamingTranscription": "./QNStreamingTranscription",
+		"QNThresholds": "./QNThresholds",
+		"QNVerifyResult": "./QNVerifyResult"
+	},
+	"describe": {
+		"content": "语音识别回调"
+	},
+	"blocks": [
+		{
+			"name": "Method",
+			"elements": [
+				{
+					"name": "onAudioToText",
+					"sign": "onAudioToText(result: {{QNApiAsrResult}}): void",
+					"desc": [
+						"实时转化文字数据"
+					],
+					"parameters": [
+						{
+							"name": "result",
+							"type": "{{QNApiAsrResult}}",
+							"desc": "\n"
+						}
+					],
+					"returns": "void"
+				},
+				{
+					"name": "onStatusChange",
+					"sign": "onStatusChange(status: {{QNAudioToTextStatus}}, msg: string): void",
+					"desc": [
+						"连接状态变化"
+					],
+					"parameters": [
+						{
+							"name": "status",
+							"type": "{{QNAudioToTextStatus}}"
+						},
+						{
+							"name": "msg",
+							"type": "string",
+							"desc": "\n"
+						}
+					],
+					"returns": "void"
+				}
+			]
+		}
+	]
+}

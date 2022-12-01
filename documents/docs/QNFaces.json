@@ -1,0 +1,194 @@
+{
+	"name": "QNFaces",
+	"reflect": {
+		"QNAudioToTextStatus": "./QNAudioToTextStatus",
+		"QNAudioToTextAnalyzer": "./QNAudioToTextAnalyzer",
+		"QNAuthoritativeFaceComparer": "./QNAuthoritativeFaceComparer",
+		"QNAuthorityActionFaceComparer": "./QNAuthorityActionFaceComparer",
+		"QNFaceActionLive": "./QNFaceActionLive",
+		"QNFaceComparer": "./QNFaceComparer",
+		"QNFaceDetector": "./QNFaceDetector",
+		"QNFaceFlashLiveDetector": "./QNFaceFlashLiveDetector",
+		"QNIDCardDetector": "./QNIDCardDetector",
+		"QNOCRDetector": "./QNOCRDetector",
+		"QNRtcAiManager": "./QNRtcAiManager",
+		"QNTextToSpeakAnalyzer": "./QNTextToSpeakAnalyzer",
+		"QNApiAsrParams": "./QNApiAsrParams",
+		"QNApiAsrResult": "./QNApiAsrResult",
+		"QNApiAuthoritativeFaceParams": "./QNApiAuthoritativeFaceParams",
+		"QNApiFaceActliveParams": "./QNApiFaceActliveParams",
+		"QNApiFaceActliveResult": "./QNApiFaceActliveResult",
+		"QNApiFaceActliveSessionParams": "./QNApiFaceActliveSessionParams",
+		"QNApiFaceActliveSessionResult": "./QNApiFaceActliveSessionResult",
+		"QNApiFaceCompareParams": "./QNApiFaceCompareParams",
+		"QNApiFaceCompareResult": "./QNApiFaceCompareResult",
+		"QNApiFaceDetectParams": "./QNApiFaceDetectParams",
+		"QNApiFaceDetectResult": "./QNApiFaceDetectResult",
+		"QNApiFaceFlashLiveDetectorParams": "./QNApiFaceFlashLiveDetectorParams",
+		"QNApiIDCardDetectorParams": "./QNApiIDCardDetectorParams",
+		"QNApiOCRDetectorParams": "./QNApiOCRDetectorParams",
+		"QNApiVoiceTtsParams": "./QNApiVoiceTtsParams",
+		"QNApiVoiceTtsResult": "./QNApiVoiceTtsResult",
+		"QNAudioToTextCallback": "./QNAudioToTextCallback",
+		"QNAuthoritativeFaceResult": "./QNAuthoritativeFaceResult",
+		"QNCompareResult": "./QNCompareResult",
+		"QNDetectResult": "./QNDetectResult",
+		"QNFaceAngle": "./QNFaceAngle",
+		"QNFaceFlashLiveDetectorResult": "./QNFaceFlashLiveDetectorResult",
+		"QNFaceFlashLiveDetectorResultResponse": "./QNFaceFlashLiveDetectorResultResponse",
+		"QNFaceLocation": "./QNFaceLocation",
+		"QNFaceQuality": "./QNFaceQuality",
+		"QNFaceQualityOcclusion": "./QNFaceQualityOcclusion",
+		"QNFaces": "./QNFaces",
+		"QNIDCardDetectorResult": "./QNIDCardDetectorResult",
+		"QNImage": "./QNImage",
+		"QNKeyWordsType": "./QNKeyWordsType",
+		"QNOCRDetectorResult": "./QNOCRDetectorResult",
+		"QNPiece": "./QNPiece",
+		"QNRtcAiManagerCache": "./QNRtcAiManagerCache",
+		"QNStreamingTranscription": "./QNStreamingTranscription",
+		"QNThresholds": "./QNThresholds",
+		"QNVerifyResult": "./QNVerifyResult"
+	},
+	"describe": {},
+	"blocks": [
+		{
+			"name": "Property",
+			"elements": [
+				{
+					"name": "age",
+					"desc": [
+						"年龄 ，当face_field包含age时返回"
+					],
+					"sign": "age?: number"
+				},
+				{
+					"name": "angle",
+					"desc": [
+						"人脸旋转角度参数"
+					],
+					"sign": "angle?: {{QNFaceAngle}}"
+				},
+				{
+					"name": "corp_image_base64",
+					"desc": [
+						"检测人脸框的人脸图片base64值"
+					],
+					"sign": "corp_image_base64?: string"
+				},
+				{
+					"name": "emotion",
+					"desc": [
+						"情绪 face_field包含emotion时返回"
+					],
+					"sign": "emotion?: {probability:number,type:string}"
+				},
+				{
+					"name": "expression",
+					"desc": [
+						"表情，当 face_field包含expression时返回"
+					],
+					"sign": "expression?: {probability:number,type:string}"
+				},
+				{
+					"name": "eye_status",
+					"desc": [
+						"双眼状态（睁开/闭合） face_field包含eye_status时返回"
+					],
+					"sign": "eye_status?: {left_eye:number,right_eye:number}"
+				},
+				{
+					"name": "face_probability",
+					"desc": [
+						"人脸置信度，范围【0~1】，代表这是一张人脸的概率，0最小、1最大。其中返回0或1时，数据类型为Integer"
+					],
+					"sign": "face_probability?: number"
+				},
+				{
+					"name": "face_shape",
+					"desc": [
+						"脸型，当face_field包含face_shape时返回"
+					],
+					"sign": "face_shape?: {probability:number,type:string}"
+				},
+				{
+					"name": "face_token",
+					"desc": [
+						"人脸图片的唯一标识"
+					],
+					"sign": "face_token?: string"
+				},
+				{
+					"name": "face_type",
+					"desc": [
+						"真实人脸/卡通人脸 face_field包含face_type时返回"
+					],
+					"sign": "face_type?: {probability:number,type:string}"
+				},
+				{
+					"name": "gender",
+					"desc": [
+						"性别，face_field包含gender时返回"
+					],
+					"sign": "gender?: {probability:number,type:string}"
+				},
+				{
+					"name": "glasses",
+					"desc": [
+						"是否带眼镜，face_field包含glasses时返回"
+					],
+					"sign": "glasses?: {probability:number,type:string}"
+				},
+				{
+					"name": "landmark",
+					"desc": [
+						"4个关键点位置，左眼中心、右眼中心、鼻尖、嘴中心。face_field包含landmark时返回"
+					],
+					"sign": "landmark?: {x:number,y:number}[]"
+				},
+				{
+					"name": "landmark150",
+					"desc": [
+						"150个特征点位置 face_field包含landmark150时返回"
+					],
+					"sign": "landmark150?: {x:number,y:number}[]"
+				},
+				{
+					"name": "landmark72",
+					"desc": [
+						"72个特征点位置 face_field包含landmark时返回"
+					],
+					"sign": "landmark72?: {x:number,y:number}[]"
+				},
+				{
+					"name": "location",
+					"desc": [
+						"人脸在图片中的位置"
+					],
+					"sign": "location?: {{QNFaceLocation}}"
+				},
+				{
+					"name": "mask",
+					"desc": [
+						"口罩识别 face_field包含mask时返回"
+					],
+					"sign": "mask?: {probability:number,type:string}"
+				},
+				{
+					"name": "quality",
+					"desc": [
+						"人脸质量信息。face_field包含quality时返回"
+					],
+					"sign": "quality?: {{QNFaceQuality}}"
+				},
+				{
+					"name": "spoofing",
+					"desc": [
+						"判断图片是否为合成图"
+					],
+					"sign": "spoofing?: number"
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,98 @@
+{
+	"name": "QNApiVoiceTtsParams",
+	"reflect": {
+		"QNAudioToTextStatus": "./QNAudioToTextStatus",
+		"QNAudioToTextAnalyzer": "./QNAudioToTextAnalyzer",
+		"QNAuthoritativeFaceComparer": "./QNAuthoritativeFaceComparer",
+		"QNAuthorityActionFaceComparer": "./QNAuthorityActionFaceComparer",
+		"QNFaceActionLive": "./QNFaceActionLive",
+		"QNFaceComparer": "./QNFaceComparer",
+		"QNFaceDetector": "./QNFaceDetector",
+		"QNFaceFlashLiveDetector": "./QNFaceFlashLiveDetector",
+		"QNIDCardDetector": "./QNIDCardDetector",
+		"QNOCRDetector": "./QNOCRDetector",
+		"QNRtcAiManager": "./QNRtcAiManager",
+		"QNTextToSpeakAnalyzer": "./QNTextToSpeakAnalyzer",
+		"QNApiAsrParams": "./QNApiAsrParams",
+		"QNApiAsrResult": "./QNApiAsrResult",
+		"QNApiAuthoritativeFaceParams": "./QNApiAuthoritativeFaceParams",
+		"QNApiFaceActliveParams": "./QNApiFaceActliveParams",
+		"QNApiFaceActliveResult": "./QNApiFaceActliveResult",
+		"QNApiFaceActliveSessionParams": "./QNApiFaceActliveSessionParams",
+		"QNApiFaceActliveSessionResult": "./QNApiFaceActliveSessionResult",
+		"QNApiFaceCompareParams": "./QNApiFaceCompareParams",
+		"QNApiFaceCompareResult": "./QNApiFaceCompareResult",
+		"QNApiFaceDetectParams": "./QNApiFaceDetectParams",
+		"QNApiFaceDetectResult": "./QNApiFaceDetectResult",
+		"QNApiFaceFlashLiveDetectorParams": "./QNApiFaceFlashLiveDetectorParams",
+		"QNApiIDCardDetectorParams": "./QNApiIDCardDetectorParams",
+		"QNApiOCRDetectorParams": "./QNApiOCRDetectorParams",
+		"QNApiVoiceTtsParams": "./QNApiVoiceTtsParams",
+		"QNApiVoiceTtsResult": "./QNApiVoiceTtsResult",
+		"QNAudioToTextCallback": "./QNAudioToTextCallback",
+		"QNAuthoritativeFaceResult": "./QNAuthoritativeFaceResult",
+		"QNCompareResult": "./QNCompareResult",
+		"QNDetectResult": "./QNDetectResult",
+		"QNFaceAngle": "./QNFaceAngle",
+		"QNFaceFlashLiveDetectorResult": "./QNFaceFlashLiveDetectorResult",
+		"QNFaceFlashLiveDetectorResultResponse": "./QNFaceFlashLiveDetectorResultResponse",
+		"QNFaceLocation": "./QNFaceLocation",
+		"QNFaceQuality": "./QNFaceQuality",
+		"QNFaceQualityOcclusion": "./QNFaceQualityOcclusion",
+		"QNFaces": "./QNFaces",
+		"QNIDCardDetectorResult": "./QNIDCardDetectorResult",
+		"QNImage": "./QNImage",
+		"QNKeyWordsType": "./QNKeyWordsType",
+		"QNOCRDetectorResult": "./QNOCRDetectorResult",
+		"QNPiece": "./QNPiece",
+		"QNRtcAiManagerCache": "./QNRtcAiManagerCache",
+		"QNStreamingTranscription": "./QNStreamingTranscription",
+		"QNThresholds": "./QNThresholds",
+		"QNVerifyResult": "./QNVerifyResult"
+	},
+	"describe": {
+		"content": "文字转语音 http api 参数\nhttps://ap-open-z0.qiniuapi.com/dora-sdk/api/voice-tts-v2"
+	},
+	"blocks": [
+		{
+			"name": "Property",
+			"elements": [
+				{
+					"name": "audioType",
+					"desc": [
+						"可不填，不填时默认为 3。\naudioType=3 返回 16K 采样率的 mp3\naudioType=4 返回 8K 采样率的 mp3\naudioType=5 返回 24K 采样率的 mp3\naudioType=6 返回 48k采样率的mp3\naudioType=7 返回 16K 采样率的 pcm 格式\naudioType=8 返回 8K 采样率的 pcm 格式\naudioType=9 返回 24k 采样率的pcm格式\naudioType=10 返回  8K 采样率的 wav 格式\naudioType=11 返回 16K 采样率的 wav 格式"
+					],
+					"sign": "audioType?: number"
+				},
+				{
+					"name": "content",
+					"desc": [
+						"需要进行语音合成的文本内容，最短1个字，最长200字"
+					],
+					"sign": "content: string"
+				},
+				{
+					"name": "speed",
+					"desc": [
+						"语速，取值范围为 0.75 - 1.25，默认为1"
+					],
+					"sign": "speed?: number"
+				},
+				{
+					"name": "spkid",
+					"desc": [
+						"TTS 发音人标识音源 id 0-6,实际可用范围根据情况, 可以不设置,默认是 0;\n其中0：女声（柔和）；1，女声（正式）；2，女生（柔和带正式）；3：男声（柔和），4：男声（柔和带正式）；5：男声（闽南话）；6：女生（闽南话）。"
+					],
+					"sign": "spkid?: number"
+				},
+				{
+					"name": "volume",
+					"desc": [
+						"音量大小，取值范围为 0.75 - 1.25，默认为1"
+					],
+					"sign": "volume?: number"
+				}
+			]
+		}
+	]
+}

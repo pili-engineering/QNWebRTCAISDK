@@ -1,0 +1,146 @@
+{
+	"name": "QNAuthorityActionFaceComparer",
+	"reflect": {
+		"QNAudioToTextStatus": "./QNAudioToTextStatus",
+		"QNAudioToTextAnalyzer": "./QNAudioToTextAnalyzer",
+		"QNAuthoritativeFaceComparer": "./QNAuthoritativeFaceComparer",
+		"QNAuthorityActionFaceComparer": "./QNAuthorityActionFaceComparer",
+		"QNFaceActionLive": "./QNFaceActionLive",
+		"QNFaceComparer": "./QNFaceComparer",
+		"QNFaceDetector": "./QNFaceDetector",
+		"QNFaceFlashLiveDetector": "./QNFaceFlashLiveDetector",
+		"QNIDCardDetector": "./QNIDCardDetector",
+		"QNOCRDetector": "./QNOCRDetector",
+		"QNRtcAiManager": "./QNRtcAiManager",
+		"QNTextToSpeakAnalyzer": "./QNTextToSpeakAnalyzer",
+		"QNApiAsrParams": "./QNApiAsrParams",
+		"QNApiAsrResult": "./QNApiAsrResult",
+		"QNApiAuthoritativeFaceParams": "./QNApiAuthoritativeFaceParams",
+		"QNApiFaceActliveParams": "./QNApiFaceActliveParams",
+		"QNApiFaceActliveResult": "./QNApiFaceActliveResult",
+		"QNApiFaceActliveSessionParams": "./QNApiFaceActliveSessionParams",
+		"QNApiFaceActliveSessionResult": "./QNApiFaceActliveSessionResult",
+		"QNApiFaceCompareParams": "./QNApiFaceCompareParams",
+		"QNApiFaceCompareResult": "./QNApiFaceCompareResult",
+		"QNApiFaceDetectParams": "./QNApiFaceDetectParams",
+		"QNApiFaceDetectResult": "./QNApiFaceDetectResult",
+		"QNApiFaceFlashLiveDetectorParams": "./QNApiFaceFlashLiveDetectorParams",
+		"QNApiIDCardDetectorParams": "./QNApiIDCardDetectorParams",
+		"QNApiOCRDetectorParams": "./QNApiOCRDetectorParams",
+		"QNApiVoiceTtsParams": "./QNApiVoiceTtsParams",
+		"QNApiVoiceTtsResult": "./QNApiVoiceTtsResult",
+		"QNAudioToTextCallback": "./QNAudioToTextCallback",
+		"QNAuthoritativeFaceResult": "./QNAuthoritativeFaceResult",
+		"QNCompareResult": "./QNCompareResult",
+		"QNDetectResult": "./QNDetectResult",
+		"QNFaceAngle": "./QNFaceAngle",
+		"QNFaceFlashLiveDetectorResult": "./QNFaceFlashLiveDetectorResult",
+		"QNFaceFlashLiveDetectorResultResponse": "./QNFaceFlashLiveDetectorResultResponse",
+		"QNFaceLocation": "./QNFaceLocation",
+		"QNFaceQuality": "./QNFaceQuality",
+		"QNFaceQualityOcclusion": "./QNFaceQualityOcclusion",
+		"QNFaces": "./QNFaces",
+		"QNIDCardDetectorResult": "./QNIDCardDetectorResult",
+		"QNImage": "./QNImage",
+		"QNKeyWordsType": "./QNKeyWordsType",
+		"QNOCRDetectorResult": "./QNOCRDetectorResult",
+		"QNPiece": "./QNPiece",
+		"QNRtcAiManagerCache": "./QNRtcAiManagerCache",
+		"QNStreamingTranscription": "./QNStreamingTranscription",
+		"QNThresholds": "./QNThresholds",
+		"QNVerifyResult": "./QNVerifyResult"
+	},
+	"describe": {
+		"content": "活体动作识别加权威人脸对比"
+	},
+	"blocks": [
+		{
+			"name": "Property",
+			"elements": [
+				{
+					"name": "authoritativeFaceParams",
+					"desc": [
+						""
+					],
+					"sign": "authoritativeFaceParams: QNAuthoritativeFaceParams"
+				},
+				{
+					"name": "faceActionLiveDetector",
+					"desc": [
+						""
+					],
+					"sign": "faceActionLiveDetector: {{QNFaceActionLive}}"
+				},
+				{
+					"name": "videoTrack",
+					"desc": [
+						""
+					],
+					"sign": "videoTrack: (QNLocalVideoTrack | QNRemoteVideoTrack)"
+				}
+			]
+		},
+		{
+			"name": "Method",
+			"elements": [
+				{
+					"name": "commit",
+					"sign": "commit(): Promise<{authoritativeFaceResult:{{QNAuthoritativeFaceResult}},faceActionResult:{{QNApiFaceActliveResult}}}>",
+					"desc": [
+						"结束检测"
+					],
+					"returns": "Promise<{authoritativeFaceResult:{{QNAuthoritativeFaceResult}},faceActionResult:{{QNApiFaceActliveResult}}}>"
+				},
+				{
+					"name": "getRequestCode",
+					"sign": "getRequestCode(params: {{QNApiFaceActliveSessionParams}}): Promise<{{QNApiFaceActliveSessionResult}}>",
+					"desc": [
+						"获取校验码"
+					],
+					"parameters": [
+						{
+							"name": "params",
+							"type": "{{QNApiFaceActliveSessionParams}}",
+							"desc": "\n"
+						}
+					],
+					"returns": "Promise<{{QNApiFaceActliveSessionResult}}>"
+				},
+				{
+					"name": "start",
+					"sign": "start(videoTrack: (QNLocalVideoTrack | QNRemoteVideoTrack), faceActionParams: QNFaceActionLiveParams, authoritativeFaceParams: QNAuthoritativeFaceParams): {{QNAuthorityActionFaceComparer}}",
+					"desc": [
+						"开始检测"
+					],
+					"parameters": [
+						{
+							"name": "videoTrack",
+							"type": "(QNLocalVideoTrack | QNRemoteVideoTrack)",
+							"desc": ""
+						},
+						{
+							"name": "faceActionParams",
+							"type": "QNFaceActionLiveParams",
+							"desc": ""
+						},
+						{
+							"name": "authoritativeFaceParams",
+							"type": "QNAuthoritativeFaceParams",
+							"desc": ""
+						}
+					],
+					"returns": "{{QNAuthorityActionFaceComparer}}"
+				},
+				{
+					"name": "create",
+					"sign": "create(): {{QNAuthorityActionFaceComparer}}",
+					"desc": [
+						"创建实例"
+					],
+					"returns": "{{QNAuthorityActionFaceComparer}}",
+					"static": true
+				}
+			]
+		}
+	]
+}

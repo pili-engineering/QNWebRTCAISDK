@@ -1,0 +1,110 @@
+{
+	"name": "QNVerifyResult",
+	"reflect": {
+		"QNAudioToTextStatus": "./QNAudioToTextStatus",
+		"QNAudioToTextAnalyzer": "./QNAudioToTextAnalyzer",
+		"QNAuthoritativeFaceComparer": "./QNAuthoritativeFaceComparer",
+		"QNAuthorityActionFaceComparer": "./QNAuthorityActionFaceComparer",
+		"QNFaceActionLive": "./QNFaceActionLive",
+		"QNFaceComparer": "./QNFaceComparer",
+		"QNFaceDetector": "./QNFaceDetector",
+		"QNFaceFlashLiveDetector": "./QNFaceFlashLiveDetector",
+		"QNIDCardDetector": "./QNIDCardDetector",
+		"QNOCRDetector": "./QNOCRDetector",
+		"QNRtcAiManager": "./QNRtcAiManager",
+		"QNTextToSpeakAnalyzer": "./QNTextToSpeakAnalyzer",
+		"QNApiAsrParams": "./QNApiAsrParams",
+		"QNApiAsrResult": "./QNApiAsrResult",
+		"QNApiAuthoritativeFaceParams": "./QNApiAuthoritativeFaceParams",
+		"QNApiFaceActliveParams": "./QNApiFaceActliveParams",
+		"QNApiFaceActliveResult": "./QNApiFaceActliveResult",
+		"QNApiFaceActliveSessionParams": "./QNApiFaceActliveSessionParams",
+		"QNApiFaceActliveSessionResult": "./QNApiFaceActliveSessionResult",
+		"QNApiFaceCompareParams": "./QNApiFaceCompareParams",
+		"QNApiFaceCompareResult": "./QNApiFaceCompareResult",
+		"QNApiFaceDetectParams": "./QNApiFaceDetectParams",
+		"QNApiFaceDetectResult": "./QNApiFaceDetectResult",
+		"QNApiFaceFlashLiveDetectorParams": "./QNApiFaceFlashLiveDetectorParams",
+		"QNApiIDCardDetectorParams": "./QNApiIDCardDetectorParams",
+		"QNApiOCRDetectorParams": "./QNApiOCRDetectorParams",
+		"QNApiVoiceTtsParams": "./QNApiVoiceTtsParams",
+		"QNApiVoiceTtsResult": "./QNApiVoiceTtsResult",
+		"QNAudioToTextCallback": "./QNAudioToTextCallback",
+		"QNAuthoritativeFaceResult": "./QNAuthoritativeFaceResult",
+		"QNCompareResult": "./QNCompareResult",
+		"QNDetectResult": "./QNDetectResult",
+		"QNFaceAngle": "./QNFaceAngle",
+		"QNFaceFlashLiveDetectorResult": "./QNFaceFlashLiveDetectorResult",
+		"QNFaceFlashLiveDetectorResultResponse": "./QNFaceFlashLiveDetectorResultResponse",
+		"QNFaceLocation": "./QNFaceLocation",
+		"QNFaceQuality": "./QNFaceQuality",
+		"QNFaceQualityOcclusion": "./QNFaceQualityOcclusion",
+		"QNFaces": "./QNFaces",
+		"QNIDCardDetectorResult": "./QNIDCardDetectorResult",
+		"QNImage": "./QNImage",
+		"QNKeyWordsType": "./QNKeyWordsType",
+		"QNOCRDetectorResult": "./QNOCRDetectorResult",
+		"QNPiece": "./QNPiece",
+		"QNRtcAiManagerCache": "./QNRtcAiManagerCache",
+		"QNStreamingTranscription": "./QNStreamingTranscription",
+		"QNThresholds": "./QNThresholds",
+		"QNVerifyResult": "./QNVerifyResult"
+	},
+	"describe": {},
+	"blocks": [
+		{
+			"name": "Property",
+			"elements": [
+				{
+					"name": "action_verify",
+					"desc": [
+						"动作识别结果 pass代表动作验证通过，fail代表动作验证未通过"
+					],
+					"sign": "action_verify?: string"
+				},
+				{
+					"name": "best_image",
+					"desc": [
+						"图片信息"
+					],
+					"sign": "best_image?: {{QNImage}}"
+				},
+				{
+					"name": "maxspoofing",
+					"desc": [
+						"返回的1-8张图片中合成图检测得分的最大值 范围[0,1]，分数越高则概率越大"
+					],
+					"sign": "maxspoofing?: number"
+				},
+				{
+					"name": "pic_list",
+					"desc": [
+						"返回1-8张抽取出来的图片信息"
+					],
+					"sign": "pic_list?: {{QNImage}}[]"
+				},
+				{
+					"name": "score",
+					"desc": [
+						"活体检测的总体打分 范围[0,1]，分数越高则活体的概率越大"
+					],
+					"sign": "score?: number"
+				},
+				{
+					"name": "spoofing_score",
+					"desc": [
+						"返回的1-8张图片中合成图检测得分的中位数 范围[0,1]，分数越高则概率越大"
+					],
+					"sign": "spoofing_score?: number"
+				},
+				{
+					"name": "thresholds",
+					"desc": [
+						"阈值 按活体检测分数>阈值来判定活体检测是否通过(阈值视产品需求选择其中一个)"
+					],
+					"sign": "thresholds?: {{QNThresholds}}"
+				}
+			]
+		}
+	]
+}

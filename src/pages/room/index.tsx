@@ -2,25 +2,21 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import QNRTC, { QNLocalAudioTrack, QNLocalTrack, QNLocalVideoTrack, QNRTCClient, QNTrack } from 'qnweb-rtc';
 import {
   QNAuthoritativeFaceComparer,
-  QNFaceActionLive,
   QNFaceDetector,
   QNIDCardDetector,
   QNOCRDetector,
   QNRtcAiManager,
   QNTextToSpeakAnalyzer,
-  QNFaceActionLiveParams,
-  QNAuthorityActionFaceComparer,
   QNFaceFlashLiveDetector,
-  QNAudioToTextAnalyzer
+  QNAudioToTextAnalyzer,
+  QNFaceActionLive,
+  QNAuthorityActionFaceComparer, QNFaceComparer
 } from 'qnweb-rtc-ai';
-import { Button, Dropdown, MenuProps, message, Modal, Switch } from 'antd';
+import { Button, message, Modal, Switch } from 'antd';
 import { SwitchChangeEventHandler } from 'antd/es/switch';
-import { DownOutlined } from '@ant-design/icons';
 
 import { request } from '@/api';
-import { LivingActionMenu } from './components';
-import { showAuthFaceModal, showTextToSpeakerModal } from './utils';
-import { createTimeoutTask } from './utils';
+import { showAuthFaceModal, showTextToSpeakerModal, filterBigData } from './utils';
 
 import styles from './index.module.scss';
 
@@ -28,12 +24,22 @@ const localCameraTag = 'local-camera';
 const localMicTag = 'local-mic';
 const isLocalCameraTrack = (track: QNTrack) => track.tag === localCameraTag;
 
+const faceActionMap: Record<string, string> = {
+  0: '眨眼',
+  4: '抬头',
+  5: '低头',
+  7: '左右摇头'
+};
+
 const Room: React.FC = () => {
   const urlQueryRef = React.useRef<{
     roomToken: string;
   }>({
     roomToken: new URLSearchParams(location.search).get('roomToken') || '',
   });
+
+  const facingModeRef = useRef<'user' | 'environment'>('user');
+  const audioToTextRef = useRef<QNAudioToTextAnalyzer | null>(null);
 
   const [client, setClient] = useState<QNRTCClient>();
   const [localTracks, setLocalTracks] = useState<QNLocalTrack[]>([]);
@@ -44,15 +50,17 @@ const Room: React.FC = () => {
 
   const [idCardLoading, setIdCardLoading] = useState<boolean>(false);
   const [ocrLoading, setOcrLoading] = useState<boolean>(false);
-  const [livingActionLoading, setLivingActionLoading] = useState<boolean>(false);
+  const [faceActionLiveLoading, setFaceActionLiveLoading] = useState<boolean>(false);
   const [authFaceLoading, setAuthFaceLoading] = useState<boolean>(false);
   const [authFaceWithActionLoading, setAuthFaceWithActionLoading] = useState<boolean>(false);
   const [faceLoading, setFaceLoading] = useState<boolean>(false);
   const [flashLiveLoading, setFlashLiveLoading] = useState<boolean>(false);
+  const [faceComparerLoading, setFaceComparerLoading] = useState<boolean>(false);
+  const [textToSpeakLoading, setTextToSpeakLoading] = useState<boolean>(false);
   const [isAudioToTextOpen, setIsAudioToTextOpen] = useState<boolean>(false);
+  const [toastVisible, setToastVisible] = useState(false);
+  const [toastText, setToastText] = useState('');
 
-  const facingModeRef = useRef<'user' | 'environment'>('user');
-  const audioToTextRef = useRef<QNAudioToTextAnalyzer | null>(null);
 
   /**
    * 初始化ai相关的token
@@ -187,37 +195,59 @@ const Room: React.FC = () => {
 
   /**
    * 动作活体
-   * @param event
    */
-  const onLivingAction: MenuProps['onClick'] = ({ key }) => {
+  const onFaceActionLive = () => {
     if (!localCameraTrack) {
       return Modal.error({
         content: `请先开启摄像头`
       });
     }
-    setLivingActionLoading(true);
-    type Action = QNFaceActionLiveParams['action_types'][number];
-    const detector = QNFaceActionLive.start(localCameraTrack, {
-      action_types: [key as Action],
-      video_type: 1
-    });
-    const task = createTimeoutTask(3000);
-    task.run().then(() => {
-      return detector.commit();
+
+    setFaceActionLiveLoading(true);
+    const client = QNFaceActionLive.create();
+    let interTimer: NodeJS.Timer | null = null;
+    let codeIndex = 0;
+    let count = 3;
+    const renderToast = (code: string) => {
+      const curCode = code[codeIndex];
+      if (interTimer && codeIndex >= code.length) {
+        clearInterval(interTimer);
+      }
+      setToastText(`${faceActionMap[curCode]}：${count}`);
+
+      count--;
+      if (count <= 0) {
+        count = 3;
+        codeIndex++;
+      }
+    };
+
+    return client.getRequestCode().then(result => {
+      const { code = '', session_id } = result.response?.result || {};
+      setToastVisible(true);
+      client.start(localCameraTrack, {
+        session_id
+      });
+      renderToast(code);
+      interTimer = setInterval(() => {
+        renderToast(code);
+      }, 1000);
+
+      return new Promise(resolve => {
+        setTimeout(resolve, code.length * 3000);
+      });
+    }).then(() => {
+      setToastVisible(false);
+      setToastText('');
+      return client.commit();
     }).then(result => {
-      setResponseResult(JSON.stringify(
-        Object.assign(result.response, {
-          best_frames: result.response.best_frames.map(item => {
-            return { quality: item.quality };
-          })
-        })
-      ));
+      setResponseResult(filterBigData(result));
     }).catch(error => {
       Modal.error({
         content: error.message
       });
     }).finally(() => {
-      setLivingActionLoading(false);
+      setFaceActionLiveLoading(false);
     });
   };
 
@@ -230,6 +260,7 @@ const Room: React.FC = () => {
         content: `请先开启摄像头`
       });
     }
+
     showAuthFaceModal().then(result => {
       setAuthFaceLoading(true);
       return QNAuthoritativeFaceComparer.run(
@@ -251,45 +282,63 @@ const Room: React.FC = () => {
   /**
    * 动作活体+权威认证
    */
-  const onAuthFaceWithAction: MenuProps['onClick'] = ({ key }) => {
+  const onAuthFaceWithAction = () => {
     if (!localCameraTrack) {
       return Modal.error({
         content: `请先开启摄像头`
       });
     }
-    type Action = QNFaceActionLiveParams['action_types'][number];
-    let detector: QNAuthorityActionFaceComparer | null = null;
-    showAuthFaceModal().then(result => {
-      setAuthFaceWithActionLoading(true);
-      detector = QNAuthorityActionFaceComparer.start(
-        localCameraTrack,
-        { action_types: [key as Action], video_type: 1 },
-        {
-          realname: result.realName,
-          idcard: result.idCard
-        }
-      );
-      const task = createTimeoutTask(3000);
-      return task.run();
-    }).then(() => {
-      if (detector) {
-        return detector.commit();
+
+    const client = QNAuthorityActionFaceComparer.create();
+    let interTimer: NodeJS.Timer | null = null;
+    let codeIndex = 0;
+    let count = 3;
+    const renderToast = (code: string) => {
+      const curCode = code[codeIndex];
+      if (interTimer && codeIndex >= code.length) {
+        clearInterval(interTimer);
       }
-      return Promise.reject(new TypeError('detector is null'));
-    }).then(result => {
-      setResponseResult(JSON.stringify({
-        faceActionResult: Object.assign(result.faceActionResult.response, {
-          best_frames: result.faceActionResult.response.best_frames.map(item => {
-            return { quality: item.quality };
-          })
-        }),
-        authoritativeFaceResult: result.authoritativeFaceResult.response,
-      }));
-    }).catch(error => {
-      Modal.error({
-        content: error.message
+      setToastText(`${faceActionMap[curCode]}：${count}`);
+
+      count--;
+      if (count <= 0) {
+        count = 3;
+        codeIndex++;
+      }
+    };
+    return showAuthFaceModal().then(authResult => {
+      setAuthFaceWithActionLoading(true);
+      return client.getRequestCode().then(result => {
+        const { code = '', session_id } = result.response?.result || {};
+        setToastVisible(true);
+        client.start(localCameraTrack, {
+          session_id
+        }, {
+          realname: authResult.realName,
+          idcard: authResult.idCard
+        });
+        renderToast(code);
+        interTimer = setInterval(() => {
+          renderToast(code);
+        }, 1000);
+
+        return new Promise(resolve => {
+          setTimeout(resolve, code.length * 3000);
+        });
+      }).then(() => {
+        setToastVisible(false);
+        setToastText('');
+        return client.commit();
+      }).then(result => {
+        setResponseResult(filterBigData(result));
+      }).catch(error => {
+        Modal.error({
+          content: error.message
+        });
+      }).finally(() => {
+        setAuthFaceWithActionLoading(false);
       });
-    }).finally(() => setAuthFaceWithActionLoading(false));
+    });
   };
 
   /**
@@ -303,8 +352,9 @@ const Room: React.FC = () => {
     }
     setFlashLiveLoading(true);
     const detector = QNFaceFlashLiveDetector.start(localCameraTrack);
-    const task = createTimeoutTask(3000);
-    task.run().then(() => {
+    new Promise((resolve) => {
+      setTimeout(resolve, 3000);
+    }).then(() => {
       return detector.commit();
     }).then(result => {
       setResponseResult(JSON.stringify(result.response));
@@ -324,11 +374,10 @@ const Room: React.FC = () => {
         content: `请先开启摄像头`
       });
     }
+
     setFaceLoading(true);
     QNFaceDetector.run(localCameraTrack).then(result => {
-      setResponseResult(JSON.stringify(Object.assign(result.response, {
-        face: result.response.face.map(({ face_aligned_b64, ...rest }) => rest)
-      })));
+      setResponseResult(filterBigData(result));
     }).catch(error => {
       Modal.error({
         content: error.message
@@ -341,16 +390,28 @@ const Room: React.FC = () => {
    */
   const onTextSpeaker = () => {
     showTextToSpeakerModal().then(result => {
+      setTextToSpeakLoading(true);
       return QNTextToSpeakAnalyzer.run({
-        text: result.text
+        content: result.text
       });
     }).then(result => {
-      const audioElement = new Audio(`data:audio/wav;base64,${result.response.audio}`);
-      return audioElement.play();
+      if (result.response?.code === '0') {
+        const snd = new Audio(result.response.result.audioUrl);
+        return snd.play().catch(error => {
+          Modal.error({
+            content: error.message
+          });
+        });
+      }
+      Modal.error({
+        content: result.response?.msg
+      });
     }).catch(error => {
       Modal.error({
         content: error.message
       });
+    }).finally(() => {
+      setTextToSpeakLoading(false);
     });
   };
 
@@ -368,14 +429,11 @@ const Room: React.FC = () => {
     if (checked) {
       audioToTextRef.current = QNAudioToTextAnalyzer.startAudioToText(
         localMicTrack,
-        { hot_words: '清楚,10;清晰,1' },
+        null,
         {
-          onAudioToText: (message) => {
-            console.log('message', message);
-            const captionText = message.transcript;
-            if (captionText) {
-              setResponseResult(captionText);
-            }
+          onAudioToText: (result) => {
+            console.log('result', result);
+            setResponseResult(result.bestTranscription.transcribedText);
           }
         }
       );
@@ -404,7 +462,62 @@ const Room: React.FC = () => {
     }).finally(() => setOcrLoading(false));
   };
 
+  /**
+   * 人脸对比
+   * @param event
+   */
+  const onFaceComparer: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+    const files = event.target.files || [];
+    const file = files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const imgFile = e.target?.result; //  base64码, 或 e.target 都是一样的
+        if (typeof imgFile !== 'string') {
+          Modal.error({
+            content: '文件类型错误'
+          });
+          console.error(`文件类型错误: ${imgFile}`);
+          return;
+        }
+
+        if (!localCameraTrack) {
+          Modal.error({
+            content: '请先打开摄像头'
+          });
+          return;
+        }
+
+        setFaceComparerLoading(true);
+        return QNFaceComparer.run(localCameraTrack, {
+          image: imgFile.replace(/^data:image\/\w+;base64,/, ''),
+          image_type: 'BASE64',
+        }).then(result => {
+          setResponseResult(filterBigData(result));
+        }).catch(error => {
+          Modal.error({
+            content: error.message
+          });
+        }).finally(() => {
+          setFaceComparerLoading(false);
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   return <div className={styles.container}>
+    {
+      toastVisible ? <div className={styles.toast}>{toastText}</div> : null
+    }
+
+    <input
+      id="uploadFile"
+      style={{ display: 'none' }}
+      type="file"
+      onChange={onFaceComparer}
+    />
+
     <div id={localCameraTag} className={styles.localCamera}/>
     <div className={styles.tools}>
       <Button
@@ -420,16 +533,20 @@ const Room: React.FC = () => {
         onClick={onIdCard}
         loading={idCardLoading}
       >身份证识别</Button>
-      <Dropdown.Button
+      <Button
         className={styles.tool}
         type="primary"
         size="small"
-        overlay={<LivingActionMenu onClick={onLivingAction}/>}
-        icon={<DownOutlined/>}
-        loading={livingActionLoading}
-      >
-        动作活体
-      </Dropdown.Button>
+        onClick={onFaceActionLive}
+        loading={faceActionLiveLoading}
+      >动作活体</Button>
+      <Button
+        className={styles.tool}
+        type="primary"
+        size="small"
+        loading={faceComparerLoading}
+        onClick={() => document.getElementById('uploadFile')?.click()}
+      >人脸对比</Button>
       <Button
         className={styles.tool}
         type="primary"
@@ -437,16 +554,13 @@ const Room: React.FC = () => {
         onClick={onAuthFace}
         loading={authFaceLoading}
       >权威人脸对比</Button>
-      <Dropdown.Button
+      <Button
         className={styles.tool}
         type="primary"
         size="small"
-        overlay={<LivingActionMenu onClick={onAuthFaceWithAction}/>}
-        icon={<DownOutlined/>}
+        onClick={onAuthFaceWithAction}
         loading={authFaceWithActionLoading}
-      >
-        动作活体+权威认证
-      </Dropdown.Button>
+      >动作活体+权威认证</Button>
       <Button
         className={styles.tool}
         type="primary"
@@ -465,6 +579,7 @@ const Room: React.FC = () => {
         className={styles.tool}
         type="primary"
         size="small"
+        loading={textToSpeakLoading}
         onClick={onTextSpeaker}
       >文转音</Button>
       <Switch

@@ -1,0 +1,236 @@
+{
+	"name": "QNAudioToTextAnalyzer",
+	"reflect": {
+		"QNAudioToTextStatus": "./QNAudioToTextStatus",
+		"QNAudioToTextAnalyzer": "./QNAudioToTextAnalyzer",
+		"QNAuthoritativeFaceComparer": "./QNAuthoritativeFaceComparer",
+		"QNAuthorityActionFaceComparer": "./QNAuthorityActionFaceComparer",
+		"QNFaceActionLive": "./QNFaceActionLive",
+		"QNFaceComparer": "./QNFaceComparer",
+		"QNFaceDetector": "./QNFaceDetector",
+		"QNFaceFlashLiveDetector": "./QNFaceFlashLiveDetector",
+		"QNIDCardDetector": "./QNIDCardDetector",
+		"QNOCRDetector": "./QNOCRDetector",
+		"QNRtcAiManager": "./QNRtcAiManager",
+		"QNTextToSpeakAnalyzer": "./QNTextToSpeakAnalyzer",
+		"QNApiAsrParams": "./QNApiAsrParams",
+		"QNApiAsrResult": "./QNApiAsrResult",
+		"QNApiAuthoritativeFaceParams": "./QNApiAuthoritativeFaceParams",
+		"QNApiFaceActliveParams": "./QNApiFaceActliveParams",
+		"QNApiFaceActliveResult": "./QNApiFaceActliveResult",
+		"QNApiFaceActliveSessionParams": "./QNApiFaceActliveSessionParams",
+		"QNApiFaceActliveSessionResult": "./QNApiFaceActliveSessionResult",
+		"QNApiFaceCompareParams": "./QNApiFaceCompareParams",
+		"QNApiFaceCompareResult": "./QNApiFaceCompareResult",
+		"QNApiFaceDetectParams": "./QNApiFaceDetectParams",
+		"QNApiFaceDetectResult": "./QNApiFaceDetectResult",
+		"QNApiFaceFlashLiveDetectorParams": "./QNApiFaceFlashLiveDetectorParams",
+		"QNApiIDCardDetectorParams": "./QNApiIDCardDetectorParams",
+		"QNApiOCRDetectorParams": "./QNApiOCRDetectorParams",
+		"QNApiVoiceTtsParams": "./QNApiVoiceTtsParams",
+		"QNApiVoiceTtsResult": "./QNApiVoiceTtsResult",
+		"QNAudioToTextCallback": "./QNAudioToTextCallback",
+		"QNAuthoritativeFaceResult": "./QNAuthoritativeFaceResult",
+		"QNCompareResult": "./QNCompareResult",
+		"QNDetectResult": "./QNDetectResult",
+		"QNFaceAngle": "./QNFaceAngle",
+		"QNFaceFlashLiveDetectorResult": "./QNFaceFlashLiveDetectorResult",
+		"QNFaceFlashLiveDetectorResultResponse": "./QNFaceFlashLiveDetectorResultResponse",
+		"QNFaceLocation": "./QNFaceLocation",
+		"QNFaceQuality": "./QNFaceQuality",
+		"QNFaceQualityOcclusion": "./QNFaceQualityOcclusion",
+		"QNFaces": "./QNFaces",
+		"QNIDCardDetectorResult": "./QNIDCardDetectorResult",
+		"QNImage": "./QNImage",
+		"QNKeyWordsType": "./QNKeyWordsType",
+		"QNOCRDetectorResult": "./QNOCRDetectorResult",
+		"QNPiece": "./QNPiece",
+		"QNRtcAiManagerCache": "./QNRtcAiManagerCache",
+		"QNStreamingTranscription": "./QNStreamingTranscription",
+		"QNThresholds": "./QNThresholds",
+		"QNVerifyResult": "./QNVerifyResult"
+	},
+	"describe": {
+		"content": "语音识别"
+	},
+	"blocks": [
+		{
+			"name": "Property",
+			"elements": [
+				{
+					"name": "audioBufferHandler",
+					"desc": [
+						""
+					],
+					"sign": "audioBufferHandler?: {}"
+				},
+				{
+					"name": "audioTrack",
+					"desc": [
+						""
+					],
+					"sign": "audioTrack?: (QNLocalAudioTrack | QNRemoteAudioTrack)"
+				},
+				{
+					"name": "isRecording",
+					"desc": [
+						""
+					],
+					"sign": "isRecording: boolean"
+				},
+				{
+					"name": "leftDataList",
+					"desc": [
+						""
+					],
+					"sign": "leftDataList: any[]"
+				},
+				{
+					"name": "rightDataList",
+					"desc": [
+						""
+					],
+					"sign": "rightDataList: any[]"
+				},
+				{
+					"name": "startTime",
+					"desc": [
+						""
+					],
+					"sign": "startTime: number"
+				},
+				{
+					"name": "status",
+					"desc": [
+						""
+					],
+					"sign": "status: {{QNAudioToTextStatus}}"
+				},
+				{
+					"name": "ws",
+					"desc": [
+						""
+					],
+					"sign": "ws?: WebSocket"
+				}
+			]
+		},
+		{
+			"name": "Method",
+			"elements": [
+				{
+					"name": "close",
+					"sign": "close(): void",
+					"desc": [
+						"发送 EOS close message 到后台；\nclient 保持继续接受消息，所有结果发送完毕后服务端会主动断开连接\n主动关闭 WebSocket"
+					],
+					"returns": "void"
+				},
+				{
+					"name": "getStatus",
+					"sign": "getStatus(): {{QNAudioToTextStatus}}",
+					"desc": [
+						"获取当前识别状态"
+					],
+					"returns": "{{QNAudioToTextStatus}}"
+				},
+				{
+					"name": "initWebSocket",
+					"sign": "initWebSocket(config: {audioBuffer:AudioBuffer,callback:{{QNAudioToTextCallback}},params:Partial<Omit<{{QNApiAsrParams}},'token'>>}): void",
+					"desc": [
+						"建立WebSocket连接"
+					],
+					"parameters": [
+						{
+							"name": "config",
+							"type": "{audioBuffer:AudioBuffer,callback:{{QNAudioToTextCallback}},params:Partial<Omit<{{QNApiAsrParams}},'token'>>}",
+							"desc": "\n"
+						}
+					],
+					"returns": "void"
+				},
+				{
+					"name": "interleaveLeftAndRight",
+					"sign": "interleaveLeftAndRight(left: Float32Array, right: Float32Array): Float32Array",
+					"desc": [
+						"交叉合并左右声道的数据"
+					],
+					"parameters": [
+						{
+							"name": "left",
+							"type": "Float32Array"
+						},
+						{
+							"name": "right",
+							"type": "Float32Array",
+							"desc": "\n"
+						}
+					],
+					"returns": "Float32Array"
+				},
+				{
+					"name": "mergeArray",
+					"sign": "mergeArray(list: Float32Array[]): Float32Array",
+					"desc": [
+						"合成一个单个Float32Array"
+					],
+					"parameters": [
+						{
+							"name": "list",
+							"type": "Float32Array[]",
+							"desc": "\n"
+						}
+					],
+					"returns": "Float32Array"
+				},
+				{
+					"name": "sendMessageToWebSocket",
+					"sign": "sendMessageToWebSocket(audioBuffer: AudioBuffer): void",
+					"desc": [
+						"开始发送消息"
+					],
+					"parameters": [
+						{
+							"name": "audioBuffer",
+							"type": "AudioBuffer",
+							"desc": "\n"
+						}
+					],
+					"returns": "void"
+				},
+				{
+					"name": "stopAudioToText",
+					"sign": "stopAudioToText(): void",
+					"desc": [
+						"结束语音识别"
+					],
+					"returns": "void"
+				},
+				{
+					"name": "startAudioToText",
+					"sign": "startAudioToText(audioTrack: (QNLocalAudioTrack | QNRemoteAudioTrack), params: Partial<Omit<{{QNApiAsrParams}},'token'>>, callback: {{QNAudioToTextCallback}}): {{QNAudioToTextAnalyzer}}",
+					"desc": [
+						"语音识别转文字"
+					],
+					"parameters": [
+						{
+							"name": "audioTrack",
+							"type": "(QNLocalAudioTrack | QNRemoteAudioTrack)"
+						},
+						{
+							"name": "params",
+							"type": "Partial<Omit<{{QNApiAsrParams}},'token'>>"
+						},
+						{
+							"name": "callback",
+							"type": "{{QNAudioToTextCallback}}",
+							"desc": "\n"
+						}
+					],
+					"returns": "{{QNAudioToTextAnalyzer}}",
+					"static": true
+				}
+			]
+		}
+	]
+}

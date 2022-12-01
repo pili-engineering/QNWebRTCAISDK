@@ -1,0 +1,134 @@
+{
+	"name": "QNRtcAiManager",
+	"reflect": {
+		"QNAudioToTextStatus": "./QNAudioToTextStatus",
+		"QNAudioToTextAnalyzer": "./QNAudioToTextAnalyzer",
+		"QNAuthoritativeFaceComparer": "./QNAuthoritativeFaceComparer",
+		"QNAuthorityActionFaceComparer": "./QNAuthorityActionFaceComparer",
+		"QNFaceActionLive": "./QNFaceActionLive",
+		"QNFaceComparer": "./QNFaceComparer",
+		"QNFaceDetector": "./QNFaceDetector",
+		"QNFaceFlashLiveDetector": "./QNFaceFlashLiveDetector",
+		"QNIDCardDetector": "./QNIDCardDetector",
+		"QNOCRDetector": "./QNOCRDetector",
+		"QNRtcAiManager": "./QNRtcAiManager",
+		"QNTextToSpeakAnalyzer": "./QNTextToSpeakAnalyzer",
+		"QNApiAsrParams": "./QNApiAsrParams",
+		"QNApiAsrResult": "./QNApiAsrResult",
+		"QNApiAuthoritativeFaceParams": "./QNApiAuthoritativeFaceParams",
+		"QNApiFaceActliveParams": "./QNApiFaceActliveParams",
+		"QNApiFaceActliveResult": "./QNApiFaceActliveResult",
+		"QNApiFaceActliveSessionParams": "./QNApiFaceActliveSessionParams",
+		"QNApiFaceActliveSessionResult": "./QNApiFaceActliveSessionResult",
+		"QNApiFaceCompareParams": "./QNApiFaceCompareParams",
+		"QNApiFaceCompareResult": "./QNApiFaceCompareResult",
+		"QNApiFaceDetectParams": "./QNApiFaceDetectParams",
+		"QNApiFaceDetectResult": "./QNApiFaceDetectResult",
+		"QNApiFaceFlashLiveDetectorParams": "./QNApiFaceFlashLiveDetectorParams",
+		"QNApiIDCardDetectorParams": "./QNApiIDCardDetectorParams",
+		"QNApiOCRDetectorParams": "./QNApiOCRDetectorParams",
+		"QNApiVoiceTtsParams": "./QNApiVoiceTtsParams",
+		"QNApiVoiceTtsResult": "./QNApiVoiceTtsResult",
+		"QNAudioToTextCallback": "./QNAudioToTextCallback",
+		"QNAuthoritativeFaceResult": "./QNAuthoritativeFaceResult",
+		"QNCompareResult": "./QNCompareResult",
+		"QNDetectResult": "./QNDetectResult",
+		"QNFaceAngle": "./QNFaceAngle",
+		"QNFaceFlashLiveDetectorResult": "./QNFaceFlashLiveDetectorResult",
+		"QNFaceFlashLiveDetectorResultResponse": "./QNFaceFlashLiveDetectorResultResponse",
+		"QNFaceLocation": "./QNFaceLocation",
+		"QNFaceQuality": "./QNFaceQuality",
+		"QNFaceQualityOcclusion": "./QNFaceQualityOcclusion",
+		"QNFaces": "./QNFaces",
+		"QNIDCardDetectorResult": "./QNIDCardDetectorResult",
+		"QNImage": "./QNImage",
+		"QNKeyWordsType": "./QNKeyWordsType",
+		"QNOCRDetectorResult": "./QNOCRDetectorResult",
+		"QNPiece": "./QNPiece",
+		"QNRtcAiManagerCache": "./QNRtcAiManagerCache",
+		"QNStreamingTranscription": "./QNStreamingTranscription",
+		"QNThresholds": "./QNThresholds",
+		"QNVerifyResult": "./QNVerifyResult"
+	},
+	"describe": {
+		"content": "状态管理器\n注: 主要用于初始化所需的 token"
+	},
+	"blocks": [
+		{
+			"name": "Property",
+			"elements": [
+				{
+					"name": "cache",
+					"desc": [
+						""
+					],
+					"sign": "cache: {{QNRtcAiManagerCache}}",
+					"static": true
+				}
+			]
+		},
+		{
+			"name": "Method",
+			"elements": [
+				{
+					"name": "get",
+					"sign": "get(key: T): {{QNRtcAiManagerCache}}[T]",
+					"desc": [
+						""
+					],
+					"parameters": [
+						{
+							"name": "key",
+							"type": "T",
+							"desc": ""
+						}
+					],
+					"returns": "{{QNRtcAiManagerCache}}[T]",
+					"static": true
+				},
+				{
+					"name": "init",
+					"sign": "init(token: string, signCallback: {}): void",
+					"desc": [
+						""
+					],
+					"parameters": [
+						{
+							"name": "token",
+							"type": "string",
+							"desc": ""
+						},
+						{
+							"name": "signCallback",
+							"type": "{}",
+							"desc": ""
+						}
+					],
+					"returns": "void",
+					"static": true
+				},
+				{
+					"name": "set",
+					"sign": "set(key: T, value: {{QNRtcAiManagerCache}}[T]): void",
+					"desc": [
+						""
+					],
+					"parameters": [
+						{
+							"name": "key",
+							"type": "T",
+							"desc": ""
+						},
+						{
+							"name": "value",
+							"type": "{{QNRtcAiManagerCache}}[T]",
+							"desc": ""
+						}
+					],
+					"returns": "void",
+					"static": true
+				}
+			]
+		}
+	]
+}

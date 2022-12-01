@@ -3,6 +3,22 @@
   height: 100%;
 }
 
+.toast {
+  min-width: 120px;
+  min-height: 32px;
+  padding: 0 10px;
+  position: absolute;
+  z-index: 99;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+}
+
 
 .localCamera {
   width: 100%;

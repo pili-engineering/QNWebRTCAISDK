@@ -1,0 +1,119 @@
+{
+	"name": "QNApiFaceDetectParams",
+	"reflect": {
+		"QNAudioToTextStatus": "./QNAudioToTextStatus",
+		"QNAudioToTextAnalyzer": "./QNAudioToTextAnalyzer",
+		"QNAuthoritativeFaceComparer": "./QNAuthoritativeFaceComparer",
+		"QNAuthorityActionFaceComparer": "./QNAuthorityActionFaceComparer",
+		"QNFaceActionLive": "./QNFaceActionLive",
+		"QNFaceComparer": "./QNFaceComparer",
+		"QNFaceDetector": "./QNFaceDetector",
+		"QNFaceFlashLiveDetector": "./QNFaceFlashLiveDetector",
+		"QNIDCardDetector": "./QNIDCardDetector",
+		"QNOCRDetector": "./QNOCRDetector",
+		"QNRtcAiManager": "./QNRtcAiManager",
+		"QNTextToSpeakAnalyzer": "./QNTextToSpeakAnalyzer",
+		"QNApiAsrParams": "./QNApiAsrParams",
+		"QNApiAsrResult": "./QNApiAsrResult",
+		"QNApiAuthoritativeFaceParams": "./QNApiAuthoritativeFaceParams",
+		"QNApiFaceActliveParams": "./QNApiFaceActliveParams",
+		"QNApiFaceActliveResult": "./QNApiFaceActliveResult",
+		"QNApiFaceActliveSessionParams": "./QNApiFaceActliveSessionParams",
+		"QNApiFaceActliveSessionResult": "./QNApiFaceActliveSessionResult",
+		"QNApiFaceCompareParams": "./QNApiFaceCompareParams",
+		"QNApiFaceCompareResult": "./QNApiFaceCompareResult",
+		"QNApiFaceDetectParams": "./QNApiFaceDetectParams",
+		"QNApiFaceDetectResult": "./QNApiFaceDetectResult",
+		"QNApiFaceFlashLiveDetectorParams": "./QNApiFaceFlashLiveDetectorParams",
+		"QNApiIDCardDetectorParams": "./QNApiIDCardDetectorParams",
+		"QNApiOCRDetectorParams": "./QNApiOCRDetectorParams",
+		"QNApiVoiceTtsParams": "./QNApiVoiceTtsParams",
+		"QNApiVoiceTtsResult": "./QNApiVoiceTtsResult",
+		"QNAudioToTextCallback": "./QNAudioToTextCallback",
+		"QNAuthoritativeFaceResult": "./QNAuthoritativeFaceResult",
+		"QNCompareResult": "./QNCompareResult",
+		"QNDetectResult": "./QNDetectResult",
+		"QNFaceAngle": "./QNFaceAngle",
+		"QNFaceFlashLiveDetectorResult": "./QNFaceFlashLiveDetectorResult",
+		"QNFaceFlashLiveDetectorResultResponse": "./QNFaceFlashLiveDetectorResultResponse",
+		"QNFaceLocation": "./QNFaceLocation",
+		"QNFaceQuality": "./QNFaceQuality",
+		"QNFaceQualityOcclusion": "./QNFaceQualityOcclusion",
+		"QNFaces": "./QNFaces",
+		"QNIDCardDetectorResult": "./QNIDCardDetectorResult",
+		"QNImage": "./QNImage",
+		"QNKeyWordsType": "./QNKeyWordsType",
+		"QNOCRDetectorResult": "./QNOCRDetectorResult",
+		"QNPiece": "./QNPiece",
+		"QNRtcAiManagerCache": "./QNRtcAiManagerCache",
+		"QNStreamingTranscription": "./QNStreamingTranscription",
+		"QNThresholds": "./QNThresholds",
+		"QNVerifyResult": "./QNVerifyResult"
+	},
+	"describe": {
+		"content": "人脸检测 http api 参数\nhttps://ap-open-z0.qiniuapi.com/dora-sdk/api/face-detect-v2"
+	},
+	"blocks": [
+		{
+			"name": "Property",
+			"elements": [
+				{
+					"name": "display_corp_image",
+					"desc": [
+						"是否显示检测人脸的裁剪图base64值\n0：不显示（默认）\n1：显示"
+					],
+					"sign": "display_corp_image?: number"
+				},
+				{
+					"name": "face_field",
+					"desc": [
+						"包括`age,expression,face_shape,gender,glasses,landmark,landmark150,quality,eye_status,emotion,face_type,mask,spoofing`信息逗号分隔.\n默认只返回`face_token、人脸框、概率和旋转角度`"
+					],
+					"sign": "face_field?: string"
+				},
+				{
+					"name": "face_sort_type",
+					"desc": [
+						"人脸检测排序类型\n**0**:代表检测出的人脸按照人脸面积从大到小排列\n**1**:代表检测出的人脸按照距离图片中心从近到远排列\n默认为0"
+					],
+					"sign": "face_sort_type?: number"
+				},
+				{
+					"name": "face_type",
+					"desc": [
+						"人脸的类型\n**LIVE**：表示生活照：通常为手机、相机拍摄的人像图片、或从网络获取的人像图片等，\n**IDCARD**：表示身份证芯片照：二代身份证内置芯片中的人像照片，\n**WATERMARK**：表示带水印证件照：一般为带水印的小图，如公安网小图\n**CERT**：表示证件照片：如拍摄的身份证、工卡、护照、学生证等证件图片\n默认`LIVE`"
+					],
+					"sign": "face_type?: string"
+				},
+				{
+					"name": "image",
+					"desc": [
+						"图片信息(总数据大小应小于10M，图片尺寸在1920x1080以下)，图片上传方式根据image_type来判断。\n两张图片通过json格式上传，格式参考表格下方示例"
+					],
+					"sign": "image?: string"
+				},
+				{
+					"name": "image_type",
+					"desc": [
+						"图片类型\n**BASE64**:图片的base64值，base64编码后的图片数据，编码后的图片大小不超过2M；\n**URL**:图片的 URL地址( 可能由于网络等原因导致下载图片时间过长)；\n**FACE_TOKEN**: 人脸图片的唯一标识，调用人脸检测接口时，会为每个人脸图片赋予一个唯一的FACE_TOKEN，同一张图片多次检测得到的FACE_TOKEN是同一个。"
+					],
+					"sign": "image_type?: string"
+				},
+				{
+					"name": "liveness_control",
+					"desc": [
+						"活体检测控制\n**NONE**: 不进行控制\n**LOW**:较低的活体要求(高通过率 低攻击拒绝率)\n**NORMAL**: 一般的活体要求(平衡的攻击拒绝率, 通过率)\n**HIGH**: 较高的活体要求(高攻击拒绝率 低通过率)\n默认 `NONE`\n若活体检测结果不满足要求，则返回结果中会提示活体检测失败"
+					],
+					"sign": "liveness_control?: string"
+				},
+				{
+					"name": "max_face_num",
+					"desc": [
+						"最多处理人脸的数目，默认值为1，根据人脸检测排序类型检测图片中排序第一的人脸（默认为人脸面积最大的人脸），最大值120"
+					],
+					"sign": "max_face_num?: number"
+				}
+			]
+		}
+	]
+}

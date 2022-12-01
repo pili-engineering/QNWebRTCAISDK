@@ -1,0 +1,133 @@
+{
+	"name": "QNFaceActionLive",
+	"reflect": {
+		"QNAudioToTextStatus": "./QNAudioToTextStatus",
+		"QNAudioToTextAnalyzer": "./QNAudioToTextAnalyzer",
+		"QNAuthoritativeFaceComparer": "./QNAuthoritativeFaceComparer",
+		"QNAuthorityActionFaceComparer": "./QNAuthorityActionFaceComparer",
+		"QNFaceActionLive": "./QNFaceActionLive",
+		"QNFaceComparer": "./QNFaceComparer",
+		"QNFaceDetector": "./QNFaceDetector",
+		"QNFaceFlashLiveDetector": "./QNFaceFlashLiveDetector",
+		"QNIDCardDetector": "./QNIDCardDetector",
+		"QNOCRDetector": "./QNOCRDetector",
+		"QNRtcAiManager": "./QNRtcAiManager",
+		"QNTextToSpeakAnalyzer": "./QNTextToSpeakAnalyzer",
+		"QNApiAsrParams": "./QNApiAsrParams",
+		"QNApiAsrResult": "./QNApiAsrResult",
+		"QNApiAuthoritativeFaceParams": "./QNApiAuthoritativeFaceParams",
+		"QNApiFaceActliveParams": "./QNApiFaceActliveParams",
+		"QNApiFaceActliveResult": "./QNApiFaceActliveResult",
+		"QNApiFaceActliveSessionParams": "./QNApiFaceActliveSessionParams",
+		"QNApiFaceActliveSessionResult": "./QNApiFaceActliveSessionResult",
+		"QNApiFaceCompareParams": "./QNApiFaceCompareParams",
+		"QNApiFaceCompareResult": "./QNApiFaceCompareResult",
+		"QNApiFaceDetectParams": "./QNApiFaceDetectParams",
+		"QNApiFaceDetectResult": "./QNApiFaceDetectResult",
+		"QNApiFaceFlashLiveDetectorParams": "./QNApiFaceFlashLiveDetectorParams",
+		"QNApiIDCardDetectorParams": "./QNApiIDCardDetectorParams",
+		"QNApiOCRDetectorParams": "./QNApiOCRDetectorParams",
+		"QNApiVoiceTtsParams": "./QNApiVoiceTtsParams",
+		"QNApiVoiceTtsResult": "./QNApiVoiceTtsResult",
+		"QNAudioToTextCallback": "./QNAudioToTextCallback",
+		"QNAuthoritativeFaceResult": "./QNAuthoritativeFaceResult",
+		"QNCompareResult": "./QNCompareResult",
+		"QNDetectResult": "./QNDetectResult",
+		"QNFaceAngle": "./QNFaceAngle",
+		"QNFaceFlashLiveDetectorResult": "./QNFaceFlashLiveDetectorResult",
+		"QNFaceFlashLiveDetectorResultResponse": "./QNFaceFlashLiveDetectorResultResponse",
+		"QNFaceLocation": "./QNFaceLocation",
+		"QNFaceQuality": "./QNFaceQuality",
+		"QNFaceQualityOcclusion": "./QNFaceQualityOcclusion",
+		"QNFaces": "./QNFaces",
+		"QNIDCardDetectorResult": "./QNIDCardDetectorResult",
+		"QNImage": "./QNImage",
+		"QNKeyWordsType": "./QNKeyWordsType",
+		"QNOCRDetectorResult": "./QNOCRDetectorResult",
+		"QNPiece": "./QNPiece",
+		"QNRtcAiManagerCache": "./QNRtcAiManagerCache",
+		"QNStreamingTranscription": "./QNStreamingTranscription",
+		"QNThresholds": "./QNThresholds",
+		"QNVerifyResult": "./QNVerifyResult"
+	},
+	"describe": {
+		"content": "动作活体检测"
+	},
+	"blocks": [
+		{
+			"name": "Property",
+			"elements": [
+				{
+					"name": "params",
+					"desc": [
+						""
+					],
+					"sign": "params: Omit<{{QNApiFaceActliveParams}},'video_base64'>"
+				},
+				{
+					"name": "recorder",
+					"desc": [
+						""
+					],
+					"sign": "recorder: RecordRTC"
+				}
+			]
+		},
+		{
+			"name": "Method",
+			"elements": [
+				{
+					"name": "commit",
+					"sign": "commit(): Promise<{{QNApiFaceActliveResult}}>",
+					"desc": [
+						"提交录制"
+					],
+					"returns": "Promise<{{QNApiFaceActliveResult}}>"
+				},
+				{
+					"name": "getRequestCode",
+					"sign": "getRequestCode(params: {{QNApiFaceActliveSessionParams}}): Promise<{{QNApiFaceActliveSessionResult}}>",
+					"desc": [
+						"获取校验码"
+					],
+					"parameters": [
+						{
+							"name": "params",
+							"type": "{{QNApiFaceActliveSessionParams}}",
+							"desc": "\n"
+						}
+					],
+					"returns": "Promise<{{QNApiFaceActliveSessionResult}}>"
+				},
+				{
+					"name": "start",
+					"sign": "start(videoTrack: (QNLocalVideoTrack | QNRemoteVideoTrack), params: QNFaceActionLiveParams): {{QNFaceActionLive}}",
+					"desc": [
+						"开始录制"
+					],
+					"parameters": [
+						{
+							"name": "videoTrack",
+							"type": "(QNLocalVideoTrack | QNRemoteVideoTrack)"
+						},
+						{
+							"name": "params",
+							"type": "QNFaceActionLiveParams",
+							"desc": "\n"
+						}
+					],
+					"returns": "{{QNFaceActionLive}}"
+				},
+				{
+					"name": "create",
+					"sign": "create(): {{QNFaceActionLive}}",
+					"desc": [
+						"创建动作活体检测"
+					],
+					"returns": "{{QNFaceActionLive}}",
+					"static": true
+				}
+			]
+		}
+	]
+}

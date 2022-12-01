@@ -1,0 +1,130 @@
+{
+    "name": "overview",
+    "home": true,
+    "describe": {
+        "content": "QNWXAppRTC 是结合了 QNRTC 和 dora ai 的 SDK，包含语音识别、人脸识别、人脸对比等功能"
+    },
+    "reflect": {
+        "QNAudioToTextStatus": "./QNAudioToTextStatus",
+        "QNAudioToTextAnalyzer": "./QNAudioToTextAnalyzer",
+        "QNAuthoritativeFaceComparer": "./QNAuthoritativeFaceComparer",
+        "QNAuthorityActionFaceComparer": "./QNAuthorityActionFaceComparer",
+        "QNFaceActionLive": "./QNFaceActionLive",
+        "QNFaceComparer": "./QNFaceComparer",
+        "QNFaceDetector": "./QNFaceDetector",
+        "QNFaceFlashLiveDetector": "./QNFaceFlashLiveDetector",
+        "QNIDCardDetector": "./QNIDCardDetector",
+        "QNOCRDetector": "./QNOCRDetector",
+        "QNRtcAiManager": "./QNRtcAiManager",
+        "QNTextToSpeakAnalyzer": "./QNTextToSpeakAnalyzer",
+        "QNApiAsrParams": "./QNApiAsrParams",
+        "QNApiAsrResult": "./QNApiAsrResult",
+        "QNApiAuthoritativeFaceParams": "./QNApiAuthoritativeFaceParams",
+        "QNApiFaceActliveParams": "./QNApiFaceActliveParams",
+        "QNApiFaceActliveResult": "./QNApiFaceActliveResult",
+        "QNApiFaceActliveSessionParams": "./QNApiFaceActliveSessionParams",
+        "QNApiFaceActliveSessionResult": "./QNApiFaceActliveSessionResult",
+        "QNApiFaceCompareParams": "./QNApiFaceCompareParams",
+        "QNApiFaceCompareResult": "./QNApiFaceCompareResult",
+        "QNApiFaceDetectParams": "./QNApiFaceDetectParams",
+        "QNApiFaceDetectResult": "./QNApiFaceDetectResult",
+        "QNApiFaceFlashLiveDetectorParams": "./QNApiFaceFlashLiveDetectorParams",
+        "QNApiIDCardDetectorParams": "./QNApiIDCardDetectorParams",
+        "QNApiOCRDetectorParams": "./QNApiOCRDetectorParams",
+        "QNApiVoiceTtsParams": "./QNApiVoiceTtsParams",
+        "QNApiVoiceTtsResult": "./QNApiVoiceTtsResult",
+        "QNAudioToTextCallback": "./QNAudioToTextCallback",
+        "QNAuthoritativeFaceResult": "./QNAuthoritativeFaceResult",
+        "QNCompareResult": "./QNCompareResult",
+        "QNDetectResult": "./QNDetectResult",
+        "QNFaceAngle": "./QNFaceAngle",
+        "QNFaceFlashLiveDetectorResult": "./QNFaceFlashLiveDetectorResult",
+        "QNFaceFlashLiveDetectorResultResponse": "./QNFaceFlashLiveDetectorResultResponse",
+        "QNFaceLocation": "./QNFaceLocation",
+        "QNFaceQuality": "./QNFaceQuality",
+        "QNFaceQualityOcclusion": "./QNFaceQualityOcclusion",
+        "QNFaces": "./QNFaces",
+        "QNIDCardDetectorResult": "./QNIDCardDetectorResult",
+        "QNImage": "./QNImage",
+        "QNKeyWordsType": "./QNKeyWordsType",
+        "QNOCRDetectorResult": "./QNOCRDetectorResult",
+        "QNPiece": "./QNPiece",
+        "QNRtcAiManagerCache": "./QNRtcAiManagerCache",
+        "QNStreamingTranscription": "./QNStreamingTranscription",
+        "QNThresholds": "./QNThresholds",
+        "QNVerifyResult": "./QNVerifyResult"
+    },
+    "blocks": [
+        {
+            "name": "QNRTCAI",
+            "desc": [
+                "QNRTCAI 提供了一系列的方法，可以通过它获取 SDK 的版本号、语音识别、人脸检测等。",
+                "可通过 import * as QNRTCAI from \"qnweb-rtc-ai\" 导入，然后通过 QNRTCAI.QNAudioToTextAnalyzer 来调用方法。",
+                "也可以通过 import { QNAudioToTextAnalyzer } from \"qnweb-rtc-ai\" 导入，然后直接调用 QNAudioToTextAnalyzer 的方法。",
+                "导入方式如下："
+            ],
+            "example": "import * as QNRTCAI from \"qnweb-rtc-ai\" \n或者\nimport { QNAudioToTextAnalyzer } from \"qnweb-rtc-ai\"",
+            "table": [
+                {
+                    "name": "初始化",
+                    "list": [
+                        {
+                            "方法": "{{QNRtcAiManager}}",
+                            "描述": "状态管理器，主要用于初始化所需的 token"
+                        }
+                    ]
+                },
+                {
+                    "name": "方法",
+                    "list": [
+                        {
+                            "方法": "{{QNRtcAiManager}}",
+                            "描述": "状态管理器"
+                        },
+                        {
+                            "方法": "{{QNAudioToTextAnalyzer}}",
+                            "描述": "语音识别"
+                        },
+                        {
+                            "方法": "{{QNAuthoritativeFaceComparer}}",
+                            "描述": "权威人脸对比"
+                        },
+                        {
+                            "方法": "{{QNAuthorityActionFaceComparer}}",
+                            "描述": "活体动作识别加权威人脸对比"
+                        },
+                        {
+                            "方法": "{{QNFaceActionLive}}",
+                            "描述": "动作活体检测"
+                        },
+                        {
+                            "方法": "{{QNFaceComparer}}",
+                            "描述": "人脸对比"
+                        },
+                        {
+                            "方法": "{{QNFaceDetector}}",
+                            "描述": "人脸检测"
+                        },
+                        {
+                            "方法": "{{QNFaceFlashLiveDetector}}",
+                            "描述": "光线活体检测"
+                        },
+                        {
+                            "方法": "{{QNIDCardDetector}}",
+                            "描述": "身份证识别"
+                        },
+                        {
+                            "方法": "{{QNOCRDetector}}",
+                            "描述": "ocr识别"
+                        },
+                        {
+                            "方法": "{{QNTextToSpeakAnalyzer}}",
+                            "描述": "文字转语音"
+                        }
+                    ]
+                }
+            ],
+            "elements": []
+        }
+    ]
+}

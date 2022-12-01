@@ -1,2 +1,2 @@
 export * from './modal';
-export * from './timer';
+export * from './filter';
