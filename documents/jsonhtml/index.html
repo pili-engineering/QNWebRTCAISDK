@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>webrtc doc</title>
+    <style>
+        .rtc-doc{
+            font-family: PingFangSC-Regular,PingFang SC;
+            background:white!important;
+            color:black
+        }
+        .rtc-doc * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        .rtc-doc table {
+            width: 100%;
+            overflow: auto;
+            table-layout: fixed;
+            display: table;
+            border-collapse: collapse;
+            border-spacing: 0;
+            border: 1px solid #dfdfdf;
+        }
+        .rtc-doc thead {
+            display: table-header-group;
+            vertical-align: middle;
+        }
+        .rtc-doc tbody {
+            display: table-header-group;
+            vertical-align: middle;
+        }
+        .rtc-doc th {
+            white-space: inherit;
+            border-top: none;
+            border-bottom: none;
+            padding: 6px 13px;
+            border: 1px solid #dfdfdf;
+            color: #222;
+            font-size: 16px;
+            font-weight: 400;
+            border-bottom-width: 0!important
+        }
+        .rtc-doc td {
+            white-space: inherit;
+            padding: 5px 13px;
+            border: 1px solid #dfdfdf;
+            font-size: 14px;
+            word-break: break-all;
+            border-bottom-width: 0!important
+        }
+        
+        .rtc-doc-wrap{
+            padding-left: 20px;
+            padding-right: 20px;
+            font-size:20px;
+            margin: 0.8em 0;
+            font-weight: bold;
+        }
+
+        .rtc-doc-panel {
+            background-color: #fff;
+            box-shadow: 0 0 4px rgb(0 0 0 / 25%);
+            padding: 20px;
+            color: #707070;
+            font-size: 15px;
+            line-height: 26px;
+            letter-spacing: 0;
+            margin-bottom:20px;
+        }
+
+        .rtc-doc-panel a {
+            font-style: italic;
+            font-weight: 400;
+            color: #00aae7;
+            /* white-space: nowrap; */
+            word-break:break-all;
+            text-decoration: none;
+        }
+
+        .rtc-doc-panel blockquote {
+            padding: 10px 20px;
+            margin: 20px 0;
+            font-size: 14px;
+            border-left: 5px solid rgba(135, 206, 250, 0.4);
+            background:rgba(135, 206, 250, 0.2)
+        }
+        .rtc-doc-panel .blockquote-warning {
+            background:#FCE4EC;
+            border-left:5px solid #F8BBD0
+        }
+
+        .rtc-doc-panel blockquote p {
+            padding: 5px 0
+        }
+
+
+        .rtc-doc-catalogue{
+            column-gap: 20px;
+            column-count: 1;
+            padding: 0;
+            list-style: none;
+            line-height: 1.5em;
+            margin: 20px 0 40px;
+        }
+
+        .rtc-doc-catalogue li{
+            list-style: none;
+            line-height: 40px;
+            cursor: pointer;
+            color: #00aae7
+        }
+        .rtc-doc-catalogue li a{
+            line-height:40px;
+            text-decoration:none
+        }
+    </style>
+</head>
+
+<body>
+    <div class="rtc-doc">
+        <div class="rtc-doc-wrap">文档索引</div>
+        <section class="rtc-doc-panel">
+            <ul class="rtc-doc-catalogue">
+                    <li><a href="/QNFaceActionLiveResult.html">QNFaceActionLiveResult</a></li>
+                    <li><a href="/QNApiFaceActliveParams.html">QNApiFaceActliveParams</a></li>
+                    <li><a href="/QNApiFaceActliveSessionParams.html">QNApiFaceActliveSessionParams</a></li>
+                    <li><a href="/QNFaceDetector.html">QNFaceDetector</a></li>
+                    <li><a href="/QNIDCardDetectorParams.html">QNIDCardDetectorParams</a></li>
+                    <li><a href="/QNFaces.html">QNFaces</a></li>
+                    <li><a href="/QNAudioToTextAnalyzerParams.html">QNAudioToTextAnalyzerParams</a></li>
+                    <li><a href="/QNAudioToTextAnalyzer.html">QNAudioToTextAnalyzer</a></li>
+                    <li><a href="/QNFaceComparer.html">QNFaceComparer</a></li>
+                    <li><a href="/QNPiece.html">QNPiece</a></li>
+                    <li><a href="/QNVerifyResult.html">QNVerifyResult</a></li>
+                    <li><a href="/QNCompareResult.html">QNCompareResult</a></li>
+                    <li><a href="/QNApiAsrParams.html">QNApiAsrParams</a></li>
+                    <li><a href="/QNFaceQualityOcclusion.html">QNFaceQualityOcclusion</a></li>
+                    <li><a href="/QNTextToSpeakAnalyzerResult.html">QNTextToSpeakAnalyzerResult</a></li>
+                    <li><a href="/QNAuthoritativeFaceResult.html">QNAuthoritativeFaceResult</a></li>
+                    <li><a href="/QNAudioToTextAnalyzerResult.html">QNAudioToTextAnalyzerResult</a></li>
+                    <li><a href="/QNApiFaceFlashLiveDetectorParams.html">QNApiFaceFlashLiveDetectorParams</a></li>
+                    <li><a href="/QNIDCardDetectorResult.html">QNIDCardDetectorResult</a></li>
+                    <li><a href="/QNApiFaceActliveResult.html">QNApiFaceActliveResult</a></li>
+                    <li><a href="/QNApiFaceActliveSessionResult.html">QNApiFaceActliveSessionResult</a></li>
+                    <li><a href="/QNFaceActionLiveParams.html">QNFaceActionLiveParams</a></li>
+                    <li><a href="/QNKeyWordsType.html">QNKeyWordsType</a></li>
+                    <li><a href="/QNOCRDetectorResult.html">QNOCRDetectorResult</a></li>
+                    <li><a href="/QNFaceFlashLiveDetectorResult.html">QNFaceFlashLiveDetectorResult</a></li>
+                    <li><a href="/QNApiAuthoritativeFaceParams.html">QNApiAuthoritativeFaceParams</a></li>
+                    <li><a href="/QNAuthoritativeFaceParams.html">QNAuthoritativeFaceParams</a></li>
+                    <li><a href="/QNApiOCRDetectorParams.html">QNApiOCRDetectorParams</a></li>
+                    <li><a href="/QNFaceActionLive.html">QNFaceActionLive</a></li>
+                    <li><a href="/QNTextToSpeakAnalyzerParams.html">QNTextToSpeakAnalyzerParams</a></li>
+                    <li><a href="/overview.html">overview</a></li>
+                    <li><a href="/QNApiAsrResult.html">QNApiAsrResult</a></li>
+                    <li><a href="/QNAudioToTextCallback.html">QNAudioToTextCallback</a></li>
+                    <li><a href="/QNFaceComparerParams.html">QNFaceComparerParams</a></li>
+                    <li><a href="/QNRtcAiManagerCache.html">QNRtcAiManagerCache</a></li>
+                    <li><a href="/QNAuthorityActionFaceComparer.html">QNAuthorityActionFaceComparer</a></li>
+                    <li><a href="/QNFaceFlashLiveDetectorResultResponse.html">QNFaceFlashLiveDetectorResultResponse</a></li>
+                    <li><a href="/QNApiFaceDetectResult.html">QNApiFaceDetectResult</a></li>
+                    <li><a href="/QNApiVoiceTtsResult.html">QNApiVoiceTtsResult</a></li>
+                    <li><a href="/QNApiFaceCompareResult.html">QNApiFaceCompareResult</a></li>
+                    <li><a href="/QNFaceLocation.html">QNFaceLocation</a></li>
+                    <li><a href="/QNRtcAiManager.html">QNRtcAiManager</a></li>
+                    <li><a href="/QNTextToSpeakAnalyzer.html">QNTextToSpeakAnalyzer</a></li>
+                    <li><a href="/QNIDCardDetector.html">QNIDCardDetector</a></li>
+                    <li><a href="/QNDetectResult.html">QNDetectResult</a></li>
+                    <li><a href="/QNStreamingTranscription.html">QNStreamingTranscription</a></li>
+                    <li><a href="/QNFaceFlashLiveDetector.html">QNFaceFlashLiveDetector</a></li>
+                    <li><a href="/QNApiFaceDetectParams.html">QNApiFaceDetectParams</a></li>
+                    <li><a href="/QNApiVoiceTtsParams.html">QNApiVoiceTtsParams</a></li>
+                    <li><a href="/QNOCRDetector.html">QNOCRDetector</a></li>
+                    <li><a href="/QNAudioToTextStatus.html">QNAudioToTextStatus</a></li>
+                    <li><a href="/QNFaceAngle.html">QNFaceAngle</a></li>
+                    <li><a href="/QNFaceComparerResult.html">QNFaceComparerResult</a></li>
+                    <li><a href="/QNAuthoritativeFaceComparer.html">QNAuthoritativeFaceComparer</a></li>
+                    <li><a href="/QNImage.html">QNImage</a></li>
+                    <li><a href="/QNThresholds.html">QNThresholds</a></li>
+                    <li><a href="/version.html">version</a></li>
+                    <li><a href="/QNFaceQuality.html">QNFaceQuality</a></li>
+                    <li><a href="/QNApiIDCardDetectorParams.html">QNApiIDCardDetectorParams</a></li>
+                    <li><a href="/QNApiFaceCompareParams.html">QNApiFaceCompareParams</a></li>
+            </ul>
+        </section>
+    </div>
+</body>
+
+</html>

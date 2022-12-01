@@ -1,0 +1,85 @@
+<link rel="stylesheet" type="text/css" href="https://docs.qnsdk.com/styles/doc-v4-api.css" />
+<div class="rtc-doc rtc-doc-home" id="rtc-doc">
+        <section class="rtc-doc-panel rtc-doc-describe rtc-doc-note">
+                QNRTCAI 是结合了 QNRTC 和 dora ai 的 SDK，包含语音识别、人脸识别、人脸对比等功能</section>
+                    <div class="rtc-doc-home-block-wrap">QNRTCAI</div>
+            <div class="rtc-doc-home-block-desc rtc-doc-comment rtc-doc-describe rtc-doc-block-desc">
+                <p>QNRTCAI 提供了一系列的方法，可以通过它获取 SDK 的版本号、语音识别、人脸检测等。</p>
+                <p>可通过 import * as QNRTCAI from "qnweb-rtc-ai" 导入，然后通过 QNRTCAI.QNAudioToTextAnalyzer 来调用方法。</p>
+                <p>也可以通过 import { QNAudioToTextAnalyzer } from "qnweb-rtc-ai" 导入，然后直接调用 QNAudioToTextAnalyzer 的方法。</p>
+                <p>导入方式如下：</p>
+            </div>
+                    <pre class="rtc-doc-example"><code><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> <span class="hljs-variable constant_">QNRTCAI</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;qnweb-rtc-ai&quot;</span> 
+<span></span>或者
+<span></span><span class="hljs-keyword">import</span> { <span class="hljs-title class_">QNAudioToTextAnalyzer</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;qnweb-rtc-ai&quot;</span></code></pre>
+                    <p class="rtc-doc-table-title">初始化</p>
+        <table class="rtc-doc-table">
+            <thead>
+                <tr>
+                    <th>方法</th>
+                    <th>描述</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><a href='./QNRtcAiManager'>QNRtcAiManager</a></td>
+                    <td>状态管理器，主要用于初始化所需的 token</td>
+                </tr>
+            </tbody>
+        </table>
+            <p class="rtc-doc-table-title">方法</p>
+        <table class="rtc-doc-table">
+            <thead>
+                <tr>
+                    <th>方法</th>
+                    <th>描述</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><a href='./QNRtcAiManager'>QNRtcAiManager</a></td>
+                    <td>状态管理器</td>
+                </tr>
+                <tr>
+                    <td><a href='./QNAudioToTextAnalyzer'>QNAudioToTextAnalyzer</a></td>
+                    <td>语音识别</td>
+                </tr>
+                <tr>
+                    <td><a href='./QNAuthoritativeFaceComparer'>QNAuthoritativeFaceComparer</a></td>
+                    <td>权威人脸对比</td>
+                </tr>
+                <tr>
+                    <td><a href='./QNAuthorityActionFaceComparer'>QNAuthorityActionFaceComparer</a></td>
+                    <td>活体动作识别加权威人脸对比</td>
+                </tr>
+                <tr>
+                    <td><a href='./QNFaceActionLive'>QNFaceActionLive</a></td>
+                    <td>动作活体检测</td>
+                </tr>
+                <tr>
+                    <td><a href='./QNFaceComparer'>QNFaceComparer</a></td>
+                    <td>人脸对比</td>
+                </tr>
+                <tr>
+                    <td><a href='./QNFaceDetector'>QNFaceDetector</a></td>
+                    <td>人脸检测</td>
+                </tr>
+                <tr>
+                    <td><a href='./QNFaceFlashLiveDetector'>QNFaceFlashLiveDetector</a></td>
+                    <td>光线活体检测</td>
+                </tr>
+                <tr>
+                    <td><a href='./QNIDCardDetector'>QNIDCardDetector</a></td>
+                    <td>身份证识别</td>
+                </tr>
+                <tr>
+                    <td><a href='./QNOCRDetector'>QNOCRDetector</a></td>
+                    <td>ocr识别</td>
+                </tr>
+                <tr>
+                    <td><a href='./QNTextToSpeakAnalyzer'>QNTextToSpeakAnalyzer</a></td>
+                    <td>文字转语音</td>
+                </tr>
+            </tbody>
+        </table>
+</div>

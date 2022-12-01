@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>webrtc doc</title>
+    <link rel="stylesheet" type="text/css" href="https://docs.qnsdk.com/styles/doc-v4-api.css" />
+</head>
+
+<body>
+    <div class="rtc-doc rtc-doc-page" id="rtc-doc">
+<section class="rtc-doc-panel rtc-doc-describe rtc-doc-note">
+                语音识别</section>
+            <div class="rtc-doc-page-wrap">Index</div>
+<section class="rtc-doc-panel">
+        <div class="rtc-doc-page-title">Property</div>
+        <ul class="rtc-doc-catalogue">
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#audioBufferHandler`)'>audioBufferHandler</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#audioTrack`)'>audioTrack</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#isRecording`)'>isRecording</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#leftDataList`)'>leftDataList</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#rightDataList`)'>rightDataList</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#startTime`)'>startTime</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#status`)'>status</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#ws`)'>ws</a></li>
+        </ul>
+        <div class="rtc-doc-page-title">Method</div>
+        <ul class="rtc-doc-catalogue">
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#close`)'>close</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#getStatus`)'>getStatus</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#initWebSocket`)'>initWebSocket</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#interleaveLeftAndRight`)'>interleaveLeftAndRight</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#mergeArray`)'>mergeArray</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#sendMessageToWebSocket`)'>sendMessageToWebSocket</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#stopAudioToText`)'>stopAudioToText</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#startAudioToText`)'>startAudioToText</a></li>
+        </ul>
+</section>
+<div class="rtc-doc-page-wrap">Property</div>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="audioBufferHandler">
+audioBufferHandler</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">audioBufferHandler?: {}</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p></p>
+    </div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="audioTrack">
+audioTrack</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">audioTrack?: (QNLocalAudioTrack | QNRemoteAudioTrack)</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p></p>
+    </div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="isRecording">
+isRecording</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">isRecording: boolean</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p></p>
+    </div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="leftDataList">
+leftDataList</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">leftDataList: any[]</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p></p>
+    </div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="rightDataList">
+rightDataList</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">rightDataList: any[]</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p></p>
+    </div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="startTime">
+startTime</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">startTime: number</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p></p>
+    </div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="status">
+status</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">status: <a href='./QNAudioToTextStatus.html'>QNAudioToTextStatus</a></li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p></p>
+    </div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="ws">
+ws</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">ws?: WebSocket</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p></p>
+    </div>
+</li>
+</ul>
+</section>
+<div class="rtc-doc-page-wrap">Method</div>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="close">
+close</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">close(): void</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>发送 EOS close message 到后台；
+client 保持继续接受消息，所有结果发送完毕后服务端会主动断开连接
+主动关闭 WebSocket</p>
+    </div>
+    <div class="rtc-doc-returns-title">Returns <span>void</span></div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="getStatus">
+getStatus</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">getStatus(): <a href='./QNAudioToTextStatus.html'>QNAudioToTextStatus</a></li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>获取当前识别状态</p>
+    </div>
+    <div class="rtc-doc-returns-title">Returns <span><a href='./QNAudioToTextStatus.html'>QNAudioToTextStatus</a></span></div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="initWebSocket">
+initWebSocket</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">initWebSocket(config: {audioBuffer:AudioBuffer,callback:<a href='./QNAudioToTextCallback.html'>QNAudioToTextCallback</a>,params:Partial&lt;Omit&lt;<a href='./QNApiAsrParams.html'>QNApiAsrParams</a>,'token'&gt;&gt;}): void</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>建立WebSocket连接</p>
+    </div>
+<div class="rtc-doc-parameters-title">Parameters</div>
+<ul class="rtc-doc-parameters">
+    <li>
+        <div>
+            config: {audioBuffer:AudioBuffer,callback:<a href='./QNAudioToTextCallback.html'>QNAudioToTextCallback</a>,params:Partial&lt;Omit&lt;<a href='./QNApiAsrParams.html'>QNApiAsrParams</a>,'token'&gt;&gt;}
+        </div>
+                <p>
+</p>
+    </li>
+</ul>
+    <div class="rtc-doc-returns-title">Returns <span>void</span></div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="interleaveLeftAndRight">
+interleaveLeftAndRight</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">interleaveLeftAndRight(left: Float32Array, right: Float32Array): Float32Array</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>交叉合并左右声道的数据</p>
+    </div>
+<div class="rtc-doc-parameters-title">Parameters</div>
+<ul class="rtc-doc-parameters">
+    <li>
+        <div>
+            left: Float32Array
+        </div>
+                <p></p>
+    </li>
+    <li>
+        <div>
+            right: Float32Array
+        </div>
+                <p>
+</p>
+    </li>
+</ul>
+    <div class="rtc-doc-returns-title">Returns <span>Float32Array</span></div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="mergeArray">
+mergeArray</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">mergeArray(list: Float32Array[]): Float32Array</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>合成一个单个Float32Array</p>
+    </div>
+<div class="rtc-doc-parameters-title">Parameters</div>
+<ul class="rtc-doc-parameters">
+    <li>
+        <div>
+            list: Float32Array[]
+        </div>
+                <p>
+</p>
+    </li>
+</ul>
+    <div class="rtc-doc-returns-title">Returns <span>Float32Array</span></div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="sendMessageToWebSocket">
+sendMessageToWebSocket</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">sendMessageToWebSocket(audioBuffer: AudioBuffer): void</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>开始发送消息</p>
+    </div>
+<div class="rtc-doc-parameters-title">Parameters</div>
+<ul class="rtc-doc-parameters">
+    <li>
+        <div>
+            audioBuffer: AudioBuffer
+        </div>
+                <p>
+</p>
+    </li>
+</ul>
+    <div class="rtc-doc-returns-title">Returns <span>void</span></div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="stopAudioToText">
+stopAudioToText</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">stopAudioToText(): void</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>结束语音识别</p>
+    </div>
+    <div class="rtc-doc-returns-title">Returns <span>void</span></div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="startAudioToText">
+<span class="rtc-static">Static</span>
+startAudioToText</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">startAudioToText(audioTrack: (QNLocalAudioTrack | QNRemoteAudioTrack), params: Partial&lt;Omit&lt;<a href='./QNApiAsrParams.html'>QNApiAsrParams</a>,'token'&gt;&gt;, callback: <a href='./QNAudioToTextCallback.html'>QNAudioToTextCallback</a>): <a href='./QNAudioToTextAnalyzer.html'>QNAudioToTextAnalyzer</a></li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>语音识别转文字</p>
+    </div>
+<div class="rtc-doc-parameters-title">Parameters</div>
+<ul class="rtc-doc-parameters">
+    <li>
+        <div>
+            audioTrack: (QNLocalAudioTrack | QNRemoteAudioTrack)
+        </div>
+                <p></p>
+    </li>
+    <li>
+        <div>
+            params: Partial&lt;Omit&lt;<a href='./QNApiAsrParams.html'>QNApiAsrParams</a>,'token'&gt;&gt;
+        </div>
+                <p></p>
+    </li>
+    <li>
+        <div>
+            callback: <a href='./QNAudioToTextCallback.html'>QNAudioToTextCallback</a>
+        </div>
+                <p>
+</p>
+    </li>
+</ul>
+    <div class="rtc-doc-returns-title">Returns <span><a href='./QNAudioToTextAnalyzer.html'>QNAudioToTextAnalyzer</a></span></div>
+</li>
+</ul>
+</section>
+</div></body>
+</html>
+
+
+
+

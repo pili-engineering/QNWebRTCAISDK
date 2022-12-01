@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>webrtc doc</title>
+    <link rel="stylesheet" type="text/css" href="https://docs.qnsdk.com/styles/doc-v4-api.css" />
+</head>
+
+<body>
+    <div class="rtc-doc rtc-doc-page" id="rtc-doc">
+            <div class="rtc-doc-page-wrap">Index</div>
+<section class="rtc-doc-panel">
+        <div class="rtc-doc-page-title">Property</div>
+        <ul class="rtc-doc-catalogue">
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#action_verify`)'>action_verify</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#best_image`)'>best_image</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#maxspoofing`)'>maxspoofing</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#pic_list`)'>pic_list</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#score`)'>score</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#spoofing_score`)'>spoofing_score</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#thresholds`)'>thresholds</a></li>
+        </ul>
+</section>
+<div class="rtc-doc-page-wrap">Property</div>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="action_verify">
+action_verify</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">action_verify?: string</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>动作识别结果 pass代表动作验证通过，fail代表动作验证未通过</p>
+    </div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="best_image">
+best_image</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">best_image?: <a href='./QNImage.html'>QNImage</a></li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>图片信息</p>
+    </div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="maxspoofing">
+maxspoofing</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">maxspoofing?: number</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>返回的1-8张图片中合成图检测得分的最大值 范围[0,1]，分数越高则概率越大</p>
+    </div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="pic_list">
+pic_list</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">pic_list?: <a href='./QNImage.html'>QNImage</a>[]</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>返回1-8张抽取出来的图片信息</p>
+    </div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="score">
+score</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">score?: number</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>活体检测的总体打分 范围[0,1]，分数越高则活体的概率越大</p>
+    </div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="spoofing_score">
+spoofing_score</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">spoofing_score?: number</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>返回的1-8张图片中合成图检测得分的中位数 范围[0,1]，分数越高则概率越大</p>
+    </div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="thresholds">
+thresholds</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">thresholds?: <a href='./QNThresholds.html'>QNThresholds</a></li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>阈值 按活体检测分数&gt;阈值来判定活体检测是否通过(阈值视产品需求选择其中一个)</p>
+    </div>
+</li>
+</ul>
+</section>
+</div></body>
+</html>
+
+
+
+

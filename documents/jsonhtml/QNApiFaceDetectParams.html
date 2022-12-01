@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>webrtc doc</title>
+    <link rel="stylesheet" type="text/css" href="https://docs.qnsdk.com/styles/doc-v4-api.css" />
+</head>
+
+<body>
+    <div class="rtc-doc rtc-doc-page" id="rtc-doc">
+<section class="rtc-doc-panel rtc-doc-describe rtc-doc-note">
+                人脸检测 http api 参数
+https://ap-open-z0.qiniuapi.com/dora-sdk/api/face-detect-v2</section>
+            <div class="rtc-doc-page-wrap">Index</div>
+<section class="rtc-doc-panel">
+        <div class="rtc-doc-page-title">Property</div>
+        <ul class="rtc-doc-catalogue">
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#display_corp_image`)'>display_corp_image</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#face_field`)'>face_field</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#face_sort_type`)'>face_sort_type</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#face_type`)'>face_type</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#image`)'>image</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#image_type`)'>image_type</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#liveness_control`)'>liveness_control</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#max_face_num`)'>max_face_num</a></li>
+        </ul>
+</section>
+<div class="rtc-doc-page-wrap">Property</div>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="display_corp_image">
+display_corp_image</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">display_corp_image?: number</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>是否显示检测人脸的裁剪图base64值
+0：不显示（默认）
+1：显示</p>
+    </div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="face_field">
+face_field</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">face_field?: string</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>包括`age,expression,face_shape,gender,glasses,landmark,landmark150,quality,eye_status,emotion,face_type,mask,spoofing`信息逗号分隔.
+默认只返回`face_token、人脸框、概率和旋转角度`</p>
+    </div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="face_sort_type">
+face_sort_type</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">face_sort_type?: number</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>人脸检测排序类型
+**0**:代表检测出的人脸按照人脸面积从大到小排列
+**1**:代表检测出的人脸按照距离图片中心从近到远排列
+默认为0</p>
+    </div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="face_type">
+face_type</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">face_type?: string</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>人脸的类型
+**LIVE**：表示生活照：通常为手机、相机拍摄的人像图片、或从网络获取的人像图片等，
+**IDCARD**：表示身份证芯片照：二代身份证内置芯片中的人像照片，
+**WATERMARK**：表示带水印证件照：一般为带水印的小图，如公安网小图
+**CERT**：表示证件照片：如拍摄的身份证、工卡、护照、学生证等证件图片
+默认`LIVE`</p>
+    </div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="image">
+image</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">image?: string</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>图片信息(总数据大小应小于10M，图片尺寸在1920x1080以下)，图片上传方式根据image_type来判断。
+两张图片通过json格式上传，格式参考表格下方示例</p>
+    </div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="image_type">
+image_type</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">image_type?: string</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>图片类型
+**BASE64**:图片的base64值，base64编码后的图片数据，编码后的图片大小不超过2M；
+**URL**:图片的 URL地址( 可能由于网络等原因导致下载图片时间过长)；
+**FACE_TOKEN**: 人脸图片的唯一标识，调用人脸检测接口时，会为每个人脸图片赋予一个唯一的FACE_TOKEN，同一张图片多次检测得到的FACE_TOKEN是同一个。</p>
+    </div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="liveness_control">
+liveness_control</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">liveness_control?: string</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>活体检测控制
+**NONE**: 不进行控制
+**LOW**:较低的活体要求(高通过率 低攻击拒绝率)
+**NORMAL**: 一般的活体要求(平衡的攻击拒绝率, 通过率)
+**HIGH**: 较高的活体要求(高攻击拒绝率 低通过率)
+默认 `NONE`
+若活体检测结果不满足要求，则返回结果中会提示活体检测失败</p>
+    </div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="max_face_num">
+max_face_num</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">max_face_num?: number</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>最多处理人脸的数目，默认值为1，根据人脸检测排序类型检测图片中排序第一的人脸（默认为人脸面积最大的人脸），最大值120</p>
+    </div>
+</li>
+</ul>
+</section>
+</div></body>
+</html>
+
+
+
+

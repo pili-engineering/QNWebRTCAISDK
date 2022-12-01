@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>webrtc doc</title>
+    <link rel="stylesheet" type="text/css" href="https://docs.qnsdk.com/styles/doc-v4-api.css" />
+</head>
+
+<body>
+    <div class="rtc-doc rtc-doc-page" id="rtc-doc">
+            <div class="rtc-doc-page-wrap">Index</div>
+<section class="rtc-doc-panel">
+        <div class="rtc-doc-page-title">Property</div>
+        <ul class="rtc-doc-catalogue">
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#age`)'>age</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#angle`)'>angle</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#corp_image_base64`)'>corp_image_base64</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#emotion`)'>emotion</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#expression`)'>expression</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#eye_status`)'>eye_status</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#face_probability`)'>face_probability</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#face_shape`)'>face_shape</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#face_token`)'>face_token</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#face_type`)'>face_type</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#gender`)'>gender</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#glasses`)'>glasses</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#landmark`)'>landmark</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#landmark150`)'>landmark150</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#landmark72`)'>landmark72</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#location`)'>location</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#mask`)'>mask</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#quality`)'>quality</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#spoofing`)'>spoofing</a></li>
+        </ul>
+</section>
+<div class="rtc-doc-page-wrap">Property</div>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="age">
+age</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">age?: number</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>年龄 ，当face_field包含age时返回</p>
+    </div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="angle">
+angle</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">angle?: <a href='./QNFaceAngle.html'>QNFaceAngle</a></li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>人脸旋转角度参数</p>
+    </div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="corp_image_base64">
+corp_image_base64</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">corp_image_base64?: string</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>检测人脸框的人脸图片base64值</p>
+    </div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="emotion">
+emotion</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">emotion?: {probability:number,type:string}</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>情绪 face_field包含emotion时返回</p>
+    </div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="expression">
+expression</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">expression?: {probability:number,type:string}</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>表情，当 face_field包含expression时返回</p>
+    </div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="eye_status">
+eye_status</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">eye_status?: {left_eye:number,right_eye:number}</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>双眼状态（睁开/闭合） face_field包含eye_status时返回</p>
+    </div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="face_probability">
+face_probability</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">face_probability?: number</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>人脸置信度，范围【0~1】，代表这是一张人脸的概率，0最小、1最大。其中返回0或1时，数据类型为Integer</p>
+    </div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="face_shape">
+face_shape</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">face_shape?: {probability:number,type:string}</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>脸型，当face_field包含face_shape时返回</p>
+    </div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="face_token">
+face_token</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">face_token?: string</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>人脸图片的唯一标识</p>
+    </div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="face_type">
+face_type</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">face_type?: {probability:number,type:string}</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>真实人脸/卡通人脸 face_field包含face_type时返回</p>
+    </div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="gender">
+gender</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">gender?: {probability:number,type:string}</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>性别，face_field包含gender时返回</p>
+    </div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="glasses">
+glasses</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">glasses?: {probability:number,type:string}</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>是否带眼镜，face_field包含glasses时返回</p>
+    </div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="landmark">
+landmark</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">landmark?: {x:number,y:number}[]</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>4个关键点位置，左眼中心、右眼中心、鼻尖、嘴中心。face_field包含landmark时返回</p>
+    </div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="landmark150">
+landmark150</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">landmark150?: {x:number,y:number}[]</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>150个特征点位置 face_field包含landmark150时返回</p>
+    </div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="landmark72">
+landmark72</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">landmark72?: {x:number,y:number}[]</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>72个特征点位置 face_field包含landmark时返回</p>
+    </div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="location">
+location</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">location?: <a href='./QNFaceLocation.html'>QNFaceLocation</a></li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>人脸在图片中的位置</p>
+    </div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="mask">
+mask</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">mask?: {probability:number,type:string}</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>口罩识别 face_field包含mask时返回</p>
+    </div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="quality">
+quality</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">quality?: <a href='./QNFaceQuality.html'>QNFaceQuality</a></li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>人脸质量信息。face_field包含quality时返回</p>
+    </div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="spoofing">
+spoofing</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">spoofing?: number</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>判断图片是否为合成图</p>
+    </div>
+</li>
+</ul>
+</section>
+</div></body>
+</html>
+
+
+
+

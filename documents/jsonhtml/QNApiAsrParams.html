@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>webrtc doc</title>
+    <link rel="stylesheet" type="text/css" href="https://docs.qnsdk.com/styles/doc-v4-api.css" />
+</head>
+
+<body>
+    <div class="rtc-doc rtc-doc-page" id="rtc-doc">
+<section class="rtc-doc-panel rtc-doc-describe rtc-doc-note">
+                实时音频识别 websocket 参数
+wss://ap-open-ws.service-z0.qiniuapp.com/v2/asr</section>
+            <div class="rtc-doc-page-wrap">Index</div>
+<section class="rtc-doc-panel">
+        <div class="rtc-doc-page-title">Property</div>
+        <ul class="rtc-doc-catalogue">
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#aue`)'>aue</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#e`)'>e</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#key_words`)'>key_words</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#model_type`)'>model_type</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#token`)'>token</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#voice_id`)'>voice_id</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#voice_sample`)'>voice_sample</a></li>
+        </ul>
+</section>
+<div class="rtc-doc-page-wrap">Property</div>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="aue">
+aue</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">aue: number</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>数据格式，1: pcm，2: AAC，3: MPEG2;默认1</p>
+    </div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="e">
+e</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">e: number</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>请求时间戳, 单位秒</p>
+    </div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="key_words">
+key_words</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">key_words?: string[]</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>识别关键字; 相同读音时优先识别为关键字。每个词 2-4 个字, 不同词用 `,` 分割</p>
+    </div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="model_type">
+model_type</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">model_type?: number</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>识别语言，中文: 1, 英文: 2, 中英混合: 0; 默认 1</p>
+    </div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="token">
+token</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">token: string</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>请求签名, [签算方式](https://developer.qiniu.com/kodo/1202/download-token)</p>
+    </div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="voice_id">
+voice_id</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">voice_id?: string</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>数据流id，不同流不同</p>
+    </div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="voice_sample">
+voice_sample</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">voice_sample: number</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>数据采样率，取值: 48000, 44100, 32000, 16000, 8000;默认16000</p>
+    </div>
+</li>
+</ul>
+</section>
+</div></body>
+</html>
+
+
+
+

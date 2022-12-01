@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>webrtc doc</title>
+    <link rel="stylesheet" type="text/css" href="https://docs.qnsdk.com/styles/doc-v4-api.css" />
+</head>
+
+<body>
+    <div class="rtc-doc rtc-doc-page" id="rtc-doc">
+<section class="rtc-doc-panel rtc-doc-describe rtc-doc-note">
+                动作活体检测</section>
+            <div class="rtc-doc-page-wrap">Index</div>
+<section class="rtc-doc-panel">
+        <div class="rtc-doc-page-title">Property</div>
+        <ul class="rtc-doc-catalogue">
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#params`)'>params</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#recorder`)'>recorder</a></li>
+        </ul>
+        <div class="rtc-doc-page-title">Method</div>
+        <ul class="rtc-doc-catalogue">
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#commit`)'>commit</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#getRequestCode`)'>getRequestCode</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#start`)'>start</a></li>
+                <li><a onClick='document.location.replace(`${document.location.protocol}//${document.location.host}${document.location.pathname}${document.location.search}#create`)'>create</a></li>
+        </ul>
+</section>
+<div class="rtc-doc-page-wrap">Property</div>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="params">
+params</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">params: Omit&lt;<a href='./QNApiFaceActliveParams.html'>QNApiFaceActliveParams</a>,'video_base64'&gt;</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p></p>
+    </div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="recorder">
+recorder</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">recorder: RecordRTC</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p></p>
+    </div>
+</li>
+</ul>
+</section>
+<div class="rtc-doc-page-wrap">Method</div>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="commit">
+commit</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">commit(): Promise&lt;<a href='./QNApiFaceActliveResult.html'>QNApiFaceActliveResult</a>&gt;</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>提交录制</p>
+    </div>
+    <div class="rtc-doc-returns-title">Returns <span>Promise&lt;<a href='./QNApiFaceActliveResult.html'>QNApiFaceActliveResult</a>&gt;</span></div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="getRequestCode">
+getRequestCode</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">getRequestCode(params: <a href='./QNApiFaceActliveSessionParams.html'>QNApiFaceActliveSessionParams</a>): Promise&lt;<a href='./QNApiFaceActliveSessionResult.html'>QNApiFaceActliveSessionResult</a>&gt;</li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>获取校验码</p>
+    </div>
+<div class="rtc-doc-parameters-title">Parameters</div>
+<ul class="rtc-doc-parameters">
+    <li>
+        <div>
+            params: <a href='./QNApiFaceActliveSessionParams.html'>QNApiFaceActliveSessionParams</a>
+        </div>
+                <p>
+</p>
+    </li>
+</ul>
+    <div class="rtc-doc-returns-title">Returns <span>Promise&lt;<a href='./QNApiFaceActliveSessionResult.html'>QNApiFaceActliveSessionResult</a>&gt;</span></div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="start">
+start</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">start(videoTrack: (QNLocalVideoTrack | QNRemoteVideoTrack), params: QNFaceActionLiveParams): <a href='./QNFaceActionLive.html'>QNFaceActionLive</a></li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>开始录制</p>
+    </div>
+<div class="rtc-doc-parameters-title">Parameters</div>
+<ul class="rtc-doc-parameters">
+    <li>
+        <div>
+            videoTrack: (QNLocalVideoTrack | QNRemoteVideoTrack)
+        </div>
+                <p></p>
+    </li>
+    <li>
+        <div>
+            params: QNFaceActionLiveParams
+        </div>
+                <p>
+</p>
+    </li>
+</ul>
+    <div class="rtc-doc-returns-title">Returns <span><a href='./QNFaceActionLive.html'>QNFaceActionLive</a></span></div>
+</li>
+</ul>
+</section>
+<section class="rtc-doc-panel">
+<div class="rtc-doc-page-title rtc-doc-antor" id="create">
+<span class="rtc-static">Static</span>
+create</div>
+<ul class="rtc-doc-page-container">
+        <li class="rtc-doc-sign-signature">create(): <a href='./QNFaceActionLive.html'>QNFaceActionLive</a></li>
+    </li>
+<li class="rtc-doc-page-description">
+    <div class="rtc-doc-desc-wrap">
+        <p>创建动作活体检测</p>
+    </div>
+    <div class="rtc-doc-returns-title">Returns <span><a href='./QNFaceActionLive.html'>QNFaceActionLive</a></span></div>
+</li>
+</ul>
+</section>
+</div></body>
+</html>
+
+
+
+
